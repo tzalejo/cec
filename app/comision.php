@@ -4,7 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class comision extends Model
+class Comision extends Model
 {
     //
+    protected $primaryKey = 'comisionId';
+
 }
