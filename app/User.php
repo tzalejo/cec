@@ -8,6 +8,24 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    /**
+     *  Si queremos crear un nombre de una tabla distinta en la bd
+     *  protected $table = 'nombre_tabla'
+     * 
+     */
+
+    /**
+     * 
+     * si queremos desactivar los campos de creacion y actualizacion
+     * que se crean automaticamente al crear una tabla
+     * 
+     * public $timestamps = false;
+     */
+
+    
+    /**
+     * Para cambiar el modelo de clave primaria
+     */
     protected $primaryKey = 'id';
     /**
      * The attributes that are mass assignable.
@@ -73,4 +91,15 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function esDirector(){
+        return $this->roleId === Role::where('roleDescripcion','director')->first()->value('roleId');
+    }
+
+    public static function buscarPorEmail($email){
+        // es static es similar a user
+        return static::where(compact('email'))->first();
+    }
+
+    
 }

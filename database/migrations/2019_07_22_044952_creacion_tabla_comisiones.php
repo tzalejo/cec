@@ -19,7 +19,7 @@ class CreacionTablaComisiones extends Migration
             $table->string('comisionHorario',50);
             $table->date('comisionFI');
             $table->date('comisionFF');
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

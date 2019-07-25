@@ -19,11 +19,11 @@ class CreacionTablaEstudiantes extends Migration
             $table->string('estudianteApellido',50);
             $table->string('estudianteNombre',50);
             $table->string('estudianteDomicilio',100);
-            $table->string('estudianteTelefono',50);
+            $table->string('estudianteTelefono',50)->nullable();
             $table->string('estudianteLocalidad',100);
             $table->date('estudianteNacimiento');
-            $table->string('estudianteFoto');
-            $table->timestamps();
+            $table->string('estudianteFoto')->nullable();
+            // $table->timestamps();
         });
     }
 

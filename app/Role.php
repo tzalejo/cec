@@ -7,7 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
 
+     /**
+     * 
+     * si queremos desactivar los campos de creacion y actualizacion
+     * que se crean automaticamente al crear una tabla
+     * 
+     */
+    public $timestamps = false;
+    
+    /**
+     * Identifico el id de la tabla
+     */
     protected $primaryKey = 'roleId';
+    
     /**
      * Estoy indicando que un role tiene muchos user
      * 

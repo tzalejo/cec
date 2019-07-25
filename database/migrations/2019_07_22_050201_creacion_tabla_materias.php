@@ -17,7 +17,7 @@ class CreacionTablaMaterias extends Migration
             $table->bigIncrements('materiaId');
             $table->string('materiaNombre',50);
             $table->boolean('materiaSeminario');
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

@@ -11,6 +11,9 @@ class RoleTablaSeeder extends Seeder
      */
     public function run()
     {
+        // para vaciar las bd
+        DB::table('roles')->truncate();
+
         // creamos el rol de director(admin)
         $role = new Role(
             // [

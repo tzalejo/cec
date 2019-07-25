@@ -17,7 +17,7 @@ class CreacionTablaPagos extends Migration
             $table->bigIncrements('pagoId');
             $table->float('pagoAbono',10,2);
             $table->date('pagoFAbono');
-            $table->timestamps();
+            // $table->timestamps(); lo desactivo
 
             $table->unsignedInteger('cuotaId');
             $table->foreign('cuotaId')->references('cuotaId')->on('cuotas');

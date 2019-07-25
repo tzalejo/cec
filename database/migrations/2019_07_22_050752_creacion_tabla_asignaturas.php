@@ -15,7 +15,7 @@ class CreacionTablaAsignaturas extends Migration
     {
         Schema::create('asignaturas', function (Blueprint $table) {
             $table->bigIncrements('asignaturasId');
-            $table->timestamps();
+            // $table->timestamps();
 
             $table->unsignedInteger('cursoId');
             $table->foreign('cursoId')->references('cursoId')->on('cursos');

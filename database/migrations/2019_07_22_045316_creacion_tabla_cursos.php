@@ -19,7 +19,7 @@ class CreacionTablaCursos extends Migration
             $table->smallInteger('cursoNroCuota');
             $table->float('cursoCostoMes', 10, 2);
             $table->float('cursoInscripcion', 10, 2);
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

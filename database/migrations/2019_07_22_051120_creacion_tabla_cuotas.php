@@ -15,11 +15,11 @@ class CreacionTablaCuotas extends Migration
     {
         Schema::create('cuotas', function (Blueprint $table) {
             $table->bigIncrements('cuotaId');
-            $table->string('cuotaConcepto');
+            $table->string('cuotaConcepto',100);
             $table->float('cuotaMonto', 10, 2);
             $table->date('cuotaFVencimiento');
-            $table->float('cuotaBonificacion',10,2);
-            $table->timestamps();
+            $table->float('cuotaBonificacion',10,2)->default(0.0);
+            // $table->timestamps();
 
             $table->unsignedInteger('matriculaId');
             $table->foreign('matriculaId')->references('matriculaId')->on('matriculas');

@@ -13,6 +13,9 @@ class UserTablaSeeder extends Seeder
      */
     public function run()
     {
+        // para vaciar las bd
+        // DB::table('users')->truncate();
+
         // traigo el rol de admin(director)
         $role_dire=Role::where('roleDescripcion','director')->first();
         
@@ -33,6 +36,9 @@ class UserTablaSeeder extends Seeder
         $user->roleId = $role_secre->roleId;
         $user->save();
         
+        //creo usuario usando factory.. 
+        factory(User::class)->times(10)->create();
 
     }
+   
 }
