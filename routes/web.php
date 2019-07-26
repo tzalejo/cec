@@ -22,3 +22,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 // vamos a manejar inscripcion(abm) y legajo
 Route::get('/inscripcion','AlumnosController@inscripcion');
 
+

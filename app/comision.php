@@ -35,13 +35,25 @@ class Comision extends Model
         return Matricula::where('comisionId',$this->comisionId)->count();
     }
 
+    /**
+     * Devuelve el nombre del curso, segun la comision seleccionadad. Tinker:
+     * $comision = Comision::all()->first();
+     * $comision->obtenerCurso() --> "SJCC"
+     * 
+     * @return string
+     */
     public function obtenerCurso(){
         return Curso::where('cursoId',$this->cursoId)->value('cursoNombre');
     }
-    // me devuelve si la funcion esta activa o no, osea la fecha de fin 
-    public function comisionActiva(){
-        $now = new \DateTime();
-        return ($this->comisionFF < $now);
-    }
+    
+    /**
+     * Me devuelve si la funcion esta activa o no, osea la fecha de fin. Tinker:
+     * 
+     * 
+     */
+    // public function comisionesActivas(){
+    //     $now = date('Y-m-d');
+    //     return Comision::where('comisionFF', '>', $now)->get();
+    // }
 
 }
