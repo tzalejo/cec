@@ -55,7 +55,7 @@
             <div class="container">
                
                 
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
 
@@ -80,13 +80,13 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ Auth::user()->userNombre }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
+                                    document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
@@ -95,6 +95,8 @@
                                     </form>
                                 </div>
                             </li>
+                            <!-- Image and text -->
+                            <img src="http://www.empleosperu.gob.pe:8080/CertiJovenPortal/images/usuario.jpg" width="30" height="30" class="d-inline-block align-top" >
                         @endguest
                     </ul>
                 </div>
@@ -166,7 +168,7 @@
                                 </ul>
                             </div>
                         </nav>
-                        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="particles-js">
+                        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="position: relative; justify-content: center!important; z-index: 100;">
                             @yield('content')
                         </main>
                     </div>  
@@ -176,10 +178,21 @@
     </div>
 
 </body>
-{{-- <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.js"></script> --}}
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="../../assets/js/vendor/popper.min.js"></script>
+<script src="../../dist/js/bootstrap.min.js"></script>
+
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>
+  feather.replace()
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-// particlesJS.load(@dom-id, @path-json, @callback (optional));
+
 particlesJS.load('particles-js', '{{ asset('js/particles.json') }}', function() {
     console.log('callback - particles.min.js config loaded');
 });
