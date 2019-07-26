@@ -13,6 +13,7 @@ $factory->define(Estudiante::class, function (Faker $faker) {
         'estudianteDomicilio'   => $faker->secondaryAddress,
         'estudianteTelefono'    => $faker->tollFreePhoneNumber,
         'estudianteLocalidad'   => $faker->country,
+        'estudianteEmail'       => $faker->email,
         'estudianteNacimiento'  => $faker->date('Y-m-d','now'),
         'estudianteFoto'        => $faker->mimeType,
     ];

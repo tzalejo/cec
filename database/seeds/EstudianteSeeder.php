@@ -25,6 +25,7 @@ class EstudianteSeeder extends Seeder
             'estudianteDomicilio'=>'domi 1',
             'estudianteTelefono'=>'123-123',
             'estudianteLocalidad'=>'tartagal',
+            'estudianteEmail'=>'ale@mail.com',
             'estudianteNacimiento'=>'1982-09-17',
             'estudianteFoto'=>'null'
         ]);
