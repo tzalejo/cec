@@ -20,27 +20,49 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         #particles-js{
-            position:sticky;
+            position:inherit;
             width: 100%;
             height: 100%;
+           
+            }
+            canvas.particles-js-canvas-el {
+                position: absolute;
+                top: 48px;
+                left: 0px;
+            
+            }
+            .count-particles{
+                position: absolute;
+                top: 48px;
+                left: 0;
+                width: 80px;
+            }
+
+            .js-count-particles{
+                font-size: 1.1em;
             }
     </style>
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" >
+            @guest
+            @else
+                <a class="navbar-brand" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </a>
+            @endif
             <div class="container">
+               
+                
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        {{-- <span class="navbar-toggler-icon"></span> --}}
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -79,9 +101,78 @@
             </div>
         </nav>
         <main class="py-4">
-            @yield('content')
+            @guest
+                @yield('content')
+            @else
+                <div class="container-fluid">
+                    <div class="row" style="position: relative; justify-content: center!important; z-index: 100;">
+                        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                            <div class="sidebar-sticky">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/inscripcion">
+                                        <span data-feather="edit-2"></span>
+                                        Inscripcion
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="edit"></span>
+                                        Modificar Inscripcion
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="trash-2"></span>
+                                        Baja
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="layers"></span>
+                                        Legajo
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="dollar-sign"></span>
+                                        Pagos Cuota
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="file"></span>
+                                        Pagos Inscripcion
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="bar-chart-2"></span>
+                                        Estadistica
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="users"></span>
+                                        Comisiones
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="slack"></span>
+                                        Gerencia
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="particles-js">
+                            @yield('content')
+                        </main>
+                    </div>  
+                </div>
+            @endguest
         </main>
-        
     </div>
 
 </body>

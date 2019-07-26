@@ -14,7 +14,7 @@ class Matricula extends Model
      */
     public $timestamps = false;
     
-    protected $primaryKey = 'materiaId';
+    protected $primaryKey = 'matriculaId';
 
 
 }
