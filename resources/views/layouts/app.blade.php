@@ -96,7 +96,7 @@
                                 </div>
                             </li>
                             <!-- Image and text -->
-                            <img src="http://www.empleosperu.gob.pe:8080/CertiJovenPortal/images/usuario.jpg" width="30" height="30" class="d-inline-block align-top" >
+                            <img src="{{Auth::user()->userImagen}}" width="30" height="30" class="d-inline-block align-top" >
                         @endguest
                     </ul>
                 </div>
