@@ -46,19 +46,10 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" >
-            @guest
-            @else
-                <a class="navbar-brand" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </a>
-            @endif
             <div class="container">
-               
-                
                 <a class="navbar-brand" href="{{ url('/home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
@@ -112,15 +103,21 @@
                             <div class="sidebar-sticky">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/inscripcion">
+                                        <a class="nav-link" href="{{route('alumnos.inscripcion')}}">
                                         <span data-feather="edit-2"></span>
                                         Inscripcion
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
-                                        <span data-feather="edit"></span>
+                                        <span data-feather="delete"></span>
                                         Modificar Inscripcion
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                        <span data-feather="edit"></span>
+                                        Re-Inscripcion
                                         </a>
                                     </li>
                                     <li class="nav-item">

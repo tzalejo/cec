@@ -17,9 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')
+        ->name('home');
 
 // vamos a manejar inscripcion(abm) y legajo
-Route::get('/inscripcion','AlumnosController@inscripcion');
+Route::get('/alumnos/inscripcion','AlumnosController@inscripcion')
+        ->name('alumnos.inscripcion'); // con esto podemos nombrando a la ruta y podesmo usar ese nombre para referirnos a ella route('alumno.inscripcion')
+        // ->name('alumnos.inscripcion',['id'=> 'mis_valor']) asi enviamos un valor 
+Route::post('/alumnos/crear','AlumnosController@store')
+        ->name('alumnos.crear');
 
 
