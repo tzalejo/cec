@@ -15,6 +15,11 @@ class Matricula extends Model
     public $timestamps = false;
     
     protected $primaryKey = 'matriculaId';
-
+    
+    protected $fillable=[
+        'matriculaSituacion',
+        'estudianteId',
+        'comisionId',
+    ];
 
 }

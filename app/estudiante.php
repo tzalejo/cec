@@ -16,5 +16,16 @@ class Estudiante extends Model
     
     protected $primaryKey = 'estudianteId';
 
+    protected $fillable =[
+        'estudianteNombre',
+        'estudianteApellido',
+        'estudianteDNI',
+        'estudianteDomicilio',
+        'estudianteEmail',
+        'estudianteTelefono',
+        'estudianteLocalidad',
+        'estudianteNacimiento',
+        'estudianteFoto',
+    ];
     
 }
