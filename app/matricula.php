@@ -22,4 +22,14 @@ class Matricula extends Model
         'comisionId',
     ];
 
+    /**
+     * 
+     * 
+     * @var colection
+     */
+    public function estudiante()
+    {
+        return $this->belongsTo(Estudiante::Class, 'estudianteId');
+    }
+
 }

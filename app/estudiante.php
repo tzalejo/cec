@@ -27,5 +27,19 @@ class Estudiante extends Model
         'estudianteNacimiento',
         'estudianteFoto',
     ];
+
+    /**
+     * Indico la relacion que un estudiante puede tener muchas matriculas('s' de muchas)
+     * Tinker:
+     * $estudiante= App\Estudiante::first()
+     * $estudiante->matriculas
+     * 
+     * @var colection
+     */
+
+    public function matriculas()
+    {
+        return $this->hasMany(Matricula::class,'matriculaId');
+    }
     
 }
