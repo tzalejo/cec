@@ -30,6 +30,17 @@ class Comision extends Model
         return $this->belongsTo(Curso::class,'cursoId');
     }
     
+    /**
+    * Estoy indicando la relacion comision tiene muchas matriculas('s' de muchos).
+    * Usando tinker $comsion= Comision::first()
+    * $comsion->curso; -> esto me devuelve el curso relacionado a la comision (primera).
+    * @var array 
+    */
+    public function matriculas()
+    {
+        return $this->hasMany(Matricula::class, 'matriculaId');
+    }
+    
     // funcion que me devuelve la cantidad de alumnos que tiene una comision..
     public function cantidadAlumnos(){
         return Matricula::where('comisionId',$this->comisionId)->count();
@@ -38,14 +49,18 @@ class Comision extends Model
     /**
      * Devuelve el nombre del curso, segun la comision seleccionadad. Tinker:
      * $comision = Comision::all()->first();
-     * $comision->obtenerCurso() --> "SJCC"
+     * $comision->obtenerNombreCurso() --> "SJCC"
      * 
      * @return string
      */
-    public function obtenerCurso(){
+    public function obtenerNombreCurso(){
         return Curso::where('cursoId',$this->cursoId)->value('cursoNombre');
     }
     
+    public function obtenerAlumnos(){
+        return Matricula::where('comisionId',$this->comisionId)->get();
+    }
+
     /**
      * Me devuelve si la funcion esta activa o no, osea la fecha de fin. Tinker:
      * 

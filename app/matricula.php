@@ -1,7 +1,8 @@
 <?php
 
 namespace App;
-
+use App\Estudiante;
+use App\Comision;
 use Illuminate\Database\Eloquent\Model;
 
 class Matricula extends Model
@@ -23,13 +24,23 @@ class Matricula extends Model
     ];
 
     /**
-     * 
+     * Indico la relacion Matricula tiene un y solo un alumno
      * 
      * @var colection
      */
     public function estudiante()
     {
         return $this->belongsTo(Estudiante::Class, 'estudianteId');
+    }
+
+    /**
+     * Relacion una matricula tien una y solo una  comision
+     * 
+     * @var colection
+     */
+    public function comision()
+    {
+        return $this->belongsTo(Comision::class, 'comisionId');
     }
 
 }
