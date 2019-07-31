@@ -83,6 +83,23 @@
         </select>
       </div>
     </div>
+    <div class="from-row">
+      <h2>Pagos</h2>
+      <div class="form-group col-md-12">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="pagoInscripcion">
+          <label class="custom-control-label" for="pagoInscripcion">Inscripcion</label>
+        </div>
+        
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="pagoCuota">
+          <label class="custom-control-label" for="pagoCuota">Cuota</label>
+        </div>
+
+      </div>
+
+    </div>
+
     {{-- <a href="{{route('alumnos.crear')}}" class="btn btn-primary">Inscribir</a> --}}
     <button type="submit" class="btn btn-primary">Inscribir Alumno</button>
     <a href="{{route('home')}}" class="btn btn-primary">Cancelar</a>

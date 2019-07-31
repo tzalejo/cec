@@ -27,4 +27,11 @@ Route::get('/alumnos/inscripcion','AlumnosController@inscripcion')
 Route::post('/alumnos/crear','AlumnosController@store')
         ->name('alumnos.crear');
 
+        
+Route::get('/alumnos/mostrar{paginado}','AlumnosController@show')
+        ->name('alumnos.mostrar');
+Route::get('/alumnos/{matricula}/editar','AlumnosController@edit')
+        ->name('alumnos.editar');
+Route::put('/alumnos/{estudiante}','AlumnosController@update')
+        ->name('alumnos.actualizar');
 
