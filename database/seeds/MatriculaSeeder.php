@@ -10,9 +10,9 @@ class MatriculaSeeder extends Seeder
      * @return void
      */
     public function run(){
-
+        // Recordar: regular(RE), no regular(NR) o egresado(EG) 
         Matricula::create([
-            'matriculaSituacion'=>'RE',
+            'matriculaSituacion'=>'NR',
             'estudianteId'=>1 ,
             'comisionId'=>1 ,
         ]);

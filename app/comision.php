@@ -43,7 +43,9 @@ class Comision extends Model
     
     // funcion que me devuelve la cantidad de alumnos que tiene una comision..
     public function cantidadAlumnos(){
-        return Matricula::where('comisionId',$this->comisionId)->count();
+        return Matricula::where('comisionId',$this->comisionId)
+                            ->where('matriculaSituacion','RE')
+                            ->count();
     }
 
     /**
@@ -58,7 +60,9 @@ class Comision extends Model
     }
     
     public function obtenerAlumnos(){
-        return Matricula::where('comisionId',$this->comisionId)->get();
+        return Matricula::where('comisionId',$this->comisionId)
+                            ->where('matriculaSituacion','RE') // Solo los regulares
+                            ->get();
     }
 
     /**
