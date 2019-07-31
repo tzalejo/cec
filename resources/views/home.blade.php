@@ -155,11 +155,39 @@
                     <td>{{$matricula->estudiante->estudianteApellido}}</td>
                     <td>{{$matricula->estudiante->estudianteNombre}}</td>
                     <td>{{$matricula->estudiante->estudianteDNI}}</td>
-                    <td style="width:50px;" ><a href="{{route('alumnos.editar',['matricula'=>$matricula])}}"><i class="fa fa-pencil fa-2x" style="color:#31353D"></i></a></td>
-                    <td style="width:50px;" ><a href=""><i class="fa fa-times fa-2x" style="color:#31353D"></i></a></td>
+                    <td style="width:50px;" ><a href="{{route('alumnos.editar',$matricula)}}"><i class="fa fa-pencil fa-2x" style="color:#31353D"></i></a></td>
+                    <td style="width:50px;" >
+                      <a data-toggle="modal" data-target="#exampleModal{{$matricula->matriculaId}}"><i class="fa fa-times fa-2x" style="color:#31353D"></i></a>
+                      <!-- Modal -->
+                      <div class="modal fade" id="exampleModal{{$matricula->matriculaId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$matricula->matriculaId}}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel{{$matricula->matriculaId}}">Confirmación</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              ¿Desea Eliminar el alumno {{$matricula->estudiante->estudianteApellido}}?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                              <form action="{{route('alumnos.eliminar',$matricula)}}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-primary">Eliminar</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                   </tr>                      
                   @empty
-                    
+                    <th>
+                      SIN ALUMNO
+                    </th>  
                   @endforelse
                 </tbody>
               </table>

@@ -8,6 +8,8 @@ use App\Estudiante;
 use App\Matricula;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
+
+
 class AlumnosController extends Controller
 {
     /**
@@ -15,8 +17,7 @@ class AlumnosController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth');
     }
     // muestro el formulario de inscripcion
@@ -132,4 +133,15 @@ class AlumnosController extends Controller
         return redirect()->route('home');
     }
     
+    public function destroy(Matricula $matricula){
+        // dd($matricula->estudiante);
+        // Se elimina logicamente ( no regular: NR )..
+        // Dejaremos los datos del estudiante..
+        $matricula->matriculaSituacion = 'NR';
+        $matricula->update();
+        
+        // dd(Auth::user()->userNombre);
+        return redirect()->route('home');
+
+    }
 }

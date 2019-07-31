@@ -34,4 +34,7 @@ Route::get('/alumnos/{matricula}/editar','AlumnosController@edit')
         ->name('alumnos.editar');
 Route::put('/alumnos/{estudiante}','AlumnosController@update')
         ->name('alumnos.actualizar');
+Route::delete('/alumnos/{matricula}','AlumnosController@destroy')
+        ->name('alumnos.eliminar');
+
 
