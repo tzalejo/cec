@@ -17,7 +17,7 @@ class UserTablaSeeder extends Seeder
         // DB::table('users')->truncate();
 
         // traigo el rol de admin(director)
-        $role_dire=Role::where('roleDescripcion','director')->first();
+        $role_dire=Role::where('roleDescripcion','Director')->first();
         
         // creo el usuario director.
         $user= new User();
@@ -29,7 +29,7 @@ class UserTablaSeeder extends Seeder
         $user->save();
         
         // creo un usuario secretaria
-        $role_secre=Role::where('roleDescripcion','secretaria')->first();
+        $role_secre=Role::where('roleDescripcion','Secretaria')->first();
         $user= new User();
         $user->userNombre = 'Amelie';
         $user->email = 'secre@email.com';
@@ -39,7 +39,7 @@ class UserTablaSeeder extends Seeder
         $user->save();
         
         //creo usuario usando factory.. 
-        factory(User::class)->times(10)->create();
+        factory(User::class)->times(20)->create();
 
     }
    

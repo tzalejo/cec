@@ -22,7 +22,7 @@ class RoleTablaSeeder extends Seeder
             // ]
         );
         // $role->roleId = 1;
-        $role->roleDescripcion = 'director';
+        $role->roleDescripcion = 'Director';
         $role->save();
         
         // creamos el rol de secretaria
@@ -33,7 +33,7 @@ class RoleTablaSeeder extends Seeder
             // ]
         );
         // $role->roleId = 2;
-        $role->roleDescripcion = 'secretaria';
+        $role->roleDescripcion = 'Secretaria';
         $role->save();
 
 

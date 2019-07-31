@@ -31,7 +31,7 @@ class EstudianteSeeder extends Seeder
         ]);
 
         //creo 20 estudiantes aleatorios..
-        factory(Estudiante::class)->times(20)->create();
+        factory(Estudiante::class)->times(80)->create();
 
 
         // creamos un usuario, usuando el constructor de consulta
