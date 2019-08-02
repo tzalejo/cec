@@ -12,12 +12,22 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script> 
 
+    {{-- calendario --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="chrome-extension://aadgmnobpdmgmigaicncghmmoeflnamj/ng-inspector.js"></script>
+    <script src="{{asset('js/calendar.js')}}"></script>
+    <link href="{{ asset('css/calendar.css') }}" rel="stylesheet">
+    {{-- calendario --}}
+
     <!-- Fonts -->
     <link rel="stylesheet" href="{{asset('css/font-awesome.css')}}"> <!--font-awesome-->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     
     <!-- Styles -->
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.3/darkly/bootstrap.min.css"> --}}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         #particles-js{
@@ -686,20 +696,7 @@
                             </span>
                         </div>
                     </div>
-                    <!-- sidebar-header  -->
-                    {{-- <div class="sidebar-search">
-                        <div>
-                        <div class="input-group">
-                            <input type="text" class="form-control search-menu" placeholder="Search...">
-                            <div class="input-group-append">
-                            <span class="input-group-text">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </span>
-                            </div>
-                        </div>
-                        </div>
-                    </div> --}}
-                    <!-- sidebar-search  -->
+                 
                     <div class="sidebar-menu">
                         <ul>
                             <li class="header-menu">
@@ -707,45 +704,18 @@
                             </li>
                             <li>
                                 <a href="{{route('alumnos.inscripcion')}}">
-                                    <i class="fa fa-pencil-square-o"></i>
+                                    <i class="fa fa-vcard"></i>
                                     <span>Inscripción</span>
                                     {{-- <span class="badge badge-pill badge-warning">New</span> --}}
                                 </a>
-                                {{-- <div class="sidebar-submenu">
-                                    <ul>
-                                        <li>
-                                            <a href="#">Dashboard 1
-                                                <span class="badge badge-pill badge-success">Pro</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Dashboard 2</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Dashboard 3</a>
-                                        </li>
-                                    </ul>
-                                </div> --}}
                             </li>
                             <li>
                                 <a href="#">
                                     <i class="fa fa-retweet"></i>
                                     <span>Re Inscripción</span>
                                 </a>
+                            </li>
                             
-                            </li>
-                            {{-- <li>
-                                <a href="#">
-                                    <i class="fa fa-times"></i>
-                                    <span>Baja</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{route('alumnos.mostrar',['paginado'=>10])}}">
-                                    <i class="fa fa-eraser"></i>
-                                    <span>Editar</span>
-                                </a>
-                            </li> --}}
                             <li class="sidebar-dropdown">
                                 <a href="#">
                                     <i class="fa fa-usd"></i>
@@ -909,5 +879,75 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
     integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
 </script>
+
+{{-- calendario --}}
+
+
+<script>
+    // var mivalores = new Array(new Array(),new Array());
+    $(document).ready(function(e){
+        // console.log('se instancia caledarYvv');
+        // calendar = new CalendarYvv("#calendar", moment().format("Y-M-D"), "Monday");
+        calendar = new CalendarYvv("#calendar", moment().format("Y-M-D"), "Lunes");
+        
+        // console.log('window.calendar.currentSelected');
+        // console.log(window.calendar.currentSelected);
+        calendar.funcPer = function(ev){
+            // console.log(ev);
+            // console.log(window.calendar.currentSelected);
+            // miMes = new Date(window.calendar.currentSelected).getMonth(); // 0,1,2,3,4,5,6,7,8,9,10,11 ()
+            // console.log('miMes',miMes);
+            // diaSemana = new Date(window.calendar.currentSelected).getDay(); // 0,1,2,3,4,5,6(dom,lun,mar,...,sab)
+            // console.log('diaSemana',diaSemana);
+            // midia = new Date(window.calendar.currentSelected).getDate(); // dia 1..31
+            // console.log('midia',midia);   
+            // calendar.diaSeleccionado = window.calendar.currentSelected; 
+            // mivalores[parseInt(miMes)][parseInt(miDia)] = midia; 
+            // calendar.diasResal = mivalores.slice();
+            // calendar.createDayTag();
+            // calendar.createDaysMont();
+            // calendar.ordenarDiasMes();
+            // calendar.corregirMesA();
+            // calendar.diasResal = mivalores[miMes][midia]
+        };        
+        // preselected dates
+        // background color of preselected dates
+        calendar.colorResal = "#28a7454d"
+
+        // // text color of preselected dates
+        calendar.textResalt = "#28a745"
+
+        // background class
+        calendar.bg = "bg-dark";
+
+        // text color class
+        calendar.textColor = "text-white";
+
+        // class for normal buttons
+        calendar.btnH = "btn-outline-light";
+
+        // button class when hovering over
+        calendar.btnD = "btn-rounded-success";
+        console.log('se ejecuta createCalandar');
+        calendar.createCalendar();
+    });
+</script>
+{{-- <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36251023-1']);
+    _gaq.push(['_setDomainName', 'jqueryscript.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; 
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script> --}}
+{{-- calendario --}}
+
 
 </html>

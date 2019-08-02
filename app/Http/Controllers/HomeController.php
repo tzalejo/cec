@@ -25,6 +25,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         // $comisiones = Comision::all();
+        
         $request->user()->autorizaRoles(['Secretaria', 'Director']);
         // envio a la vista home
         return view('home')
