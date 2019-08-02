@@ -21,7 +21,7 @@ class CreacionTablaEstudiantes extends Migration
             $table->string('estudianteDomicilio',100);
             $table->string('estudianteTelefono',50)->nullable();
             $table->string('estudianteLocalidad',100);
-            $table->string('estudianteEmail',100)->nullable()->unique();;
+            $table->string('estudianteEmail',100)->nullable();
             $table->date('estudianteNacimiento');
             $table->string('estudianteFoto')->nullable();
             // $table->timestamps();
