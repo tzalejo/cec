@@ -15,4 +15,14 @@ class Curso extends Model
     public $timestamps = false;
     
     protected $primaryKey = 'cursoId';
+
+    /**
+    * Estoy indicando la relacion comision tiene muchas matriculas('s' de muchos).
+    * Usando tinker $curso= Curso::first()
+    * $curso->comisiones; -> esto me devuelve las comisiones relacionado a la curso.
+    * @var array 
+    */
+    public function comisiones(){
+        return $this->hasMany(Comision::class,'cursoId');
+    }
 }

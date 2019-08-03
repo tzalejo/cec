@@ -32,13 +32,13 @@ class Comision extends Model
     
     /**
     * Estoy indicando la relacion comision tiene muchas matriculas('s' de muchos).
-    * Usando tinker $comsion= Comision::first()
-    * $comsion->curso; -> esto me devuelve el curso relacionado a la comision (primera).
+    * Usando tinker $comision= Comision::first()
+    * $comision->matriculas; -> esto me devuelve las matriculas relacionado a la comision.
     * @var array 
     */
     public function matriculas()
     {
-        return $this->hasMany(Matricula::class, 'matriculaId');
+        return $this->hasMany(Matricula::class, 'comisionId');
     }
     
     // funcion que me devuelve la cantidad de alumnos que tiene una comision..
