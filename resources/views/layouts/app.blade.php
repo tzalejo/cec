@@ -24,6 +24,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     
+    {{-- icons Ionicons --}}
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+    {{-- icons Ionicons --}}
+
     <!-- Styles -->
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.3/darkly/bootstrap.min.css"> --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -704,9 +708,10 @@
                             </li>
                             <li>
                                 <a href="{{route('alumnos.inscripcion')}}">
-                                    <i class="fa fa-vcard"></i>
+                                    <i class="fa fa">
+                                        <ion-icon name="person-add"></ion-icon>
+                                    </i>
                                     <span>Inscripción</span>
-                                    {{-- <span class="badge badge-pill badge-warning">New</span> --}}
                                 </a>
                             </li>
                             <li>
@@ -881,8 +886,6 @@
 </script>
 
 {{-- calendario --}}
-
-
 <script>
     // var mivalores = new Array(new Array(),new Array());
     $(document).ready(function(e){
@@ -932,6 +935,8 @@
         calendar.createCalendar();
     });
 </script>
+
+
 {{-- <script type="text/javascript">
 
     var _gaq = _gaq || [];
