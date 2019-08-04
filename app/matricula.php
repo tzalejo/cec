@@ -3,6 +3,7 @@
 namespace App;
 use App\Estudiante;
 use App\Comision;
+use App\Cuota;
 use Illuminate\Database\Eloquent\Model;
 
 class Matricula extends Model
@@ -41,6 +42,16 @@ class Matricula extends Model
     public function comision()
     {
         return $this->belongsTo(Comision::class, 'comisionId');
+    }
+
+    /**
+     * Relacion 
+     * 
+     * @var colection
+     */
+    public function cuotas()
+    {
+        return $this->hasMany(Cuota::class, 'matriculaId');
     }
 
 }
