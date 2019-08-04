@@ -87,12 +87,12 @@
       <h2>Pagos</h2>
       <div class="form-group col-md-12">
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="pagoInscripcion">
+          <input type="checkbox" class="custom-control-input" id="pagoInscripcion" name="pagoInscripcion">
           <label class="custom-control-label" for="pagoInscripcion">Inscripcion</label>
         </div>
         
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="pagoCuota">
+          <input type="checkbox" class="custom-control-input" id="pagoCuota" name="pagoCuota">
           <label class="custom-control-label" for="pagoCuota">Cuota</label>
         </div>
 

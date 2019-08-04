@@ -88,6 +88,7 @@
       </select>
     </div>
   </div>
+  
   <button type="submit" class="btn btn-primary">Actualizar Alumno</button>
   <a href="{{route('home')}}" class="btn btn-primary">Cancelar</a>
 </form>

@@ -36,5 +36,7 @@ Route::put('/alumnos/{estudiante}','AlumnosController@update')
         ->name('alumnos.actualizar');
 Route::delete('/alumnos/{matricula}','AlumnosController@destroy')
         ->name('alumnos.eliminar');
-
+        
+Route::get('/alumnos/{matricula}/pago','AlumnosController@pago')
+        ->name('alumnos.pago');
 
