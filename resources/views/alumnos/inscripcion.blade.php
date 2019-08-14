@@ -6,7 +6,7 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="estudianteNombre">Nombre</label>
-        <input type="text" class="form-control @error('estudianteNombre') is-invalid @enderror" id="estudianteNombre" placeholder="Nombre" name="estudianteNombre" value="{{old('estudianteNombre')}}">
+        <input type="text" autofocus  class="form-control @error('estudianteNombre') is-invalid @enderror" id="estudianteNombre" placeholder="Nombre" name="estudianteNombre" value="{{old('estudianteNombre')}}">
         @error('estudianteNombre')
           <div class="invalid-feedback">{{ $message }}</div>
         @enderror

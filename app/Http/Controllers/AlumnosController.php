@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Comision;
 use App\Estudiante;
 use App\Matricula;
-use App\Cuota;
+use App\{Cuota,Pago};
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 
@@ -59,7 +59,7 @@ class AlumnosController extends Controller
             'estudianteApellido'    => ucwords(strtolower($datosValidado['estudianteApellido'])),
             'estudianteDNI'         => $datosValidado['estudianteDNI'],
             'estudianteDomicilio'   => ucwords(strtolower($datosValidado['estudianteDomicilio'])),
-            'estudianteEmail'       => $datosValidado['estudianteEmail'],
+            'estudianteEmail'       => strtolower($datosValidado['estudianteEmail']),
             'estudianteTelefono'    => $datosValidado['estudianteTelefono'],
             'estudianteLocalidad'   => strtolower($datosValidado['estudianteLocalidad']),
             'estudianteNacimiento'  => $datosValidado['estudianteNacimiento'],
@@ -72,7 +72,7 @@ class AlumnosController extends Controller
             'estudianteId'      =>$estudianteNuevo->estudianteId ,
             'comisionId'        =>$request->get('comisionId') ,
         ]);
-        // dd($matriculaId->matriculaId);
+        // pregunto por las casillas 
         if (is_null($request->get('pagoInscripcion')) && is_null($request->get('pagoCuota'))) {
             # es porque ninguna de las dos casilla esta tildada..
             return view('home')->with('comisiones', Comision::all());
@@ -100,14 +100,19 @@ class AlumnosController extends Controller
                 $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
             }
             return redirect()
-            ->route('alumnos.pago', $matricula);
+            ->route('alumnos.cuotas', $matricula);
         }
         
     }
     
-    public function show($paginado){
-        // $page = $request->get('page', 1);
-        $estudiantes = Estudiante::paginate($paginado);
+    public function show(Request $request){
+        
+        // primero dejo en minuscula to el apellido y en mayusucula la primera letra
+        $apellido = ucwords(strtolower($request->get('estudianteApellido')));
+        
+        $estudiantes = Estudiante::orderBy('estudianteId','ASC') 
+            ->estudianteApellido($apellido)
+            ->paginate(10);
         
         return view('alumnos.mostrar')
             ->with('estudiantes', $estudiantes);
@@ -184,9 +189,65 @@ class AlumnosController extends Controller
         return redirect()->route('home');
 
     }
+    // genero la vista de cuota, para seleccionar cuota a pagar
+    public function cuotas(Matricula $matricula){
 
-    public function pago(Matricula $matricula){
-
-        return view('alumnos.pago')->with('matricula',$matricula);;
+        return view('alumnos.cuotas')->with('matricula',$matricula);
     }
+    // ingreso el monto a pagar de la cuota seleccionada..
+    public function pago(Cuota $cuota){
+
+        return view('alumnos.pago')->with('cuota',$cuota);
+
+    }
+    // hago el pago
+    public function cancelarPago(Cuota $cuota, Request $request){
+        // dd($request);
+        $now = date('Y-m-d');
+        $datosValido = $request->validate([
+            'cuotaMonto' => 'required|numeric|min:100'
+        ]);
+        // genero los pagos automatico..
+
+        // id de la primera cuota a pagar..
+        $cuotaPagada =  $cuota->cuotaId;
+        // genero el registro de esta cuota para consultar el saldo
+        $cuotaBuscada = Cuota::find($cuotaPagada);
+        
+        // resto del monto q voy abonar del saldo..
+        if($datosValido['cuotaMonto']>$cuotaBuscada->cuotaFaltante()){
+            $resto = $datosValido['cuotaMonto']-$cuotaBuscada->cuotaFaltante();
+            // busco cuantas cuota tengo para pagar..
+            $cociente= intdiv( $resto,$cuotaBuscada->cuotaMonto);
+            
+        }else{
+            $resto = $datosValido['cuotaMonto'];
+            $cociente=-1;
+        }
+        for ($i=0; $i <= $cociente  ; $i++) { 
+            Pago::create([
+                'pagoAbono'     => $cuotaBuscada->cuotaFaltante(),
+                'pagoFAbono'    => $now,
+                'cuotaId'       => $cuotaPagada
+                ]);
+            // como los pagos son secuencciales, sumo uno para ir a la siguiente cuota
+            $cuotaPagada++;
+            // busco la cuota
+            $cuotaBuscada = Cuota::find($cuotaPagada);
+            // resto el monto total
+            if($resto>$cuotaBuscada->cuotaMonto){
+                $resto = $resto-$cuotaBuscada->cuotaMonto;
+            }
+        }
+        // Ahora si el monto es inferior a lo faltante de la cuota..
+        if($resto>0){
+            Pago::create([
+                'pagoAbono' => $resto,
+                'pagoFAbono' => $now,
+                'cuotaId' => $cuotaPagada
+            ]);
+        }
+        return redirect()->route('alumnos.cuotas',$cuota->matricula);
+    }
+
 }

@@ -39,7 +39,7 @@ class UserTablaSeeder extends Seeder
         $user->save();
         
         //creo usuario usando factory.. 
-        factory(User::class)->times(20)->create();
+        // factory(User::class)->times(20)->create();
 
     }
    

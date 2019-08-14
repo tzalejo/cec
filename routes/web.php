@@ -27,16 +27,28 @@ Route::get('/alumnos/inscripcion','AlumnosController@inscripcion')
 Route::post('/alumnos/crear','AlumnosController@store')
         ->name('alumnos.crear');
 
-        
-Route::get('/alumnos/mostrar{paginado}','AlumnosController@show')
-        ->name('alumnos.mostrar');
 Route::get('/alumnos/{matricula}/editar','AlumnosController@edit')
         ->name('alumnos.editar');
 Route::put('/alumnos/{estudiante}','AlumnosController@update')
         ->name('alumnos.actualizar');
+
 Route::delete('/alumnos/{matricula}','AlumnosController@destroy')
         ->name('alumnos.eliminar');
         
-Route::get('/alumnos/{matricula}/pago','AlumnosController@pago')
+
+// mostrar estudiantes para hacer el pago de cuota o inscripcion..
+Route::get('/alumnos/mostrar','AlumnosController@show')
+        ->name('alumnos.mostrar');
+        
+
+Route::get('/alumnos/{matricula}/cuotas','AlumnosController@cuotas')
+        ->name('alumnos.cuotas');
+
+
+Route::get('/alumnos/{cuota}/pago','AlumnosController@pago')
         ->name('alumnos.pago');
+        
+Route::post('/alumnos/{cuota}/pago','AlumnosController@cancelarPago')
+        ->name('alumnos.cancelarPago');
+
 

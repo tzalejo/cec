@@ -3,8 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Matricula;
-use App\Pago;
+use App\{Pago,Matricula};
 class Cuota extends Model
 {
      /**
@@ -38,9 +37,43 @@ class Cuota extends Model
         return $this->hasMany(Pago::Class, 'cuotaId');
     }
 
+    public function cuotaFaltante(){
+        /**
+         * return el faltante de una cuota parcialmente pagada;
+         * 
+         */
+        return ($this->cuotaMonto - Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono'));
+    }
+
     public function cuotaPagada(){
-        // return Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono');
-        // $sumatoriaCuota = Pago::sum('pagoAbono')->where('cuotaId',$this->cuotaId);
+        /**
+         * return Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono');
+         * $sumatoriaCuota = Pago::sum('pagoAbono')->where('cuotaId',$this->cuotaId);
+         */
         return $this->cuotaMonto == Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono');
+    }
+    public function estadoCuota(){
+        /**
+         *  Generar los estados de la cuota(Pagos):
+         *  Cuota Pagada        : Fecha
+         *  Cuota No pagada     : N/A
+         *  Cuota Pago Parcial  : Fecha - Faltante
+         */
+        $now = date('Y-m-d');
+        if ($this->cuotaPagada()){
+            # si la cuota esta saldada
+            return Pago::where('cuotaId',$this->cuotaId)
+            ->value('pagoFAbono');
+            // ->get()
+            // ->last() // para obtener el último elemento de la colección
+            
+        }if ($this->cuotaMonto > Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono') && $this->cuotaFVencimiento<= $now)  {
+            # si la cuota aun no fue salda y tiene un pago parcial
+            return 'Falta cancelar: $'.(string)($this->cuotaMonto-(Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono')));
+        } else {
+            # si la cuota no esta pagada
+            return 'No vencida - $'.(string)($this->cuotaMonto-(Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono')));
+        }
+        
     }
 }

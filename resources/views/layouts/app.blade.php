@@ -673,7 +673,7 @@
         </div> 
         @yield('content')
     @else {{-- si estoy legueado --}}
-        <div class="page-wrapper chiller-theme toggled">
+        <div class="page-wrapper chiller-theme toggled table-responsive-md">
             <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </a>
@@ -729,8 +729,8 @@
                                 </a>
                                 <div class="sidebar-submenu">
                                     <ul>
-                                        <li><a href="#">Inscripción</a></li>
-                                        <li><a href="#">Cuota</a></li>
+                                        {{-- <li><a href="#">Inscripción</a></li> --}}
+                                        <li><a href="{{route('alumnos.mostrar')}}">Curso</a></li>
                                         <li><a href="#">Seminario</a></li>
                                     </ul>
                                 </div>
@@ -902,7 +902,6 @@
             // console.log('miMes',miMes);
             // diaSemana = new Date(window.calendar.currentSelected).getDay(); // 0,1,2,3,4,5,6(dom,lun,mar,...,sab)
             // console.log('diaSemana',diaSemana);
-            // midia = new Date(window.calendar.currentSelected).getDate(); // dia 1..31
             // console.log('midia',midia);   
             // calendar.diaSeleccionado = window.calendar.currentSelected; 
             // mivalores[parseInt(miMes)][parseInt(miDia)] = midia; 
@@ -912,8 +911,12 @@
             // calendar.ordenarDiasMes();
             // calendar.corregirMesA();
             // calendar.diasResal = mivalores[miMes][midia]
-        };        
+        };      
+        
+        midia = new Date(window.calendar.currentSelected).getDate(); // dia 1..31
+        calendar.diasResal = [midia];
         // preselected dates
+
         // background color of preselected dates
         calendar.colorResal = "#28a7454d"
 

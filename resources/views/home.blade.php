@@ -83,7 +83,7 @@
       <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist" aria-multiselectable="true"><!--Accordion wrapper-->
         <div class="card mb-2"><!-- Accordion card -->
           @foreach ($comisiones as $comision)
-          <div class="card-header p-1 z-depth-1" role="tab" id="heading{{$comision->comisionId}}"><!-- Card header -->
+          <div class="card-header p-1 z-depth-1" style="height: 58px;" role="tab" id="heading{{$comision->comisionId}}"><!-- Card header -->
             <a data-toggle="collapse" data-parent="#accordionEx5" href="#collapse{{$comision->comisionId}}" aria-expanded="true" aria-controls="collapse{{$comision->comisionId}}" style="text-decoration:none;">
               <i class="fa fa-ellipsis-v fa-2x p-3 mr-2 float-left" aria-hidden="true"></i>
               <h4>

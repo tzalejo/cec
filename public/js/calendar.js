@@ -16,7 +16,7 @@ class CalendarYvv{
 		this.funcNext = false; // funcion a ejecutar al lanzar el evento click
 		this.funcPrev = false; // funcion a ejecutar al lanzar el evento click
 		this.currentSelected = moment().format("Y-M-D"); // elemento seleccionado
-
+		// midia = new Date(window.calendar.currentSelected).getDate();
 		this.diasResal = []; // dias importantes
 		this.colorResal = "#28a7454d"; // color de los dias importantes
 		this.textResalt = "#28a745"; // color de texto de dias importantes

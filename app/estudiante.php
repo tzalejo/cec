@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use App\Matricula;
 use Illuminate\Database\Eloquent\Model;
 
 class Estudiante extends Model
@@ -41,5 +41,23 @@ class Estudiante extends Model
     {
         return $this->hasMany(Matricula::class,'matriculaId');
     }
+
+
+    // query scope
+    public function scopeEstudianteApellido($query, $estudianteApellido){
+        if(trim($estudianteApellido))
+            return $query->where('estudianteApellido', 'LIKE' , "%$estudianteApellido%");
+        
+    }
+
+    /**
+     * Devuelve la cantidad de matriculas tiene el estudiante..
+     * 
+     * @var number
+     */
+    public function cantidadMatriculas(){
+        return Matricula::where('estudianteId',$this->estudinteId)->count();
+    }
+
     
 }

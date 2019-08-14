@@ -4,7 +4,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Role;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -93,11 +93,11 @@ class User extends Authenticatable
     }
 
     public function esDirector(){
-        return $this->roleId === Role::where('roleDescripcion','director')->first()->value('roleId');
+        return $this->roleId === Role::where('roleDescripcion','Director')->first()->value('roleId');
     }
 
     public static function buscarPorEmail($email){
-        // es static es similar a user
+        // es static es similar a user o this
         return static::where(compact('email'))->first();
     }
 

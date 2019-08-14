@@ -54,4 +54,14 @@ class Matricula extends Model
         return $this->hasMany(Cuota::class, 'matriculaId');
     }
 
+
+    /**
+     * Funcion si una matricula esta regular(RE) o no regular(eliminada-NR)
+     * 
+     * @var boolean
+     */
+    public function esMatriculaRegular(){
+        return $this->matriculaSituacion == 'RE';
+    }
+
 }

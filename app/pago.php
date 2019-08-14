@@ -25,6 +25,6 @@ class Pago extends Model
 
     public function cuota()
     {
-        return $this->belongsTo(Cuota::Class,  'cuotaId');
+        return $this->belongsTo(Cuota::Class, 'cuotaId');
     }
 }
