@@ -39,11 +39,13 @@ class Estudiante extends Model
 
     public function matriculas()
     {
-        return $this->hasMany(Matricula::class,'matriculaId');
+        return $this->hasMany(Matricula::class,'estudianteId');
     }
 
-
-    // query scope
+    /**
+     * query scope
+     * 
+     */
     public function scopeEstudianteApellido($query, $estudianteApellido){
         if(trim($estudianteApellido))
             return $query->where('estudianteApellido', 'LIKE' , "%$estudianteApellido%");
