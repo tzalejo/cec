@@ -18,20 +18,20 @@ class EstudianteSeeder extends Seeder
         // DB::table('estudiantes')->truncate();
 
         // crear usuario usando Eloquent
-        // Estudiante::create([
-        //     'estudianteDNI'=>12345678,
-        //     'estudianteApellido'=>'Valenzuela',
-        //     'estudianteNombre'=>'Alejandro',
-        //     'estudianteDomicilio'=>'Av. Juan Carlos Nro 1873',
-        //     'estudianteTelefono'=>'134-1543623',
-        //     'estudianteLocalidad'=>'Tartagal',
-        //     'estudianteEmail'=>'ale@mail.com',
-        //     'estudianteNacimiento'=>'1982-09-17',
-        //     'estudianteFoto'=>'null'
-        // ]);
+        Estudiante::create([
+            'estudianteDNI'=>12345678,
+            'estudianteApellido'=>'Valenzuela',
+            'estudianteNombre'=>'Alejandro',
+            'estudianteDomicilio'=>'Av. Juan Carlos Nro 1873',
+            'estudianteTelefono'=>'134-1543623',
+            'estudianteLocalidad'=>'Tartagal',
+            'estudianteEmail'=>'tzalejo@mail.com',
+            'estudianteNacimiento'=>'1982-09-17',
+            'estudianteFoto'=>'null'
+        ]);
 
         //creo 20 estudiantes aleatorios..
-        // factory(Estudiante::class)->times(80)->create();
+        factory(Estudiante::class)->times(80)->create();
 
 
         // creamos un usuario, usuando el constructor de consulta

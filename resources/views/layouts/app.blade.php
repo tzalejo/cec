@@ -673,16 +673,16 @@
         </div> 
         @yield('content')
     @else {{-- si estoy legueado --}}
-        <div class="page-wrapper chiller-theme toggled table-responsive-md">
+        <div class="page-wrapper chiller-theme toggled " >
             <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </a>
-            <nav id="sidebar" class="sidebar-wrapper">
+            <nav id="sidebar" class="sidebar-wrapper" data-toggle="collapse">
                 <div class="sidebar-content">
                     <div class="sidebar-brand">
                         <a href="{{route('home')}}">sistema cec</a>
                         <div id="close-sidebar">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <i class="fa fa-times" aria-hidden="false"></i>
                         </div>
                     </div>
                     <div class="sidebar-header">
@@ -751,7 +751,7 @@
                             </li>
                             <li class="sidebar-dropdown">
                                 <a href="#">
-                                    <i class="fa fa-address-book"></i>
+                                    <i class="fas fa-fw fa-cog"></i>
                                     <span>Administración</span>
                                 </a>
                                 <div class="sidebar-submenu">
@@ -821,7 +821,7 @@
                 </div>
             </nav>
             <main class="page-content">
-                <div class="container-fluid">
+                <div class="container">
 
                     @yield('content')
 

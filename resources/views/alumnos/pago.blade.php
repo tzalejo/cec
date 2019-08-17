@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <h1>PAGO</h1>
-<h4>Alumno</h4>
+<h4>ESTUDIANTE</h4>
 
 <div class="form-row">
   <div class="form-group col-md-6">
