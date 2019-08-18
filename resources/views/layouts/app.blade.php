@@ -162,6 +162,7 @@
             /*----------------sidebar-wrapper----------------*/
 
             .sidebar-wrapper {
+                
                 width: 260px;
                 height: 100%;
                 max-height: 100%;
@@ -265,6 +266,14 @@
 
             /*----------------------sidebar-menu-------------------------*/
 
+            #sidebar {
+            background-image: url("https://directivosygerentes.es/wp-content/uploads/2019/04/datisa-tecnolog%C3%ADa-usuario-681x454.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-sizing: border-box;
+            }
+
             .sidebar-wrapper .sidebar-menu {
             padding-bottom: 10px;
             }
@@ -282,6 +291,7 @@
             text-decoration: none;
             position: relative;
             padding: 8px 30px 8px 20px;
+            
             }
 
             .sidebar-wrapper .sidebar-menu ul li a i {
@@ -296,9 +306,25 @@
 
             .sidebar-wrapper .sidebar-menu ul li a:hover > i::before {
             display: inline-block;
-            animation: swing ease-in-out 0.5s 1 alternate;   
+            /* movimiento de los botons.. */ 
+            animation: swing ease-in-out 0.5s 1 alternate;  
             }
-
+            /*   
+            .sidebar-wrapper .sidebar-menu ul li a:hover > ion-icon::before {
+            display: inline-block;
+           
+            animation: swing ease-in-out 0.5s 1 alternate;  
+            }
+       
+            <li>
+                <a href="{{route('alumnos.reinscripcion')}}">
+                    <i class="fa fa-retweet"></i>
+             <li>
+                <a href="{{route('alumnos.inscripcion')}}">
+                    <i class="fa fa">
+                        <ion-icon name="person-add"></ion-icon>
+                    </i>
+            */
             .sidebar-wrapper .sidebar-menu .sidebar-dropdown > a:after {
                 font-family: "Font Awesome 5 Free";
                 font-weight: 900;
@@ -339,6 +365,7 @@
                 -moz-osx-font-smoothing: grayscale;
                 margin-right: 10px;
                 font-size: 8px;
+                background-color: rgba(255,255,255,.1);
             }
 
             .sidebar-wrapper .sidebar-menu ul li a span.label,
@@ -677,6 +704,7 @@
             <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </a>
+            {{-- barra laterarl izq --}}
             <nav id="sidebar" class="sidebar-wrapper" data-toggle="collapse">
                 <div class="sidebar-content">
                     <div class="sidebar-brand">
@@ -702,7 +730,7 @@
                     </div>
                  
                     <div class="sidebar-menu">
-                        <ul>
+                        <ul >
                             <li class="header-menu">
                                 <span>Alumno</span>
                             </li>
@@ -715,7 +743,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{route('alumnos.reinscripcion')}}">
                                     <i class="fa fa-retweet"></i>
                                     <span>Re Inscripción</span>
                                 </a>

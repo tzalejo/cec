@@ -66,13 +66,11 @@ class Comision extends Model
     }
 
     /**
-     * Me devuelve si la funcion esta activa o no, osea la fecha de fin. Tinker:
-     * 
-     * 
+     *  scope Comisiones
      */
-    // public function comisionesActivas(){
-    //     $now = date('Y-m-d');
-    //     return Comision::where('comisionFF', '>', $now)->get();
-    // }
+    public function scopeComisionesActivas($query){
+        $now = date('Y-m-d');
+        return $query->where('comisionFF', '>', $now);
+    }
 
 }

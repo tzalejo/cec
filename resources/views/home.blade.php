@@ -116,14 +116,14 @@
            
             {{-- <div id="collapse{{$comision->comisionId}}" class="collapse" role="tabpanel" aria-labelledby="heading{{$comision->comisionId}}" data-parent="#accordionEx5"> <!-- Card body --> --}}
             <div class="card-body rgba-black-light white-text z-depth-1 pb-0" style="padding:0px;">
-              <table class="table table-striped">
+              <table class="table table-borderless">
                 <thead class="">
                   <tr>
-                    <th scope="col">#Matricula</th>
+                    {{-- <th scope="col">#Matricula</th>
                     <th scope="col">Apellido</th>
                     <th scope="col">Nombre </th>
                     <th scope="col">DNI</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col">Acciones</th> --}}
                   </tr>
                 </thead>
                 <tbody>

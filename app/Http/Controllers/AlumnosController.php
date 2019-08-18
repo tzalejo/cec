@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Comision;
-use App\Estudiante;
-use App\Matricula;
-use App\{Cuota,Pago};
+use App\{Estudiante,Matricula,Comision,Cuota,Pago};
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 
@@ -24,8 +21,8 @@ class AlumnosController extends Controller
     // muestro el formulario de inscripcion
     public function inscripcion(){
         $now = date('Y-m-d');
-        $comisionesAbiertas = Comision::where('comisionFF', '>', $now)->get();
-        return view('alumnos.inscripcion')->with('comisionesAbiertas',$comisionesAbiertas);
+        $comisionesActivas = Comision::ComisionesActivas()->get(); // uso un scope
+        return view('alumnos.inscripcion')->with('comisionesActivas',$comisionesActivas);
     }
     // guardo los datos del formulario de inscripcion..
     public function store(Estudiante $estudiante, Request $request){
@@ -261,4 +258,60 @@ class AlumnosController extends Controller
         return redirect()->route('alumnos.cuotas',$cuota->matricula);
     }
 
+    // muestro el formulario de Re-inscripcion
+    public function reinscripcion(Request $request){
+        $apellido = ucwords(strtolower($request->get('estudianteApellido')));
+        $DNI = $request->get('estudianteDNI');
+        
+        $estudiantes = Estudiante::orderBy('estudianteId','ASC') 
+            ->estudianteApellido($apellido)
+            ->estudianteDNI($DNI)
+            ->paginate(10);
+        
+        return view('alumnos.reinscripcion')->with('estudiantes', $estudiantes);
+    }
+    // formulario para que seleccione nuevo curso..
+    public function reinscripcionEstudiante(Estudiante $estudiante){
+        // dd($estudiante);
+        $now = date('Y-m-d');
+        $comisionesActivas = Comision::ComisionesActivas()->get();
+        return view('alumnos.reinscripcionEstudiante')
+            ->with('estudiante',$estudiante)
+            ->with('comisionesActivas',$comisionesActivas);
+    }
+
+    // dar el alta de la reinscripcion..
+    public function altaReinscripcionEstudiante(Estudiante $estudiante, Request $request){
+        // dd($estudiante);
+        // Recordar: regular(RE), no regular(NR) o egresado(EG)
+        $matricula =  Matricula::create([
+            'matriculaSituacion'=>'RE',
+            'estudianteId'      =>$estudiante->estudianteId ,
+            'comisionId'        =>$request->get('comisionId') ,
+        ]);
+
+        # generar las cuotas de la matricula..
+        $nuevafecha = $matricula->comision->comisionFI;
+        Cuota::create([
+            'cuotaConcepto'     => 'Inscripcion - '.$matricula->comision->curso->cursoNombre,
+            'cuotaMonto'        => $matricula->comision->curso->cursoInscripcion,
+            'cuotaFVencimiento' => $nuevafecha,
+            'cuotaBonificacion' => 0,
+            'matriculaId'       => $matricula->matriculaId,
+            ]);
+        for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) { 
+            # code...
+            Cuota::create([
+                'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
+                'cuotaMonto'        => $matricula->comision->curso->cursoCostoMes,
+                'cuotaFVencimiento' => $nuevafecha,
+                'cuotaBonificacion' => 0,
+                'matriculaId'       => $matricula->matriculaId,
+                ]);
+            $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $matricula->comision->comisionFI ) ) ;
+            $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+        }
+        return redirect()
+        ->route('alumnos.cuotas', $matricula);
+    }
 }

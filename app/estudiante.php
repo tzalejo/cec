@@ -43,13 +43,21 @@ class Estudiante extends Model
     }
 
     /**
-     * query scope
-     * 
+     * query scope por Apellido
      */
     public function scopeEstudianteApellido($query, $estudianteApellido){
         if(trim($estudianteApellido))
             return $query->where('estudianteApellido', 'LIKE' , "%$estudianteApellido%");
         
+    }
+
+    /**
+     * query scope por DNI
+     */
+    public function scopeEstudianteDNI($query, $estudianteDNI){
+        if(trim($estudianteDNI))
+            return $query->where('estudianteDNI', 'LIKE' , "%$estudianteDNI%");
+    
     }
 
     /**

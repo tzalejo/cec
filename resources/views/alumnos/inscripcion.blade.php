@@ -83,8 +83,8 @@
               <div class="form-group col-md-12">
                 <label for="comisionId">Curso</label>
                 <select class="form-control @error('comisionId') is-invalid @enderror" id="comisionId" name="comisionId">
-                  @forelse ($comisionesAbiertas as $comision)
-                    <option value="{{$comision->comisionId}}" >{{$comision->comisionNombre}} - {{$comision->comisionHorario}} - Alumnos({{$comision->cantidadAlumnos()}})</option>
+                  @forelse ($comisionesActivas as $comision)
+                    <option value="{{$comision->comisionId}}" >{{$comision->curso->cursoNombre }} - {{ $comision->comisionNombre}} ( {{$comision->comisionHorario}} ) - Alumnos({{$comision->cantidadAlumnos()}}) </option>
                   @empty
                     <option>Sin Comisiones</option>
                   @endforelse

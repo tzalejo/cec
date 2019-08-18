@@ -47,8 +47,18 @@ Route::get('/alumnos/{matricula}/cuotas','AlumnosController@cuotas')
 
 Route::get('/alumnos/{cuota}/pago','AlumnosController@pago')
         ->name('alumnos.pago');
+
         
 Route::post('/alumnos/{cuota}/pago','AlumnosController@cancelarPago')
         ->name('alumnos.cancelarPago');
 
+// para los alumnos q ya se inscribieron 
+Route::get('/alumnos/reinscripcion','AlumnosController@reinscripcion')
+        ->name('alumnos.reinscripcion');
 
+// vamos a manejar inscripcion(abm) y legajo
+Route::get('/alumnos/{estudiante}/inscripcion','AlumnosController@reinscripcionEstudiante')
+        ->name('alumnos.reinscripcionEstudiante'); 
+
+Route::post('/alumnos/{estudiante}/inscripcion','AlumnosController@altaReinscripcionEstudiante')
+        ->name('alumnos.altaReinscripcionEstudiante'); 
