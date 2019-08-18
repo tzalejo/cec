@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
-<div class="container">
+<div class="container-fluid">
   <div class="card">
     <div class="card-header">
-      <h2 class="card-title">ALUMNO</h2>
+      <h2 class="card-title  mb-2">ALUMNO</h2>
     </div>
   </div>
   <form>
@@ -28,7 +28,16 @@
   
   <div class="card mt-3">
     <div class="card-header">
-      <h2 class="card-title">CUOTAS</h2>
+      <div class="d-sm-flex align-items-center justify-content-between mb-2">
+        <h2 class="card-title mb-0 text-gray-800">CUOTAS</h2>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+          <span class="icon text-white-50">
+            <i class="fas fa-download fa-sm text-white-50"></i>
+          </span>
+          <span class="text">Generar Reporte</span>
+        </a>
+
+      </div>
     </div>
     <ul class="list-group list-group-flush">
       <div class="row">
@@ -56,13 +65,13 @@
                   <td class="d-none d-xl-table-cell">{{$cuota->cuotaBonificacion}}</td>
                   <td class="d-none d-md-table-cell">{{$cuota->estadoCuota()}}</td>
                   <td>
-                    <a  class="btn @if ($cuota->cuotaPagada()) btn-light @else btn-danger @endif  btn-sm" 
+                    <a  class="btn @if ($cuota->cuotaPagada()) btn-outline-light @else btn-outline-danger @endif  btn-sm" 
                         href="{{route('alumnos.pago',['cuota' => $cuota])}}"  @if ($cuota->cuotaPagada()) style="cursor: default; pointer-events: none;" onclick="return false;" @endif>
                       Pagar
                     </a>
                     {{-- cancelar una cuota solo si el Usuario es "director"--}}
                     @if ($cuota->cuotaPagada() && Auth::user()->esDirector() )
-                      <a  class="btn btn-danger btn-sm" href="#">
+                      <a  class="btn btn-outline-danger btn-sm" href="#">
                         Cancelar
                       </a>    
                     @endif

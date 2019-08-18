@@ -48,6 +48,12 @@ class AlumnosController extends Controller
         [
             'estudianteDNI.required' => 'El DNI del estudiante es requerdio',
             'estudianteDNI.unique'   => 'El DNI del estudiante ya existe',
+            'estudianteNombre.required' => 'El Nombre del estudiante es requerdio',
+            'estudianteApellido.required' => 'El Apellido del estudiante es requerdio',
+            'estudianteDomicilio.required' => 'El Domicilio del estudiante es requerdio',
+            'estudianteLocalidad.required' => 'El Localidad del estudiante es requerdio',
+            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerdio',
+            
             // 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
             // 'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, verifique',
             
@@ -81,20 +87,20 @@ class AlumnosController extends Controller
             # generar las cuotas de la matricula..
             $nuevafecha = $matricula->comision->comisionFI;
             Cuota::create([
-                'cuotaConcepto' => 'Inscripcion - '.$matricula->comision->curso->cursoNombre,
-                'cuotaMonto' => $matricula->comision->curso->cursoInscripcion,
+                'cuotaConcepto'     => 'Inscripcion - '.$matricula->comision->curso->cursoNombre,
+                'cuotaMonto'        => $matricula->comision->curso->cursoInscripcion,
                 'cuotaFVencimiento' => $nuevafecha,
                 'cuotaBonificacion' => 0,
-                'matriculaId' => $matricula->matriculaId,
+                'matriculaId'       => $matricula->matriculaId,
                 ]);
             for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) { 
                 # code...
                 Cuota::create([
-                    'cuotaConcepto' => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
-                    'cuotaMonto' => $matricula->comision->curso->cursoCostoMes,
+                    'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
+                    'cuotaMonto'        => $matricula->comision->curso->cursoCostoMes,
                     'cuotaFVencimiento' => $nuevafecha,
                     'cuotaBonificacion' => 0,
-                    'matriculaId' => $matricula->matriculaId,
+                    'matriculaId'       => $matricula->matriculaId,
                     ]);
                 $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $matricula->comision->comisionFI ) ) ;
                 $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
@@ -202,15 +208,20 @@ class AlumnosController extends Controller
     }
     // hago el pago
     public function cancelarPago(Cuota $cuota, Request $request){
-        // dd($request);
-        $now = date('Y-m-d');
+        // dd($request->validate('cuotaMonto'));
         $datosValido = $request->validate([
             'cuotaMonto' => 'required|numeric|min:100'
+        ],[
+            'cuotaMonto.required' => 'El Monto de la cuota es requerdio, por favor verifique.',
+            'cuotaMonto.numeric' => 'Se espera un valor numerico, por favor verifique.',
         ]);
         // genero los pagos automatico..
 
-        // id de la primera cuota a pagar..
+        // fecha q necesito para el pago
+        $now = date('Y-m-d');
+        // id de la cuota a pagar..
         $cuotaPagada =  $cuota->cuotaId;
+        // dd($cuota->cuotaId);
         // genero el registro de esta cuota para consultar el saldo
         $cuotaBuscada = Cuota::find($cuotaPagada);
         

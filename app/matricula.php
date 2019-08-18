@@ -64,4 +64,27 @@ class Matricula extends Model
         return $this->matriculaSituacion == 'RE';
     }
 
+    /**
+     * Funcion para saber si una matricula cancelo todas las cuotas.
+     * 
+     * @var boolean
+     */
+    public function matriculaCancelada(){
+        $cantidadCuotas = $this->comision->curso->cursoNroCuota; 
+
+        // obtengo un arreglo de todas las cuotas con matriculaId
+        $cuotas = Cuota::where('matriculaId',$this->matriculaId)->get();
+        
+        // recorro las cuotas y verifico si estan pagadas o no..
+        for ($i=1; $i <= $cantidadCuotas ; $i++) { 
+            # code...
+            if (!$cuotas[$i]->cuotaPagada()) {
+                # si alguna cuota no fue pagada retorno false..
+                return false;
+            }
+        }
+        // fue pagada si llego aca..
+        return true;
+    }
+
 }

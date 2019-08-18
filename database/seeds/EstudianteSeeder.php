@@ -19,7 +19,7 @@ class EstudianteSeeder extends Seeder
 
         // crear usuario usando Eloquent
         Estudiante::create([
-            'estudianteDNI'=>12345678,
+            'estudianteDNI'=>29570900,
             'estudianteApellido'=>'Valenzuela',
             'estudianteNombre'=>'Alejandro',
             'estudianteDomicilio'=>'Av. Juan Carlos Nro 1873',

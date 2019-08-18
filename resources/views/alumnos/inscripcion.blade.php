@@ -5,10 +5,11 @@
   <!-- Content Row -->
   <div class="row">
     <div class="col-xl-12">
-      <!-- Overflow Hidden -->
+      <!-- Overflow Hidden inscripcion-->
       <div class="card shadow mb-12">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">INSCRIPCION</h6>
+          <p class="mb-4">Las planillas de inscripciones.</p>
         </div>
         <div class="card-body">
           <form method="POST" action="{{route('alumnos.crear')}}">
