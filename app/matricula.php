@@ -73,6 +73,7 @@ class Matricula extends Model
         $cantidadCuotas = $this->comision->curso->cursoNroCuota; 
 
         // obtengo un arreglo de todas las cuotas con matriculaId
+        // $cuotas = Cuota::whereMatriculaId($this->matriculaId)->get();
         $cuotas = Cuota::where('matriculaId',$this->matriculaId)->get();
         
         // recorro las cuotas y verifico si estan pagadas o no..

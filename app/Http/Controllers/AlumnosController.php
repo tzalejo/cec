@@ -21,7 +21,9 @@ class AlumnosController extends Controller
     // muestro el formulario de inscripcion
     public function inscripcion(){
         $now = date('Y-m-d');
-        $comisionesActivas = Comision::ComisionesActivas()->get(); // uso un scope
+        $comisionesActivas = Comision::ComisionesActivas()
+        ->with('curso') // para optimizar la consulta
+        ->get(); // uso un scope
         return view('alumnos.inscripcion')->with('comisionesActivas',$comisionesActivas);
     }
     // guardo los datos del formulario de inscripcion..
@@ -113,15 +115,21 @@ class AlumnosController extends Controller
         // primero dejo en minuscula to el apellido y en mayusucula la primera letra
         $apellido = ucwords(strtolower($request->get('estudianteApellido')));
         
-        $estudiantes = Estudiante::orderBy('estudianteId','ASC') 
-            ->estudianteApellido($apellido)
-            ->paginate(10);
+        $estudiantes = Estudiante::query()
+        ->with('matriculas.comision.curso')  // me genera menos query..?¿?¿?¿
+        ->estudianteApellido($apellido)
+        ->orderBy('estudianteId','ASC')
+        ->paginate(10);
         
-        return view('alumnos.mostrar')
-            ->with('estudiantes', $estudiantes);
+        return view('alumnos.mostrar')->with('estudiantes', $estudiantes);
         
     }
+    // genero la vista de cuota, para seleccionar cuota a pagar
+    public function cuotas(Matricula $matricula){
 
+        return view('alumnos.cuotas')->with('matricula',$matricula);
+    }
+    
     public function edit(Matricula $matricula){
         $now = date('Y-m-d');
         $estudiante = $matricula->estudiante;
@@ -192,11 +200,7 @@ class AlumnosController extends Controller
         return redirect()->route('home');
 
     }
-    // genero la vista de cuota, para seleccionar cuota a pagar
-    public function cuotas(Matricula $matricula){
-
-        return view('alumnos.cuotas')->with('matricula',$matricula);
-    }
+   
     // ingreso el monto a pagar de la cuota seleccionada..
     public function pago(Cuota $cuota){
 
@@ -274,7 +278,10 @@ class AlumnosController extends Controller
     public function reinscripcionEstudiante(Estudiante $estudiante){
         // dd($estudiante);
         $now = date('Y-m-d');
-        $comisionesActivas = Comision::ComisionesActivas()->get();
+        $comisionesActivas = Comision::ComisionesActivas()
+                                // ->with('matriculas')
+                                ->with('curso') // baje la cantidad de consulta con esta condicion--auno nose porque??¿?¿?¿?
+                                ->get();
         return view('alumnos.reinscripcionEstudiante')
             ->with('estudiante',$estudiante)
             ->with('comisionesActivas',$comisionesActivas);

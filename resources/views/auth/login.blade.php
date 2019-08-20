@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container" id="particles-js">
-    <div class="row justify-content-center" style="position: relative; justify-content: center!important; z-index: 100;">
+    <div class="row justify-content-center" style="position: relative; justify-content: center!important; z-index: 100;margin-top:20%;">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>

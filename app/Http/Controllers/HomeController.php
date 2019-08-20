@@ -23,13 +23,16 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request)
-    {
-        // $comisiones = Comision::all();
-        
+    {   
         $request->user()->autorizaRoles(['Secretaria', 'Director']);
+        // baje las cantidades de consulta..de 30 a 26
+        // $comisiones = Comision::all();
+        $comisiones = Comision::with('matriculas') 
+                            ->with('curso')
+                            ->get();
         // envio a la vista home
         return view('home')
-            ->with('comisiones', Comision::all());
+            ->with('comisiones', $comisiones);
 
         // return view('home')
         //     ->with('comisiones', Comision::all())

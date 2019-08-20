@@ -50,7 +50,8 @@ class Cuota extends Model
          * return Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono');
          * $sumatoriaCuota = Pago::sum('pagoAbono')->where('cuotaId',$this->cuotaId);
          */
-        return $this->cuotaMonto == Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono');
+        $montoPago = Pago::where('cuotaId',$this->cuotaId)->sum('pagoAbono');
+        return $this->cuotaMonto == $montoPago;
     }
     public function estadoCuota(){
         /**

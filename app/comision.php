@@ -2,6 +2,7 @@
 
 namespace App;
 use App\Matricula;
+use App\Comision;
 use App\Curso;
 
 use Illuminate\Database\Eloquent\Model;
@@ -43,9 +44,9 @@ class Comision extends Model
     
     // funcion que me devuelve la cantidad de alumnos que tiene una comision..
     public function cantidadAlumnos(){
-        return Matricula::where('comisionId',$this->comisionId)
-                            ->where('matriculaSituacion','RE')
-                            ->count();
+        return Matricula::where('comisionId',$this->comisionId) // query()
+        ->where('matriculaSituacion','RE')
+        ->count();
     }
 
     /**
@@ -56,13 +57,14 @@ class Comision extends Model
      * @return string
      */
     public function obtenerNombreCurso(){
-        return Curso::where('cursoId',$this->cursoId)->value('cursoNombre');
+        return Curso::where('cursoId',$this->cursoId)
+                ->value('cursoNombre');
     }
     
     public function obtenerAlumnos(){
         return Matricula::where('comisionId',$this->comisionId)
-                            ->where('matriculaSituacion','RE') // Solo los regulares
-                            ->get();
+        ->where('matriculaSituacion','RE') // Solo los regulares
+        ->get();
     }
 
     /**
