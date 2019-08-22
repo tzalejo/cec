@@ -637,10 +637,10 @@
                         </div>
                         <div class="sidebar-header">
                             <div class="user-pic">
-                                <img class="img-responsive img-rounded" src="{{Auth::user()->userImagen}}" alt="User picture">
+                                <img class="img-responsive img-rounded" src=" @if(is_null(Auth::user()->userImagen)) {{asset('img/default.png')}} @else {{Auth::user()->userImagen}}  @endif" alt="User picture">
                             </div>
                             <div class="user-info">
-                                <span class="user-name">{{ Auth::user()->userNombre }}
+                                <span class="user-name">{{ strtoupper(Auth::user()->userNombre) }}
                                     <strong></strong>
                                 </span>
                                 <span class="user-role">{{ Auth::user()->role->roleDescripcion }}</span>

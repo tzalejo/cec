@@ -24,6 +24,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {   
+        // dd($request->user());
         $request->user()->autorizaRoles(['Secretaria', 'Director']);
         // baje las cantidades de consulta..de 30 a 26
         // $comisiones = Comision::all();

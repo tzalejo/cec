@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container" id="particles-js">
-<div class="row justify-content-center" style="position: relative; justify-content: center!important; z-index: 100;">
+    <div class="row justify-content-center" style="position: relative; justify-content: center!important; z-index: 100;margin-top:10%;">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Registro') }}</div>
@@ -17,7 +17,7 @@
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
-                                @error('name')
+                                @error('userNombre')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

@@ -38,6 +38,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        // dd('estoy en register');
         $this->middleware('guest');
     }
 
@@ -49,10 +50,11 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        // dd('estoy en validator');
         return Validator::make($data, [
-            'userNombre' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name'          => ['required', 'string', 'max:255'],
+            'email'         => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'      => ['required', 'string', 'min:5', 'confirmed'],
         ]);
     }
 
@@ -64,17 +66,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            'userNombre' => $data['userNombre'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        $role_secre=Role::where('roleDescripcion','Secretaria')->first();
+        // dd($role_secre->roleId);
+        return User::create([
+            'userNombre'    => $data['name'],
+            'email'         => $data['email'],
+            'password'      => Hash::make($data['password']),
+            'roleId'        => $role_secre->roleId,
         ]);
 
-        $user
-            ->roles()
-            ->attach(Role::where('roleDescripcion','secretaria'))->first();
+        // $user->roles()
+        //     ->attach(Role::where('roleDescripcion','Secretaria'))->first();
 
-        return $user;
+        // return $user;
 
     }
 }

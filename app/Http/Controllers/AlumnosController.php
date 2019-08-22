@@ -45,12 +45,12 @@ class AlumnosController extends Controller
             'estudianteFoto'        => ''
         ],
         [
-            'estudianteDNI.required' => 'El DNI del estudiante es requerdio',
-            'estudianteDNI.unique'   => 'El DNI del estudiante ya existe',
-            'estudianteNombre.required' => 'El Nombre del estudiante es requerdio',
-            'estudianteApellido.required' => 'El Apellido del estudiante es requerdio',
-            'estudianteDomicilio.required' => 'El Domicilio del estudiante es requerdio',
-            'estudianteLocalidad.required' => 'El Localidad del estudiante es requerdio',
+            'estudianteDNI.required'        => 'El DNI del estudiante es requerdio',
+            'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
+            'estudianteNombre.required'     => 'El Nombre del estudiante es requerdio',
+            'estudianteApellido.required'   => 'El Apellido del estudiante es requerdio',
+            'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerdio',
+            'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerdio',
             'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerdio',
             
             // 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
