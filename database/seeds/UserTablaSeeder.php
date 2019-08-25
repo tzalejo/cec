@@ -24,7 +24,7 @@ class UserTablaSeeder extends Seeder
         $user->userNombre = 'Alejandro';
         $user->email = 'director@email.com';
         $user->password = bcrypt('secret');
-        $user->userImagen = 'http://www.empleosperu.gob.pe:8080/CertiJovenPortal/images/usuario.jpg';
+        $user->userImagen ='director.png';
         $user->roleId = $role_dire->roleId;
         $user->save();
         
@@ -34,7 +34,7 @@ class UserTablaSeeder extends Seeder
         $user->userNombre = 'Amelie';
         $user->email = 'secre@email.com';
         $user->password = bcrypt('secret1');
-        $user->userImagen = 'http://www.empleosperu.gob.pe:8080/CertiJovenPortal/images/usuario.jpg';
+        $user->userImagen = 'secretaria.png';
         $user->roleId = $role_secre->roleId;
         $user->save();
         
