@@ -98,7 +98,7 @@
               <h2>Pagos</h2>
               <div class="form-group col-md-12">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="pagoInscripcion" name="pagoInscripcion">
+                  <input type="checkbox" class="custom-control-input" checked id="pagoInscripcion" name="pagoInscripcion">
                   <label class="custom-control-label" for="pagoInscripcion">Inscripcion</label>
                 </div>
                 
