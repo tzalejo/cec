@@ -792,12 +792,12 @@
                             <div class="text-center text-md-right">
                                 <ul class="list-unstyled list-inline">
                                     <li class="list-inline-item">
-                                        <a class="btn-floating btn-lg rgba-white-slight mx-0" href="https://www.facebook.com/pabloa.valenzuela.10">
+                                        <a class="btn-floating btn-lg rgba-white-slight mx-0" href="https://www.facebook.com/pabloa.valenzuela.10" target="_blank">
                                             <i class="fab fa-facebook-f"></i>
                                         </a>
                                     </li>
                                     <li class="list-inline-item">
-                                        <a class="btn-floating btn-lg rgba-white-slight mx-0" href="https://github.com/tzalejo">
+                                        <a class="btn-floating btn-lg rgba-white-slight mx-0" href="https://github.com/tzalejo" target="_blank">
                                             <i class="fab fa-github"></i>
                                         </a>
                                     </li>
@@ -807,7 +807,7 @@
                                         </a>
                                     </li> --}}
                                     <li class="list-inline-item">
-                                        <a class="btn-floating btn-lg rgba-white-slight mx-0" href="https://www.linkedin.com/in/pablo-alejandro-valenzuela-611a0570/">
+                                        <a class="btn-floating btn-lg rgba-white-slight mx-0" href="https://www.linkedin.com/in/pablo-alejandro-valenzuela-611a0570/" target="_blank">
                                             <i class="fab fa-linkedin-in"></i>
                                         </a>
                                     </li>
