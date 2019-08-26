@@ -63,6 +63,7 @@ class Comision extends Model
     
     public function obtenerAlumnos(){
         return Matricula::where('comisionId',$this->comisionId)
+        ->with('estudiante') // para generar menos queries
         ->where('matriculaSituacion','RE') // Solo los regulares
         ->get();
     }
