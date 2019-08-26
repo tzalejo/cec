@@ -62,35 +62,38 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class,'roleId');
     }
 
-    public function autorizaRoles($roles){
-        if ($this->tieneAlgunRole($roles)){
-            return true;
-        }
-        abort(401,'Esta acción no está autorizada.');
-    }
+    // public function autorizaRoles($roles){
+    //     if ($this->tieneAlgunRole($roles)){
+    //         return true;
+    //     }
+    //     abort(401,'Esta acción no está autorizada.');
+    // }
     
-    public function tieneAlgunRole($roles){
+    // public function tieneAlgunRole($roles){
 
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
-                if ($this->tieneRole($role)) {
-                    return true;
-                }
-            }
-        } else {
-            if ($this->tieneRole($roles)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    //     if (is_array($roles)) {
+    //         foreach ($roles as $role) {
+    //             if ($this->tieneRole($role)) {
+    //                 return true;
+    //             }
+    //         }
+    //     } else {
+    //         if ($this->tieneRole($roles)) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
     
-    public function tieneRole($role){
-        if ($this->role()->where('roleDescripcion', $role)->first()) {
-            return true;
-        }
-        return false;
-    }
+    // public function tieneRole($role){
+    //     dd($role);
+    //     // $this->role()->where('roleDescripcion', $role)->with('role');
+    //     if ($this->role()->where('roleDescripcion', $role)->first()) {
+    //     // if (Role::where('roleDescripcion',$role)->first()) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     public function esDirector(){
         return $this->roleId === Role::where('roleDescripcion','Director')->first()->value('roleId');
