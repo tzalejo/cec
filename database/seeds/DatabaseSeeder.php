@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         $this->truncateTables([
-            'estudiantes' , 'users', 'roles', 'materias','cursos','asignaturas','comisiones', 'matriculas', 'cuotas', 'pagos'
+            'estudiantes' , 'users', 'roles', 'materias','cursos','comisiones', 'matriculas', 'cuotas', 'pagos', 'curso_materia'
         ]);
         
         // La creación de datos de roles debe ejecutarse primero
@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MateriaSeeder::class);
         
         $this->call(CursoSeeder::class);
-        $this->call(AsignaturaSeeder::class);
         $this->call(ComisionSeeder::class);
         $this->call(MatriculaSeeder::class);
         $this->call(CuotaSeeder::class);

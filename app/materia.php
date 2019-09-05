@@ -16,4 +16,13 @@ class Materia extends Model
 
     
     protected $primaryKey = 'materiaId';
+
+    /**
+     * Relacion muchos a muchos materia <----> curso
+     * 
+     * 
+     */
+    public function cursos(){
+        return $this->belongsToMany(Curso::class, 'curso_materia','materiaId','cursoId');
+    }
 }

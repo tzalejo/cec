@@ -25,4 +25,8 @@ class Curso extends Model
     public function comisiones(){
         return $this->hasMany(Comision::class,'cursoId');
     }
+
+    public function materias(){
+        return $this->belongsToMany(Materia::class, 'curso_materia','cursoId','materiaId');
+    }
 }
