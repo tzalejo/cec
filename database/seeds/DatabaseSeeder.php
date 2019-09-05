@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MatriculaSeeder::class);
         $this->call(CuotaSeeder::class);
         $this->call(PagoSeeder::class);
+        $this->call(CursoMateriaSeeder::class);
 
         
     }
