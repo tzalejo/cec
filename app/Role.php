@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
 
+   protected $fillable =[
+      'roleId','roleDescripcion',
+   ];
      /**
      * 
      * si queremos desactivar los campos de creacion y actualizacion

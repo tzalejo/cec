@@ -13,6 +13,13 @@ class Curso extends Model
      * 
      */
     public $timestamps = false;
+
+    protected $fillable=[
+        'cursoNombre',
+        'cursoNroCuota',
+        'cursoCostoMes',
+        'cursoInscripcion',
+    ];
     
     protected $primaryKey = 'cursoId';
 

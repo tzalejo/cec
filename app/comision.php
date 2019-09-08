@@ -21,6 +21,14 @@ class Comision extends Model
     
     protected $primaryKey = 'comisionId';
 
+    protected $fillable = [
+        'comisionNombre',
+        'comisionHorario',
+        'comisionFI',
+        'comisionFF',
+        'cursoId',
+    ];
+    
      /**
      * Estoy indicando que un Comision pertenece a un curso.
      * Usando tinker $comsion= Comision::first()
