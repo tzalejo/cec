@@ -24,7 +24,10 @@ class AlumnosController extends Controller
         $comisionesActivas = Comision::ComisionesActivas()
         ->with('curso') // para optimizar la consulta
         ->get(); // uso un scope
-        return view('alumnos.inscripcion')->with('comisionesActivas',$comisionesActivas);
+        // return view('alumnos.inscripcion')->with('comisionesActivas',$comisionesActivas);
+        
+        // es similar(al de arriba), compact asocia 'comisionesActivas'  con $comisionesActivas
+        return view('alumnos.inscripcion',compact('comisionesActivas')); 
     }
     // guardo los datos del formulario de inscripcion..
     public function store(Estudiante $estudiante, Request $request){
@@ -45,13 +48,13 @@ class AlumnosController extends Controller
             'estudianteFoto'        => ''
         ],
         [
-            'estudianteDNI.required'        => 'El DNI del estudiante es requerdio',
+            'estudianteDNI.required'        => 'El DNI del estudiante es requerido',
             'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
-            'estudianteNombre.required'     => 'El Nombre del estudiante es requerdio',
-            'estudianteApellido.required'   => 'El Apellido del estudiante es requerdio',
-            'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerdio',
-            'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerdio',
-            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerdio',
+            'estudianteNombre.required'     => 'El Nombre del estudiante es requerido',
+            'estudianteApellido.required'   => 'El Apellido del estudiante es requerido',
+            'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerido',
+            'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerido',
+            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',
             
             // 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
             // 'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, verifique',
