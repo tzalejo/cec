@@ -62,3 +62,18 @@ Route::get('/alumnos/{estudiante}/inscripcion','AlumnosController@reinscripcionE
 
 Route::post('/alumnos/{estudiante}/inscripcion','AlumnosController@altaReinscripcionEstudiante')
         ->name('alumnos.altaReinscripcionEstudiante'); 
+
+
+### ****** rutas del gerente ********* ###
+
+// pantalla inicio para crear un curso
+Route::get('/curso/crear','CursoController@create')
+        ->name('curso.crear')
+        ->middleware('auth');
+        
+Route::post('/curso/crear', 'CursoController@store')
+        ->middleware('auth')
+        ->name('curso.guardar');
+
+
+

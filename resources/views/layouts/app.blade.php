@@ -371,8 +371,8 @@
         }
 
         .sidebar-wrapper .sidebar-menu .sidebar-dropdown.active > a:after {
-        transform: rotate(90deg);
-        right: 17px;
+            transform: rotate(90deg);
+            right: 17px;
         }
 
         /*--------------------------side-footer------------------------------*/
@@ -380,100 +380,100 @@
         
         /*- footer para barra lateral izq-*/
         .sidebar-footer {
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-        display: flex;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            display: flex;
         }
 
         .sidebar-footer > a {
-        flex-grow: 1;
-        text-align: center;
-        height: 30px;
-        line-height: 30px;
-        position: relative;
+            flex-grow: 1;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+            position: relative;
         }
 
         .sidebar-footer > a .notification {
-        position: absolute;
-        top: 0;
+            position: absolute;
+            top: 0;
         }
         /*- footer para barra lateral izq-*/
 
         .badge-sonar {
-        display: inline-block;
-        background: #980303;
-        border-radius: 50%;
-        height: 8px;
-        width: 8px;
-        position: absolute;
-        top: 0;
+            display: inline-block;
+            background: #980303;
+            border-radius: 50%;
+            height: 8px;
+            width: 8px;
+            position: absolute;
+            top: 0;
         }
 
         .badge-sonar:after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        border: 2px solid #980303;
-        opacity: 0;
-        border-radius: 50%;
-        width: 100%;
-        height: 100%;
-        animation: sonar 1.5s infinite;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: 2px solid #980303;
+            opacity: 0;
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            animation: sonar 1.5s infinite;
         }
 
         /*--------------------------page-content-----------------------------*/
 
         .page-wrapper .page-content {
-        display: inline-block;
-        width: 100%;
-        padding-left: 0px;
-        padding-top: 20px;
+            display: inline-block;
+            width: 100%;
+            padding-left: 0px;
+            padding-top: 20px;
         }
 
         .page-wrapper .page-content > div {
-        padding: 20px 40px;
+            padding: 20px 40px;
         }
 
         .page-wrapper .page-content {
-        overflow-x: hidden;
+            overflow-x: hidden;
         }
 
         /*------scroll bar---------------------*/
 
         ::-webkit-scrollbar {
-        width: 5px;
-        height: 7px;
+            width: 5px;
+            height: 7px;
         }
         ::-webkit-scrollbar-button {
-        width: 0px;
-        height: 0px;
+            width: 0px;
+            height: 0px;
         }
         ::-webkit-scrollbar-thumb {
-        background: #525965;
-        border: 0px none #ffffff;
-        border-radius: 0px;
+            background: #525965;
+            border: 0px none #ffffff;
+            border-radius: 0px;
         }
         ::-webkit-scrollbar-thumb:hover {
-        background: #525965;
+            background: #525965;
         }
         ::-webkit-scrollbar-thumb:active {
-        background: #525965;
+            background: #525965;
         }
         ::-webkit-scrollbar-track {
-        background: transparent;
-        border: 0px none #ffffff;
-        border-radius: 50px;
+            background: transparent;
+            border: 0px none #ffffff;
+            border-radius: 50px;
         }
         ::-webkit-scrollbar-track:hover {
-        background: transparent;
+            background: transparent;
         }
         ::-webkit-scrollbar-track:active {
-        background: transparent;
+            background: transparent;
         }
         ::-webkit-scrollbar-corner {
-        background: transparent;
+            background: transparent;
         }
 
 
@@ -546,19 +546,16 @@
             color: #6c7b88;
         }
 
-        /* .page-wrapper .sidebar-footer {
-            background: #3a3f48;
-            box-shadow: 0px -1px 5px #282c33;
-            border-top: 1px solid #464a52;
-        } */
-/* 
-        .page-wrapper .sidebar-footer>a:first-child {
-            border-left: none;
+        /* scroll para crear curso */
+        .my-custom-scrollbar {
+            position: relative;
+            height: 350px;
+            overflow: auto;
         }
-
-        .page-wrapper .sidebar-footer>a:last-child {
-            border-right: none;
-        } */
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+        /* scroll termina*/
 
     </style>
 </head>
@@ -736,7 +733,7 @@
                                     </a>
                                     <div class="sidebar-submenu">
                                         <ul>
-                                            <li><a href="#">Crear Nuevo</a></li>
+                                            <li><a href="{{route('curso.crear')}}">Crear Nuevo</a></li>
                                             <li><a href="#">Materia</a></li>
                                             <li><a href="#">Modificar</a></li>
                                             <li><a href="#">Impresiones</a></li>
@@ -927,6 +924,23 @@
         calendar.btnD = "btn-rounded-success";
         console.log('se ejecuta createCalandar');
         calendar.createCalendar();
+    });
+</script>
+
+{{-- script para la seleccion de materia en el alta de curso --}}
+<script>
+    $(document).ready(function() {
+        $('#example tbody').on( 'click', 'tr', function () {
+            if ( $(this).hasClass('bg-primary') ) {
+                $(this).removeClass('bg-primary');
+                const mi_id=$(this)[0].id;
+                document.getElementById('checkbox'+mi_id).checked = false;
+            }else {
+                $(this).addClass('bg-primary');
+                const mi_id=$(this)[0].id;
+                document.getElementById('checkbox'+mi_id).checked = true;
+            }
+        });
     });
 </script>
 
