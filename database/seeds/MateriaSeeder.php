@@ -48,6 +48,34 @@ class MateriaSeeder extends Seeder
             'materiaNombre'=>'Seremonial y Protocolo',
             'materiaSeminario'=>true,
         ]);
+        Materia::create([
+            'materiaNombre'=>'HTML',
+            'materiaSeminario'=>true,
+        ]);
+        Materia::create([
+            'materiaNombre'=>'Sistema Informatico',
+            'materiaSeminario'=>false,
+        ]);
+        Materia::create([
+            'materiaNombre'=>'Base de Datos',
+            'materiaSeminario'=>false,
+        ]);
+        Materia::create([
+            'materiaNombre'=>'Programacion',
+            'materiaSeminario'=>false,
+        ]);
+        Materia::create([
+            'materiaNombre'=>'Historia',
+            'materiaSeminario'=>false,
+        ]);
+        Materia::create([
+            'materiaNombre'=>'Dibujo 3D',
+            'materiaSeminario'=>false,
+        ]);
+        Materia::create([
+            'materiaNombre'=>'Sistema Contable 2',
+            'materiaSeminario'=>false,
+        ]);
 
     }
 }
