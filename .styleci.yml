@@ -1,7 +1,9 @@
 php:
   preset: laravel
+  enabled:
+    - alpha_ordered_imports
   disabled:
-    - unused_use
+    - length_ordered_imports
   finder:
     not-name:
       - index.php
