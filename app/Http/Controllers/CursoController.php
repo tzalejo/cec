@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 use App\{Materia,Curso,Comision,User};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use RealRashid\SweetAlert\Facades\Alert;
 class CursoController extends Controller
 {
+    /**
+     * Aplico el middleware-director para todo el controller
+     *
+     * @return void
+     */
+    // public function __construct(){
+    //     $this->middleware('director');
+    // }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +34,7 @@ class CursoController extends Controller
      */
     public function create()
     {
-        //
+        // toast('No puede ingresar..','warning');
         $materias = Materia::all();
         $seleccion_materias = array();
         return view('curso.crear')
