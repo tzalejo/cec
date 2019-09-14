@@ -177,6 +177,11 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
 
+        /*
+        * Package sweet-alert...
+        */
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+
     ],
 
     /*
@@ -229,6 +234,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Form' => Collective\Html\FormFacade::class,
+        
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
     ],
 
 ];
