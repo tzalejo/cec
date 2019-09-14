@@ -683,7 +683,7 @@
                                     </div>
                                 </li>
                                 <li class="sidebar-dropdown">
-                                    <a href="#">
+                                    <a>
                                         <i class="fa fa-line-chart"></i>
                                         <span>Estadística</span>
                                     </a>
@@ -697,7 +697,7 @@
                                     </div>
                                 </li>
                                 <li class="sidebar-dropdown">
-                                    <a href="#">
+                                    <a>
                                         <i class="fas fa-fw fa-cog"></i>
                                         <span>Administración</span>
                                     </a>
@@ -713,7 +713,7 @@
                                     <span>Gerencia</span>
                                 </li>
                                 <li class="sidebar-dropdown">
-                                    <a href="#">
+                                    <a>
                                         <i class="fa fa-book"></i>
                                         <span>Comisión</span>
                                     </a>
@@ -727,7 +727,7 @@
                                     </div>
                                 </li>
                                 <li class="sidebar-dropdown">
-                                    <a href="#">
+                                    <a>
                                         <i class="fa fa-calendar"></i>
                                         <span>Curso</span>
                                     </a>
@@ -770,6 +770,7 @@
             </nav>
             <main class="page-content">
                 <div class="container">
+                    
                     @yield('content')
                 </div>
                 <!-- Footer font-small mdb-color pt-4-->
@@ -817,6 +818,7 @@
             </main> 
             <!--end-page-content" -->
         </div>
+        @include('sweetalert::alert')
     @endguest
 </body>
 <!-- Placed at the end of the document so the pages load faster -->
