@@ -21,7 +21,7 @@ class AdminMiddleware
             return $next($request);
         else
             # si no es director
-            return redirect('/home')->withError('No tiene permiso de administración.');
+            return redirect('/home')->withError('No tiene suficientes Privilegios para acceder a esta seccion.');
             
         
     }

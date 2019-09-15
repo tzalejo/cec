@@ -75,6 +75,3 @@ Route::group(['middleware' => 'director'], function () {
         Route::post('/curso/crear', 'CursoController@store')
                 ->name('curso.guardar');
 });
-
-
-
