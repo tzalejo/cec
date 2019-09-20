@@ -713,7 +713,7 @@
                                     <span>Gerencia</span>
                                 </li>
                                 <li class="sidebar-dropdown">
-                                    <a>
+                                    <a  >
                                         <i class="fa fa-book"></i>
                                         <span>Comisión</span>
                                     </a>
