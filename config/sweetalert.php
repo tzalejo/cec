@@ -138,7 +138,7 @@ return [
 
     'middleware' => [
 
-        'toast_position' => env('SWEET_ALERT_MIDDLEWARE_TOAST_POSITION', 'center'),
+        'toast_position' => env('SWEET_ALERT_MIDDLEWARE_TOAST_POSITION', 'top-end'),
 
         'toast_close_button' => env('SWEET_ALERT_MIDDLEWARE_TOAST_CLOSE_BUTTON', true),
     ],
