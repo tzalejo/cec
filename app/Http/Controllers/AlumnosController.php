@@ -206,10 +206,9 @@ class AlumnosController extends Controller
    
     // ingreso el monto a pagar de la cuota seleccionada..
     public function pago(Cuota $cuota){
-
         return view('alumnos.pago')->with('cuota',$cuota);
-
     }
+    
     // hago el pago
     public function cancelarPago(Cuota $cuota, Request $request){
         // dd($request->validate('cuotaMonto'));
