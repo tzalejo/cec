@@ -75,4 +75,19 @@ Route::group(['middleware' => 'director'], function () {
                 
         Route::post('/curso/crear', 'CursoController@store')
                 ->name('curso.guardar');
+        
+                
+        # crear una materia
+        Route::get('/materia/crear','MateriaController@create')
+                ->name('materia.crear');
+
+        Route::post('/materia/crear', 'MateriaController@store')
+                ->name('materia.guardar');
+        # eliminamo el alumno
+        Route::delete('/materia/{materia}','MateriaController@destroy')
+                ->name('materia.eliminar');
+
+        #editar materia
+        
+
 });

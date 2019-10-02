@@ -34,7 +34,7 @@ class CursoController extends Controller
      */
     public function create()
     {
-        // toast('No puede ingresar..','warning');
+        # toast('No puede ingresar..','warning');
         $materias = Materia::all();
         $seleccion_materias = array();
         return view('curso.crear')
@@ -50,8 +50,7 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request['sele_materia']);
-        //valido el curso..
+        # valido el curso..
         $datosValidado = $request->validate([
             'cursoNombre'       => 'required|min:2|max:100',
             'cursoNroCuota'     => 'required|numeric|max:48',
@@ -83,6 +82,7 @@ class CursoController extends Controller
             $seleccionMaterias = $request['sele_materia'];
             # agrego las materias..
             $cursoNuevo->materias()->attach($seleccionMaterias); 
+            toast('Se guardó correctamente la Curso.','success');
             return redirect()
             ->route('home')->with('comisiones', Comision::all());
         }

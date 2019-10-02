@@ -12,9 +12,9 @@ class Materia extends Model
      * que se crean automaticamente al crear una tabla
      * 
      */
-    public $timestamps = false;
+    public $timestamps    = false;
 
-    
+    protected $fillable   = ['materiaNombre', 'materiaSeminario'];
     protected $primaryKey = 'materiaId';
 
     /**

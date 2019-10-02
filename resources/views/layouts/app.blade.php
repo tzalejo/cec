@@ -734,7 +734,7 @@
                                     <div class="sidebar-submenu">
                                         <ul>
                                             <li><a href="{{route('curso.crear')}}">Crear Nuevo</a></li>
-                                            <li><a href="#">Materia</a></li>
+                                            <li><a href="{{route('materia.crear')}}">Materia</a></li>
                                             <li><a href="#">Modificar</a></li>
                                             <li><a href="#">Impresiones</a></li>
                                         </ul>
@@ -945,7 +945,6 @@
         });
     });
 </script>
-
 
 {{-- <script type="text/javascript">
 
