@@ -2,19 +2,22 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Role;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Role;
+use Laravel\Passport\HasApiTokens;
+
+
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
+    
     /**
      *  Si queremos crear un nombre de una tabla distinta en la bd
      *  protected $table = 'nombre_tabla'
      * 
      */
-
+    
     /**
      * 
      * si queremos desactivar los campos de creacion y actualizacion
@@ -34,7 +37,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'userNombre', 'email', 'password','userImagen','roleId'
+        'userNombre', 'email', 'password','userImagen','roleId',
     ];
 
     /**

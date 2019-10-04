@@ -22,7 +22,7 @@ class UserTablaSeeder extends Seeder
         // creo el usuario director.
         $user= new User();
         $user->userNombre = 'Alejandro';
-        $user->email = 'director@email.com';
+        $user->email = 'tzalejo@gmail.com';
         $user->password = bcrypt('secret');
         $user->userImagen ='director.png';
         $user->roleId = $role_dire->roleId;
