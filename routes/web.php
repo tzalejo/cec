@@ -26,24 +26,31 @@
 //         // ->name('alumnos.inscripcion',['id'=> 'mis_valor']) asi enviamos un valor 
 // Route::post('/alumnos/crear','AlumnosController@store')
 //         ->name('alumnos.crear');
+
+// # listado de estudiantes para hacer el pago de cuota o inscripcion..
+// Route::get('/alumnos/mostrar','AlumnosController@show')
+//         ->name('alumnos.mostrar');
+
+// # pantalla de la matricula con los pagos  
+// Route::get('/alumnos/{matricula}/cuotas','AlumnosController@cuotas')
+//         ->name('alumnos.cuotas');
+
 // # obtenemos los datos del alumnos para luego editarlos.
 // Route::get('/alumnos/{matricula}/editar','AlumnosController@edit')
 //         ->name('alumnos.editar');
+
+
+
+
+
 // # actualizamos los datos del alumno.
 // Route::put('/alumnos/{estudiante}','AlumnosController@update')
 //         ->name('alumnos.actualizar');
 // # eliminamo el alumno
 // Route::delete('/alumnos/{matricula}','AlumnosController@destroy')
 //         ->name('alumnos.eliminar');
-        
 
-// # listado de estudiantes para hacer el pago de cuota o inscripcion..
-// Route::get('/alumnos/mostrar','AlumnosController@show')
-//         ->name('alumnos.mostrar');
         
-// # pantalla de la matricula con los pagos  
-// Route::get('/alumnos/{matricula}/cuotas','AlumnosController@cuotas')
-//         ->name('alumnos.cuotas');
 
 // # hacemos el pago de la cuota seleccionada.
 // Route::get('/alumnos/{cuota}/pago','AlumnosController@pago')

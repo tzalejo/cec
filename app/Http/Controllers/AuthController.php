@@ -11,13 +11,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    //
     public function signup(Request $request){
         $request->validate([
             'userNombre'    => 'required|string',
             'email'         => 'required|string|email|unique:users',
             'password'      => 'required|string|confirmed',
-            'roleId'        => 'required|numeric|',
+            'roleId'        => 'required|numeric',
         ]);
 
         $user = User::create([
@@ -26,9 +25,6 @@ class AuthController extends Controller
             'password'      => Hash::make($request->password),
             'roleId'        => $request->roleId,
         ]);
-        
-        // cre y envia tken para confirmar la cuenta.
-        $user->notify(new SignupActivate($user));
 
         return response()->json([
             'message' => 'Usuario '.$user->userNombre.' creado satisfactoriamente'
@@ -47,8 +43,8 @@ class AuthController extends Controller
             return response()->json(['message' => 'No autorizado'],401);
         }
         
-        // $user = User::find(1); 
-        // return response()->json($user->createToken('Personal Access Token'));
+        # $user = User::find(1); 
+        # return response()->json($user->createToken('Personal Access Token'));
         $user = $request->user();
         $tokenResult = $user->createToken('Pernsal Access Token');
         $token =  $tokenResult->token;
@@ -69,7 +65,6 @@ class AuthController extends Controller
     public function logout(Request $request){
 
         $request->user()->token()->revoke();
-        
         return response()->json(['message'=>'Salió exitosamente'], 200);
     }
 

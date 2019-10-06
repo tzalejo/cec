@@ -21,7 +21,8 @@ class AdminMiddleware
             return $next($request);
         else
             # si no es director
-            return back()->withToastError('No tiene suficientes Privilegios para acceder a esta seccion.');
+            # return back()->withToastError('No tiene suficientes Privilegios para acceder a esta seccion.');
+            return response()->json(['message'=>'No tiene suficientes Privilegios para acceder a esta seccion.'],403);
             
         
     }
