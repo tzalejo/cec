@@ -41,6 +41,23 @@ class User extends Authenticatable
     ];
 
     /**
+     * Mutadores: se lo utiliza para modificar antes de ser insertado en la bd 
+     * para que siempre los nombre(userNombre.users) esten en minusculas al momento de establecer..
+     */
+
+    public function setUserNombreAttribute($valor){
+        $this->attributes['userNombre'] = strtolower($valor);
+    }
+    public function setEmailAttribute($valor){
+        $this->attributes['email'] = strtolower($valor);
+    }
+    # estamos devolviendo el valor con cada caracter inical con mayuscual,
+    # pero esta transformacion no se encuentra en la bd. 
+    public function getUserNombreAttribute($valor){
+        return ucwords($valor); 
+    }
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -65,7 +82,7 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsTo(Role::class,'roleId');
     }
-
+    
     // public function autorizaRoles($roles){
     //     if ($this->tieneAlgunRole($roles)){
     //         return true;

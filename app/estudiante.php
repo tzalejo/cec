@@ -69,5 +69,20 @@ class Estudiante extends Model
         return Matricula::where('estudianteId',$this->estudinteId)->count();
     }
 
+    # uso de mutadores
+    public function setEstudianteNombreAttribute($valor){
+        $this->attributes['estudianteNombre'] = strtolower($valor);
+    }
+    public function setEstudianteApellidoAttribute($valor){
+        $this->attributes['estudianteApellido'] = strtolower($valor);
+    }
+    # estamos devolviendo el valor con cada caracter inical con mayuscual,
+    # pero esta transformacion no se encuentra en la bd. 
+    public function getEstudianteNombreAttribute($valor){
+        return ucwords($valor); 
+    }
+    public function getEstudianteApellidoAttribute($valor){
+        return ucwords($valor); 
+    }
     
 }

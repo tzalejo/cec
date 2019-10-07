@@ -1,22 +1,13 @@
 <?php
-namespace App\Http\Controllers;
 
-use App\{Materia,Curso,Comision,User};
+namespace App\Http\Controllers\Curso;
+
+use App\Curso;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use RealRashid\SweetAlert\Facades\Alert;
-class CursoController extends Controller
+use App\Http\Controllers\ApiController;
+
+class CursoController extends ApiController
 {
-    /**
-     * Aplico el middleware-director para todo el controller
-     *
-     * @return void
-     */
-    // public function __construct(){
-    //     $this->middleware('director');
-    // }
-
-
     /**
      * Display a listing of the resource.
      *
@@ -28,28 +19,13 @@ class CursoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        # toast('No puede ingresar..','warning');
-        $materias = Materia::all();
-        $seleccion_materias = array();
-        return view('curso.crear')
-        ->with('materias',$materias)
-        ->with('seleccion_materias',$seleccion_materias);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         # valido el curso..
         $datosValidado = $request->validate([
             'cursoNombre'       => 'required|min:2|max:100',
@@ -67,7 +43,6 @@ class CursoController extends Controller
             'cursoCostoMes.numeric'       => 'Debe ingresar un valor numerico',
             'cursoInscripcion.numeric'    => 'Debe ingresar un valor numerico',
         ]);
-        // dd($request);
         # Agrego el curso
         $cursoNuevo = Curso::create([
             'cursoNombre'       => $datosValidado['cursoNombre'],
@@ -75,38 +50,29 @@ class CursoController extends Controller
             'cursoCostoMes'     => $datosValidado['cursoCostoMes'],
             'cursoInscripcion'  => $datosValidado['cursoInscripcion'],
         ]);
-     
+        
         # verifico si  seleccione materia, para agregar la relacion.
         if(!is_null($request['sele_materia'])){
-            // dd($request['sele_materia']);
+
             $seleccionMaterias = $request['sele_materia'];
             # agrego las materias..
             $cursoNuevo->materias()->attach($seleccionMaterias); 
-            toast('Se guardó correctamente la Curso.','success');
-            return redirect()
-            ->route('home')->with('comisiones', Comision::all());
+            // Ya no lo necesito al cartel: toast('Se guardó correctamente la Curso.','success');
+            
+            // return redirect()
+            // ->route('home')->with('comisiones', Comision::all());
         }
-
+        return $this->showAll(Comision::all());
+        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function show(Curso $curso)
     {
         //
     }
@@ -115,10 +81,10 @@ class CursoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Curso $curso)
     {
         //
     }
@@ -126,10 +92,10 @@ class CursoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Curso $curso)
     {
         //
     }

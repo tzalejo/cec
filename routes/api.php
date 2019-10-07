@@ -14,17 +14,14 @@ use Illuminate\Http\Request;
 */
 
 # envio a la home del sistema
-Route::middleware('auth:api')->get('home','HomeController@index');
+// Route::middleware('auth:api')->get('home','HomeController@index');
 
 # Para manejo de credenciales de los usuarios
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login',  'AuthController@login'); # Me Logueo
     Route::post('signup', 'AuthController@signup'); # Creo un usuario(Users)
-    
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'AuthController@logout');
-        Route::get('user',   'AuthController@user');
-        
+        Route::get('logout', 'AuthController@logout'); # Salgo
     });
 });
 
@@ -32,9 +29,13 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'alumnos'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
-        Route::get('inscripcion', 'AlumnosController@inscripcion');
-        Route::post('crear' ,'AlumnosController@store');
-        Route::get('mostrar','AlumnosController@show');
+        
+        Route::get('mostrar','Estudiante\EstudianteController@show');
+        
+
+        
+        #Route::get('inscripcion', 'AlumnosController@inscripcion');
+        #Route::post('crear' ,'AlumnosController@store');
         # Route::get('cuotas' ,'AlumnosController@cuotas');
 
     });
@@ -44,9 +45,8 @@ Route::group(['prefix' => 'alumnos'], function () {
 Route::group(['prefix' => 'cursos'], function () {
     # Ruta que solo acceda el usuario director..
     Route::group(['middleware' => ['auth:api','director']], function () {
-        Route::get('crear', 'CursoController@create');
+        // Route::get('crear', 'CursoController@create');
     });
-    
 });
 
 

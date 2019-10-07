@@ -1,39 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Estudiante;
 
+use App\Comision;
+use App\Estudiante;
 use Illuminate\Http\Request;
-use App\{Estudiante,Matricula,Comision,Cuota,Pago};
-use Illuminate\Http\UploadedFile;
-use Illuminate\Validation\Rule;
+use App\Http\Controllers\ApiController;
+use App\Traits\ApiResponser;
 
-
-class AlumnosController extends Controller
+class EstudianteController extends ApiController
 {
+    use ApiResponser;
     /**
-     * Create a new controller instance.
+     * Display a listing of the resource.
      *
-     * @return void
+     * @return \Illuminate\Http\Response
      */
-    public function __construct(){
-        $this->middleware('auth');
+    public function index()
+    {
+        
     }
-    # muestro el formulario de inscripcion
-    public function inscripcion(){
-        $now = date('Y-m-d');
-        $comisionesActivas = Comision::ComisionesActivas()
-        ->with('curso') # para optimizar la consulta
-        ->get(); # uso un scope
-        # devuelvo las comisiones
-        return response()->json([$comisionesActivas],200);
 
-        # return view('alumnos.inscripcion')->with('comisionesActivas',$comisionesActivas);
-        # es similar(al de arriba), compact asocia 'comisionesActivas'  con $comisionesActivas
-        # return view('alumnos.inscripcion',compact('comisionesActivas')); 
-    }
-    # guardo los datos del formulario de inscripcion(del estudiante)..Estudiante $estudiante,
-    public function store( Request $request){
-
+    /**
+     *  guardo los datos del formulario de inscripcion(del estudiante)..Estudiante $estudiante,
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
         # ucfirst('texto') ->> 'Texto'
         # dd($request->all('pagoInscripcion')); viene null cuando no esta tildada la casilla, caso contrario en on
         # validamos los campos
@@ -85,7 +80,8 @@ class AlumnosController extends Controller
         # pregunto por las casillas 
         if (is_null($request->get('pagoInscripcion')) && is_null($request->get('pagoCuota'))) {
             # es porque ninguna de las dos casilla esta tildada..
-            return response()->json(['message'=>'No hace el pago de la inscripcion, se va al home'], 200);# return view('home')->with('comisiones', Comision::all());
+            # return view('home')->with('comisiones', Comision::all());
+            return $this->showAll(Comision::all());
         } else {
             # Si alguna casilla(inscripcion o cuota) esta tildada.
             # generar las cuotas de la matricula..
@@ -110,55 +106,44 @@ class AlumnosController extends Controller
                 $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
             }
             # return redirect()->route('alumnos.cuotas', $matricula);
-            return response()->json(['message'=>'Se creo correctamente el usuario, vamos al pago de las cuotas',$matricula], 200);
+            return $this->showOne($matricula);
         }
         
     }
-    # Busca estudiante utilizando el Apellido de este..
-    public function show(Request $request){
-        
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Estudiante  $estudiante
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
         # primero dejo en minuscula to el apellido y en mayusucula la primera letra
-        $apellido = ucwords(strtolower($request->get('estudianteApellido')));
-        
+        $apellido = ucwords(strtolower($request->get('estudianteApellido')));            # ver
+        $DNI = $request->get('estudianteDNI');
         $estudiantes = Estudiante::query()
         ->with('matriculas.comision.curso')  # me genera menos query..?¿?¿?¿
         ->estudianteApellido($apellido)
+        ->estudianteDNI($DNI)
         ->orderBy('estudianteId','ASC')
         ->paginate(10);
         
         # return view('alumnos.mostrar')->with('estudiantes', $estudiantes);
         # devuelve el estudiante con sus matriculas
-        return response()->json($estudiantes, 200);
-    }
-    /**************************************************************************************************************************************
-     * Reever esta consulta****************************************************************************************************************
-     **************************************************************************************************************************************/
-    # genero la vista de cuota, para seleccionar el pag
-    # public function cuotas(Request $request){
-    #     # esto viene de store
-    #     # return view('alumnos.cuotas')->with('matricula',$matricula);
-    #     return response()->json($request, 200);
-    # }
-    
-    # editando una matricula
-    public function edit(Request $request){
-        $matriculaId = $request->validate([
-            'matriculaId'      => 'required|numeric']);
-
-        $matricula = Matricula::where('matriculaId',$matriculaId)->get();
-        $now = date('Y-m-d');
-        $estudiante = $matricula->estudiante;
-        $comisionesAbiertas = Comision::where('comisionFF', '>', $now)->get();
-        $miComision = $matricula->comision; # envio la comision de la matricula
-        return view('alumnos.editar')
-        ->with('estudiante',$estudiante)
-        # envio la matricula para luego modificar la  comsion de esa matricula
-        ->with('matricula',$matricula->matriculaId) 
-        ->with('comisionesAbiertas',$comisionesAbiertas)
-        ->with('miComision',$miComision);
+        // return response()->json($estudiantes, 200);
+        return $this->successResponse($estudiantes,200);
     }
 
-    public function update(Estudiante $estudiante, Request $request){
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Estudiante  $estudiante
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Estudiante $estudiante)
+    {
         # ver el tema de las cuotas si hay cambio..                    *Falta!*
 
 
@@ -201,109 +186,12 @@ class AlumnosController extends Controller
             # code...
             $estudiante->update($datosValidado);
         }
-        return redirect()->route('home');
-    }
-    
-    public function destroy(Matricula $matricula){
-        # dd($matricula->estudiante);
-        # Se elimina logicamente ( no regular: NR )..
-        # Dejaremos los datos del estudiante..
-        $matricula->matriculaSituacion = 'NR';
-        $matricula->update();
+        // return redirect()->route('home');
+        return $this->successResponse('Estudiante modificado correctamente');
         
-        # dd(Auth::user()->userNombre);
-        return redirect()->route('home');
-
-    }
-   
-    # ingreso el monto a pagar de la cuota seleccionada..
-    public function pago(Cuota $cuota){
-        return view('alumnos.pago')->with('cuota',$cuota);
-    }
-    
-    # hago el pago
-    public function cancelarPago(Cuota $cuota, Request $request){
-        # dd($request->validate('cuotaMonto'));
-        $datosValido = $request->validate([
-            'cuotaMonto' => 'required|numeric|min:100'
-        ],[
-            'cuotaMonto.required' => 'El Monto de la cuota es requerdio, por favor verifique.',
-            'cuotaMonto.numeric' => 'Se espera un valor numerico, por favor verifique.',
-        ]);
-        # genero los pagos automatico..
-
-        # fecha q necesito para el pago
-        $now = date('Y-m-d');
-        # id de la cuota a pagar..
-        $cuotaPagada =  $cuota->cuotaId;
-        # dd($cuota->cuotaId);
-        # genero el registro de esta cuota para consultar el saldo
-        $cuotaBuscada = Cuota::find($cuotaPagada);
+        /*
+        # viene de altaReinscripcionEstudiante
         
-        # resto del monto q voy abonar del saldo..
-        if($datosValido['cuotaMonto']>$cuotaBuscada->cuotaFaltante()){
-            $resto = $datosValido['cuotaMonto']-$cuotaBuscada->cuotaFaltante();
-            # busco cuantas cuota tengo para pagar..
-            $cociente= intdiv( $resto,$cuotaBuscada->cuotaMonto);
-            
-        }else{
-            $resto = $datosValido['cuotaMonto'];
-            $cociente=-1;
-        }
-        for ($i=0; $i <= $cociente  ; $i++) { 
-            Pago::create([
-                'pagoAbono'     => $cuotaBuscada->cuotaFaltante(),
-                'pagoFAbono'    => $now,
-                'cuotaId'       => $cuotaPagada
-                ]);
-            # como los pagos son secuencciales, sumo uno para ir a la siguiente cuota
-            $cuotaPagada++;
-            # busco la cuota
-            $cuotaBuscada = Cuota::find($cuotaPagada);
-            # resto el monto total
-            if($resto>$cuotaBuscada->cuotaMonto){
-                $resto = $resto-$cuotaBuscada->cuotaMonto;
-            }
-        }
-        # Ahora si el monto es inferior a lo faltante de la cuota..
-        if($resto>0){
-            Pago::create([
-                'pagoAbono' => $resto,
-                'pagoFAbono' => $now,
-                'cuotaId' => $cuotaPagada
-            ]);
-        }
-        return redirect()->route('alumnos.cuotas',$cuota->matricula);
-    }
-
-    # muestro el formulario de Re-inscripcion
-    public function reinscripcion(Request $request){
-        $apellido = ucwords(strtolower($request->get('estudianteApellido')));
-        $DNI = $request->get('estudianteDNI');
-        
-        $estudiantes = Estudiante::orderBy('estudianteId','ASC') 
-            ->estudianteApellido($apellido)
-            ->estudianteDNI($DNI)
-            ->paginate(10);
-        
-        return view('alumnos.reinscripcion')->with('estudiantes', $estudiantes);
-    }
-    # formulario para que seleccione nuevo curso..
-    public function reinscripcionEstudiante(Estudiante $estudiante){
-        # dd($estudiante);
-        $now = date('Y-m-d');
-        $comisionesActivas = Comision::ComisionesActivas()
-                                # ->with('matriculas')
-                                ->with('curso') # baje la cantidad de consulta con esta condicion--auno nose porque??¿?¿?¿?
-                                ->get();
-        return view('alumnos.reinscripcionEstudiante')
-            ->with('estudiante',$estudiante)
-            ->with('comisionesActivas',$comisionesActivas);
-    }
-
-    # dar el alta de la reinscripcion..
-    public function altaReinscripcionEstudiante(Estudiante $estudiante, Request $request){
-        # dd($estudiante);
         # Recordar: regular(RE), no regular(NR) o egresado(EG)
         $matricula =  Matricula::create([
             'matriculaSituacion'=>'RE',
@@ -333,6 +221,17 @@ class AlumnosController extends Controller
             $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
         }
         return redirect()
-        ->route('alumnos.cuotas', $matricula);
+        ->route('alumnos.cuotas', $matricula);/** */
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Estudiante  $estudiante
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Estudiante $estudiante)
+    {
+        //
     }
 }

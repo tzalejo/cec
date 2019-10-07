@@ -12,17 +12,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        # $this->call(UsersTableSeeder::class);
         $this->truncateTables([
             'estudiantes' , 'users', 'roles', 'materias','cursos','comisiones', 'matriculas', 'cuotas', 'pagos', 'curso_materia'
         ]);
         
-        // La creación de datos de roles debe ejecutarse primero
+        # La creación de datos de roles debe ejecutarse primero
         $this->call(RoleTablaSeeder::class);
-        // Los usuarios necesitarán los roles previamente generados
+        # Los usuarios necesitarán los roles previamente generados
         $this->call(UserTablaSeeder::class);
         
-        // Estudiantes
+        # Estudiantes
         $this->call(EstudianteSeeder::class);
         
         $this->call(MateriaSeeder::class);
@@ -34,7 +34,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PagoSeeder::class);
         $this->call(CursoMateriaSeeder::class);
 
-        
+        # ejecuto la instalacion de passport! -Gracias Roimar!!!
+        Artisan::call('passport:install');
     }
     /**
      * Creo una fc para desactivar y activar la revision de foreign key,
@@ -45,12 +46,12 @@ class DatabaseSeeder extends Seeder
      */
     protected function truncateTables(array $tables){
         
-        // para desactivar la revision de llave foranea en la bd
+        # para desactivar la revision de llave foranea en la bd
         Schema::disableForeignKeyConstraints();
         foreach ($tables as $table) {
             DB::table($table)->truncate();
         }
-        // para activar la revision.
+        # para activar la revision.
         Schema::enableForeignKeyConstraints();
     }
 }

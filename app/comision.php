@@ -2,7 +2,6 @@
 
 namespace App;
 use App\Matricula;
-use App\Comision;
 use App\Curso;
 
 use Illuminate\Database\Eloquent\Model;

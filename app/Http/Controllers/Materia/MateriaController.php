@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Materia;
+
 use App\Materia;
-class MateriaController extends Controller
+use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
+
+class MateriaController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -17,20 +19,6 @@ class MateriaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        # obtengo las materias para mostrarla
-        $materias = Materia::all();
-        
-        return view('materia.crear')
-        ->with('materias',$materias);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -38,7 +26,6 @@ class MateriaController extends Controller
      */
     public function store(Request $request)
     {
-        
         $datosValidado = $request->validate([
             'materiaNombre'     => 'required|min:2|max:100', 
         ],[
@@ -63,34 +50,28 @@ class MateriaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Materia  $materia
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Materia $materia)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($materia)
-    {
-        //
-        dd($materia);
+        # toast('No puede ingresar..','warning');
+        $materias = Materia::all();
+        $seleccion_materias = array();
+        return view('curso.crear')
+        ->with('materias',$materias)
+        ->with('seleccion_materias',$seleccion_materias); ## variable de .blade ##
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Materia  $materia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Materia $materia)
     {
         //
     }
@@ -98,7 +79,7 @@ class MateriaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Materia  $materia
      * @return \Illuminate\Http\Response
      */
     public function destroy(Materia $materia)

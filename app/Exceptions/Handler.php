@@ -3,10 +3,21 @@
 namespace App\Exceptions;
 
 use Exception;
+use App\Traits\ApiResponser;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Validation\ValidationException;
+use RuntimeException;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponser;
     /**
      * A list of the exception types that are not reported.
      *
@@ -46,6 +57,60 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        # cuando genera algun otro error llamo al metodo ApiException
+        if($request->expectsJson()){
+            return $this->ApiException($request,$exception);
+        }
         return parent::render($request, $exception);
     }
+
+    protected function ApiException($request, Exception $exception){
+        
+        if($exception instanceof ModelNotFoundException ){
+            $modelo =strtolower(class_basename( $exception->getModel()));
+            return $this->errorResponse("No exite ninguna instancia de {$modelo} con el id expecificado",404);
+        }
+
+        if($exception instanceof NotFoundHttpException){
+            return $this->errorResponse('No se encontro la url expecificada ',404);
+        }
+
+        if($exception instanceof MethodNotAllowedHttpException){
+            return $this->errorResponse('El metodo expecificado en la peticion no es valido ',405);
+        }
+        if($exception instanceof QueryException){
+            $codigo=$exception->errorInfo[1];
+            if($codigo==1451){
+                return $this->errorResponse('No se puede eliminar de forma permanente el recurso porque esta relaiconado con algun otro.',409);
+            }
+        }
+
+        if($exception instanceof ThrottleRequestsException){
+            return $this->errorResponse('Limite de peticiones rebasado ',409);
+        }
+        # si estamos en modo depuracion..
+        if(config('app.debug')){
+            return parent::render($request, $exception);
+        }
+        dd($exception);
+        return $this->errorResponse('Falla inesperada. intente luego.',500);
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        
+        return $request->expectsJson()
+                    ? $this->errorResponse(['message' => "Usuario no autoriazado"], 401)
+                    : redirect()->guest($exception->redirectTo() ?? route('login'));
+    }
+
+    # para cuando los valores para el login son incorrecto..
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return $this->errorResponse([
+            'message' => 'Los datos dados no eran válidos.',
+            'errors' => $exception->errors(),
+        ], $exception->status);
+    }
+    
 }
