@@ -31,12 +31,15 @@ Route::group(['prefix' => 'alumnos'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
         
         Route::get('mostrar','Estudiante\EstudianteController@show');
+        Route::post('crear' ,'Estudiante\EstudianteController@store'); # Creo un estudiante
+        Route::put('modificar/{estudiante}' ,'Estudiante\EstudianteController@update'); # Modifico un estudiante
         
+        # para realizar un pago de un cuota..
+        Route::put('cuota/{cuota}' ,'Cuota\CuotaController@update');
+        
+        # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
+        Route::get('comision', 'Comision\ComisionController@index');
 
-        
-        #Route::get('inscripcion', 'AlumnosController@inscripcion');
-        #Route::post('crear' ,'AlumnosController@store');
-        # Route::get('cuotas' ,'AlumnosController@cuotas');
 
     });
 });

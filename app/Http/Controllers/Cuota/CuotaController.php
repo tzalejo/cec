@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Cuota;
 
-use App\Cuota;
+use App\{Cuota,Pago};
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Traits\ApiResponser;
 
 class CuotaController extends ApiController
 {
+    use ApiResponser;
     /**
      * Display a listing of the resource.
      *
@@ -49,7 +51,17 @@ class CuotaController extends ApiController
      */
     public function update(Request $request, Cuota $cuota)
     {
-        # dd($request->validate('cuotaMonto'));
+        // return response()->json($cuota->cuotaPagada() , 200);
+        # verifico si la cuota seleccionada esta realmente pagada..
+        if ($cuota->cuotaPagada()){
+            return $this->errorResponse('Esta cuota esta abonada',422);
+        }
+        # verificar si es la ultima cuota que se debe pagar
+        $cuotaAnterior = Cuota::find($cuota->cuotaId-1);
+        if (!$cuotaAnterior->cuotaPagada()) {
+            return $this->errorResponse('Hay cuotas anteriores que se deben abonar',422);
+        }
+        # es para validar los datos que vienen en el body
         $datosValido = $request->validate([
             'cuotaMonto' => 'required|numeric|min:100'
         ],[
@@ -60,14 +72,15 @@ class CuotaController extends ApiController
 
         # fecha q necesito para el pago
         $now = date('Y-m-d');
-        # id de la cuota a pagar..
+        # id de la cuota a pagar..para luego ir recorriendo si son mas d una que se puede abonar..
         $cuotaPagada =  $cuota->cuotaId;
-        # dd($cuota->cuotaId);
+        
         # genero el registro de esta cuota para consultar el saldo
         $cuotaBuscada = Cuota::find($cuotaPagada);
         
         # resto del monto q voy abonar del saldo..
         if($datosValido['cuotaMonto']>$cuotaBuscada->cuotaFaltante()){
+            # 1700 - 850 = 850
             $resto = $datosValido['cuotaMonto']-$cuotaBuscada->cuotaFaltante();
             # busco cuantas cuota tengo para pagar..
             $cociente= intdiv( $resto,$cuotaBuscada->cuotaMonto);
@@ -77,6 +90,7 @@ class CuotaController extends ApiController
             $cociente=-1;
         }
         for ($i=0; $i <= $cociente  ; $i++) { 
+            # creo el pago, con su respectivo montos(cuotaFaltante)
             Pago::create([
                 'pagoAbono'     => $cuotaBuscada->cuotaFaltante(),
                 'pagoFAbono'    => $now,
@@ -87,7 +101,7 @@ class CuotaController extends ApiController
             # busco la cuota
             $cuotaBuscada = Cuota::find($cuotaPagada);
             # resto el monto total
-            if($resto>$cuotaBuscada->cuotaMonto){
+            if($resto>=$cuotaBuscada->cuotaMonto){
                 $resto = $resto-$cuotaBuscada->cuotaMonto;
             }
         }
@@ -100,7 +114,7 @@ class CuotaController extends ApiController
             ]);
         }
         // return redirect()->route('alumnos.cuotas',$cuota->matricula);
-        return $this->successResponse('Cuota almacenada correctamente',200);
+        return $this->successResponse('Cuota fue abonada correctamente',201);
     }
 
     /**

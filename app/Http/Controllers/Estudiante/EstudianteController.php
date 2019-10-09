@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Estudiante;
 
-use App\Comision;
-use App\Estudiante;
+use App\{Estudiante,Comision,Matricula,Cuota};
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
+use Illuminate\Validation\Rule;
 
 class EstudianteController extends ApiController
 {
@@ -28,14 +28,15 @@ class EstudianteController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         # ucfirst('texto') ->> 'Texto'
-        # dd($request->all('pagoInscripcion')); viene null cuando no esta tildada la casilla, caso contrario en on
+        #return $request; #viene null cuando no esta tildada la casilla, caso contrario en on
         # validamos los campos
         $datosValidado = $request->validate([
             'estudianteNombre'      => 'required|min:3|max:50',
             'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes','estudianteDNI')],
+            'estudianteDNI'         => 'required|unique:estudiantes,estudianteDNI',
+            //['required','numeric',Rule::unique('estudiantes','estudianteDNI')],
             'estudianteDomicilio'   => 'required|max:100',
             'estudianteEmail'       => '',
             # 'estudianteEmail'       => ['email','max:100',Rule::unique('estudiantes','estudianteEmail')],
@@ -77,6 +78,7 @@ class EstudianteController extends ApiController
             'estudianteId'      =>$estudianteNuevo->estudianteId ,
             'comisionId'        =>$request->get('comisionId') ,
         ]);
+
         # pregunto por las casillas 
         if (is_null($request->get('pagoInscripcion')) && is_null($request->get('pagoCuota'))) {
             # es porque ninguna de las dos casilla esta tildada..
@@ -136,7 +138,7 @@ class EstudianteController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizo los datos del estudiante y tambien el comision de la matricula enviada..
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Estudiante  $estudiante
@@ -145,13 +147,12 @@ class EstudianteController extends ApiController
     public function update(Request $request, Estudiante $estudiante)
     {
         # ver el tema de las cuotas si hay cambio..                    *Falta!*
-
-
+        
         # validamos los campos
         $datosValidado = $request->validate([
             'estudianteNombre'      => 'required|min:3|max:50',
             'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes','estudianteDNI' )->ignore($estudiante->estudianteDNI,'estudianteDNI')], 
+            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes')->ignore($estudiante->estudianteDNI,'estudianteDNI')], 
             'estudianteDomicilio'   => 'required|max:100',
             # estoy indicando que el valor sea unico en la tabla estudiantes del campo estudianteEmail PERO ESCLUYENDO EL estudianteId!!, el cual estoy modificando.. 
             # 'estudianteEmail'       => ['email','max:100',Rule::unique('estudiantes','estudianteEmail' )->ignore($estudiante->estudianteId, 'estudianteId') ], 
@@ -160,14 +161,26 @@ class EstudianteController extends ApiController
             'estudianteLocalidad'   => 'required|max:100',
             'estudianteNacimiento'  => 'required|date',
             'estudianteFoto'        => ''
+        ],
+        [
+            'estudianteDNI.required'        => 'El DNI del estudiante es requerido',
+            'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
+            'estudianteNombre.required'     => 'El Nombre del estudiante es requerido',
+            'estudianteApellido.required'   => 'El Apellido del estudiante es requerido',
+            'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerido',
+            'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerido',
+            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',
+            
+            # 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
+            # 'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, verifique',
+            
         ]); 
-
-        # dd($request->all());
         # actualizar Estudiante y matricula(comision)
-        $matricula = Matricula::find($request->get('matricula'));
-        $matricula->comisionId = $request->get('comisionId');
+        $matricula = Matricula::find($request->get('matricula'));# busco la matricula 
+        $matricula->comisionId = $request->get('comisionId'); # modifico con la nueva comsion
         $matricula->save();
-
+        // return response()->json( is_null($request->get('estudianteFoto')), 200);
+        
         # aca especifico el mensaje d cierto error.
         if (is_null($request->get('estudianteFoto'))) {
             $estudiante->update([
@@ -184,44 +197,10 @@ class EstudianteController extends ApiController
             ]);
         } else {
             # code...
-            $estudiante->update($datosValidado);
+            $estudiante->update($datosValidado); 
         }
-        // return redirect()->route('home');
-        return $this->successResponse('Estudiante modificado correctamente');
-        
-        /*
-        # viene de altaReinscripcionEstudiante
-        
-        # Recordar: regular(RE), no regular(NR) o egresado(EG)
-        $matricula =  Matricula::create([
-            'matriculaSituacion'=>'RE',
-            'estudianteId'      =>$estudiante->estudianteId ,
-            'comisionId'        =>$request->get('comisionId') ,
-        ]);
-
-        # generar las cuotas de la matricula..
-        $nuevafecha = $matricula->comision->comisionFI;
-        Cuota::create([
-            'cuotaConcepto'     => 'Inscripcion - '.$matricula->comision->curso->cursoNombre,
-            'cuotaMonto'        => $matricula->comision->curso->cursoInscripcion,
-            'cuotaFVencimiento' => $nuevafecha,
-            'cuotaBonificacion' => 0,
-            'matriculaId'       => $matricula->matriculaId,
-            ]);
-        for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) { 
-            # code...
-            Cuota::create([
-                'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
-                'cuotaMonto'        => $matricula->comision->curso->cursoCostoMes,
-                'cuotaFVencimiento' => $nuevafecha,
-                'cuotaBonificacion' => 0,
-                'matriculaId'       => $matricula->matriculaId,
-                ]);
-            $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $matricula->comision->comisionFI ) ) ;
-            $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
-        }
-        return redirect()
-        ->route('alumnos.cuotas', $matricula);/** */
+        # return redirect()->route('home');
+        return $this->showOne($estudiante);
     }
 
     /**

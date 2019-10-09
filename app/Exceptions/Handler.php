@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use App\Traits\ApiResponser;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -65,7 +66,7 @@ class Handler extends ExceptionHandler
     }
 
     protected function ApiException($request, Exception $exception){
-        
+
         if($exception instanceof ModelNotFoundException ){
             $modelo =strtolower(class_basename( $exception->getModel()));
             return $this->errorResponse("No exite ninguna instancia de {$modelo} con el id expecificado",404);
@@ -85,14 +86,19 @@ class Handler extends ExceptionHandler
             }
         }
 
-        if($exception instanceof ThrottleRequestsException){
-            return $this->errorResponse('Limite de peticiones rebasado ',409);
-        }
+        // if($exception instanceof ThrottleRequestsException){
+        //     return $this->errorResponse('Limite de peticiones rebasado ',409);
+        // }
+        
+        // if($exception instanceof RequestException){
+        //     return $this->errorResponse('Fallo en la llamada.',500);
+        // }
+        
         # si estamos en modo depuracion..
         if(config('app.debug')){
             return parent::render($request, $exception);
         }
-        dd($exception);
+
         return $this->errorResponse('Falla inesperada. intente luego.',500);
     }
 
