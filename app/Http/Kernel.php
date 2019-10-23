@@ -65,6 +65,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         # mi middleware para verificar si es director..
         'director' => \App\Http\Middleware\AdminMiddleware::class,
+        # necesitaba cors
+        'cors' => \App\Http\Middleware\Cors::class, 
 
     ];
 

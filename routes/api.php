@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 # envio a la home del sistema
 // Route::middleware('auth:api')->get('home','HomeController@index');
 
-# Para manejo de credenciales de los usuarios
-Route::group(['prefix' => 'auth'], function () {
+# Para manejo de credenciales de los usuarios, agrego cors a las rutas
+Route::group(['prefix' => 'auth','middleware' => 'cors'], function () {
     Route::post('login',  'AuthController@login'); # Me Logueo
     Route::post('signup', 'AuthController@signup'); # Creo un usuario(Users)
     Route::group(['middleware' => 'auth:api'], function () {
@@ -25,8 +25,8 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-# Group de ruta con prefijo alumnos
-Route::group(['prefix' => 'alumnos'], function () {
+# Group de ruta con prefijo alumnos, agrego cors a las rutas
+Route::group(['prefix' => 'alumnos','middleware' => 'cors'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         

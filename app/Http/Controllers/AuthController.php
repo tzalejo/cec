@@ -42,10 +42,12 @@ class AuthController extends Controller
             'password'      => 'required|string',
             'remember_me'   => 'boolean',
             ]);
-        if($request->has('userNombre')){
-            $credenciales = request(['userNombre', 'password']);
-        }else{
+        
+        if($request->has('email')){
             $credenciales = request(['email', 'password']);
+        }
+        else{
+            $credenciales = request(['userNombre', 'password']);
         }
         # El metrod Auth devuelve true si la autenticacion fue exitosa
         if (!Auth::attempt($credenciales)) {
@@ -53,7 +55,7 @@ class AuthController extends Controller
             return $this->errorResponse('No autorizado',401);
             # return response()->json(['message' => 'No autorizado'],401);
         }
-        // return response()->json($credenciales);
+        # return response()->json($credenciales);
         
         # $user = User::find(1); 
         # return response()->json($user->createToken('Personal Access Token'));
