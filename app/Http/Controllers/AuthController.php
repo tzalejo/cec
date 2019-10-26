@@ -35,7 +35,6 @@ class AuthController extends Controller
 
     }
     public function login(Request $request){
-        
         $request->validate([
             'email'         => 'required|string|email',
             'userNombre'    => 'required_without:email|string',
@@ -52,7 +51,7 @@ class AuthController extends Controller
         # El metrod Auth devuelve true si la autenticacion fue exitosa
         if (!Auth::attempt($credenciales)) {
             # code...
-            return $this->errorResponse('No autorizado',401);
+            return $this->errorResponse('No autorizado, verifique sus datos por favor.',401);
             # return response()->json(['message' => 'No autorizado'],401);
         }
         # return response()->json($credenciales);
@@ -69,7 +68,11 @@ class AuthController extends Controller
 
         $token->save();
         return $this->successResponse([
-            'access_token'  => $tokenResult->accessToken,
+            'userNombre'    => $user->userNombre,
+            'email'         => $user->email,
+            'userImagen'    => $user->userImagen,
+            'roleId'         => $user->roleId,
+            'token'         => $tokenResult->accessToken,
             'token_type'    => 'Bearer',
             'expires_at'    => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
         ], 200);

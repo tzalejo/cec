@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('home','HomeController@index');
 
 # Para manejo de credenciales de los usuarios, agrego cors a las rutas
-Route::group(['prefix' => 'auth','middleware' => 'cors'], function () {
+Route::group(['prefix' => 'auth'], function () {
     Route::post('login',  'AuthController@login'); # Me Logueo
     Route::post('signup', 'AuthController@signup'); # Creo un usuario(Users)
     Route::group(['middleware' => 'auth:api'], function () {
@@ -26,23 +26,21 @@ Route::group(['prefix' => 'auth','middleware' => 'cors'], function () {
 });
 
 # Group de ruta con prefijo alumnos, agrego cors a las rutas
-Route::group(['prefix' => 'alumnos','middleware' => 'cors'], function () {
+Route::group(['prefix' => 'estudiante'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         
         Route::get('mostrar','Estudiante\EstudianteController@show');
         Route::post('crear' ,'Estudiante\EstudianteController@store'); # Creo un estudiante
         Route::put('modificar/{estudiante}' ,'Estudiante\EstudianteController@update'); # Modifico un estudiante
-        
-        # para realizar un pago de un cuota..
-        Route::put('cuota/{cuota}' ,'Cuota\CuotaController@update');
-        
-        # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
-        Route::get('comision', 'Comision\ComisionController@index');
-
-
     });
 });
+/** VEr luego estas url */
+# para realizar un pago de un cuota..
+Route::put('cuota/{cuota}' ,'Cuota\CuotaController@update');
+
+# devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
+Route::get('comision', 'Comision\ComisionController@index');
 
 # Group de ruta con prefijo cursos/
 Route::group(['prefix' => 'cursos'], function () {

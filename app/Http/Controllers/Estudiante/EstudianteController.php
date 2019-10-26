@@ -114,7 +114,7 @@ class EstudianteController extends ApiController
     }
 
     /**
-     * Display the specified resource.
+     * Este api lo usabaa para filtrado por DNI y/o por apellido.
      *
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
