@@ -16,16 +16,17 @@ class AuthController extends Controller
     public function signup(Request $request){
         $request->validate([
             'userNombre'    => 'required|string',
-            'email'         => 'required|string|email|unique:users',
-            'password'      => 'required|string|confirmed',
-            'roleId'        => 'required|numeric',
+            'email'         => 'required|string|email',
+            'password'      => 'required|string'
         ]);
+        #return $request;
 
         $user = User::create([
             'userNombre'    => $request->userNombre,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
-            'roleId'        => $request->roleId,
+            'userImagen'    => 'secretaria.png',
+            'roleId'        => 2,
         ]);
 
         return $this->successResponse( ['message' => 'Usuario '.$user->userNombre.' creado satisfactoriamente'],201);
@@ -85,9 +86,11 @@ class AuthController extends Controller
         return $this->successResponse(['message'=>'Salió exitosamente'], 200);
     }
 
-    // public function user(Request $request){
-    //     return $this->showAll($request->user());
+      
+    public function delete(Request $request){
+        return 'bien';
+        #eliminar
         
-    // }
+    }
 
 }
