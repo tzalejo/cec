@@ -22,6 +22,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('signup', 'AuthController@signup'); # Creo un usuario(Users)
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('logout', 'AuthController@logout'); # Salgo
+        Route::get('delete/user', 'AuthController@delete'); # elimino pero solo admin  VER LOS PERMISOS!!
     });
 });
 
@@ -35,12 +36,20 @@ Route::group(['prefix' => 'estudiante'], function () {
         Route::put('modificar/{estudiante}' ,'Estudiante\EstudianteController@update'); # Modifico un estudiante
     });
 });
-/** VEr luego estas url */
+
 # para realizar un pago de un cuota..
 Route::put('cuota/{cuota}' ,'Cuota\CuotaController@update');
 
-# devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
-Route::get('comision', 'Comision\ComisionController@index');
+#Para manejo de comsiones 
+Route::group(['prefix' => 'comision'], function () {
+    # Rutas con middleware auth
+    Route::group(['middleware' => ['auth:api']], function () {       
+        
+        # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
+        Route::get('', 'Comision\ComisionController@index');
+    });
+});
+
 
 # Group de ruta con prefijo cursos/
 Route::group(['prefix' => 'cursos'], function () {
