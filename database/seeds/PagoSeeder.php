@@ -27,8 +27,13 @@ class PagoSeeder extends Seeder
             'cuotaId' =>  $cuota->cuotaId,
         ]);
         Pago::create([
-            'pagoAbono' => 450,
+            'pagoAbono' => 300,
             'pagoFAbono' =>  '2019-01-13',
+            'cuotaId' =>  $cuota->cuotaId,
+        ]);
+        Pago::create([
+            'pagoAbono' => 150,
+            'pagoFAbono' =>  '2019-01-15',
             'cuotaId' =>  $cuota->cuotaId,
         ]);
         $cuota = Cuota::find(3);
