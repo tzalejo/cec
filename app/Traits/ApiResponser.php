@@ -12,19 +12,19 @@ trait ApiResponser{
   # para los errores
   
   protected function errorResponse($msg, $code){
-    return response()->json(['error'=> $msg, 'code'=>$code],$code);
+    return response()->json($msg,$code);
   }
   # cuando devolvemos una colecciones de elementos json
   protected function showAll(Collection $data,$code=200 ){
-    return $this->successResponse(['data'=>$data],$code);
+    return $this->successResponse($data,$code);
   }
   
   protected function showOne(Model $instancia,$code=200){
-    return $this->successResponse(['data'=>$instancia],$code);
+    return $this->successResponse($instancia,$code);
   }
 
   private function showArray($array, $code=200){
-  return $this->successResponse(['data'=>$array],$code);
+  return $this->successResponse($array,$code);
   }
 }
 
