@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Comision;
 
-use App\Comision;
+use App\{Comision,Matricula,Curso};
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Traits\ApiResponser;
 
 class ComisionController extends ApiController
 {
+    use ApiResponser;
     /**
      * Devuelvo todas las comisiones activas(que no se cerraron por las fechas)
      *
@@ -17,11 +19,13 @@ class ComisionController extends ApiController
     {
         # obtengo las comisiones activas, 
         $comisionesActivas = Comision::ComisionesActivas()
-        ->with('curso') # para optimizar la consulta
-        ->get(); # uso un scope
+                                ->with('curso') # para optimizar la consulta
+                                ->get() # uso un scope
+                                ->load(['matriculas']); # envio tmb las matriculas que tiene cada curso
         # devuelvo las comisiones
         # return response()->json([$comisionesActivas],200);
         return $this->showAll($comisionesActivas); # usamos metodos de Traits para devolver  
+        
         #########################
         # esto estaba en el home:
        
@@ -31,7 +35,6 @@ class ComisionController extends ApiController
         # envio a mi api 
         #return response()->json($comisiones, 200);  # return view('home')->with('comisiones', $comisiones);
         
-       
     }
 
     /**
