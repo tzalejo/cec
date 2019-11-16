@@ -65,28 +65,41 @@ class MatriculaController extends ApiController
     }
 
     /**
-     * Display the specified resource.
+     * 
      *
      * @param  \App\Matricula  $matricula
      * @return \Illuminate\Http\Response
      */
     public function show(Matricula $matricula)
-    {
-        // $matriculaId = $request->validate([
-        //     'matriculaId'      => 'required|numeric']);
-
-        // $matricula = Matricula::where('matriculaId',$matriculaId)->get();
-        $now = date('Y-m-d');
-        $estudiante = $matricula->estudiante;
-        $comisionesAbiertas = Comision::where('comisionFF', '>', $now)->get();
-        $miComision = $matricula->comision; # envio la comision de la matricula
+    {   
+        # validar que exista la matricula..
+        return $this->showOne($matricula,200);
         
-        return view('alumnos.editar')
-        ->with('estudiante',$estudiante)
-        # envio la matricula para luego modificar la  comsion de esa matricula
-        ->with('matricula',$matricula->matriculaId) 
-        ->with('comisionesAbiertas',$comisionesAbiertas)
-        ->with('miComision',$miComision);
+        // return $request->validate([
+        //     'matriculaId'      => 'required|numeric']);
+            
+        // if ($datosValidado->fails()) {
+        //     $errors = $datosValidado->errors();
+        //     // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
+        //     # retorno error 400..
+        //     return $this->errorResponse($errors,400);
+        // }
+        // $matriculaId =$request->get('matriculaId');
+        // $matricula = Matricula::where('matriculaId',$matriculaId)->get();
+        // return $this->showOne($matriculaId);
+        
+        
+        // $now = date('Y-m-d');
+        // $estudiante = $matricula->estudiante;
+        // $comisionesAbiertas = Comision::where('comisionFF', '>', $now)->get();
+        // $miComision = $matricula->comision; # envio la comision de la matricula
+        
+        // return view('alumnos.editar')
+        // ->with('estudiante',$estudiante)
+        // # envio la matricula para luego modificar la  comsion de esa matricula
+        // ->with('matricula',$matricula->matriculaId) 
+        // ->with('comisionesAbiertas',$comisionesAbiertas)
+        // ->with('miComision',$miComision);
         
     }
 
