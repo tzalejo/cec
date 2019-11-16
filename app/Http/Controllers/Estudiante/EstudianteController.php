@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class EstudianteController extends ApiController
 {
@@ -32,59 +33,60 @@ class EstudianteController extends ApiController
         # ucfirst('texto') ->> 'Texto'
         #return $request; #viene null cuando no esta tildada la casilla, caso contrario en on
         # validamos los campos
-        $datosValidado = $request->validate([
+        // $datosValidado = $request->validate([
+        $datosValidado = Validator::make($request->all(),[ 
             'estudianteNombre'      => 'required|min:3|max:50',
             'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => 'required|unique:estudiantes,estudianteDNI',
-            //['required','numeric',Rule::unique('estudiantes','estudianteDNI')],
+            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes','estudianteDNI')], // 'required|numeric', //required|unique:estudiantes,estudianteDNI // 
             'estudianteDomicilio'   => 'required|max:100',
-            'estudianteEmail'       => '',
-            # 'estudianteEmail'       => ['email','max:100',Rule::unique('estudiantes','estudianteEmail')],
+            'estudianteEmail'       => ['required','email','max:100',Rule::unique('estudiantes','estudianteEmail')],    // 'estudianteEmail'       => 'required|email',
             'estudianteTelefono'    => 'max:50',
             'estudianteLocalidad'   => 'required|max:100',
             'estudianteNacimiento'  => 'required|date',
             'estudianteFoto'        => ''
-        ],
-        [
+        ],[
             'estudianteDNI.required'        => 'El DNI del estudiante es requerido',
             'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
             'estudianteNombre.required'     => 'El Nombre del estudiante es requerido',
             'estudianteApellido.required'   => 'El Apellido del estudiante es requerido',
             'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerido',
             'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerido',
-            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',
+            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',            
+            'estudianteEmail.email'         => 'El Email es incorrecto, verifique el formato example@mail.com',
+            'estudianteEmail.unique'        => 'El Email del estudiante ya esta registrado, verifique',
             
-            # 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
-            # 'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, verifique',
-            
-        ]); # aca especifico el mensaje d cierto error.
-        
+        ]); # aca especifico el mensaje para cada posible error.
+        // return $datosValidado;
+        # verifico si hubo errores en la validaciones..
+        if ($datosValidado->fails()) {
+            $errors = $datosValidado->errors();
+            // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
+            # retorno error 400..
+            return $this->errorResponse($errors,400);
+        }
+
         # creo el estudiante, con su respectiva matricula
         $estudianteNuevo = Estudiante::create([
-            'estudianteNombre'      => ucwords(strtolower($datosValidado['estudianteNombre'])),
-            'estudianteApellido'    => ucwords(strtolower($datosValidado['estudianteApellido'])),
-            'estudianteDNI'         => $datosValidado['estudianteDNI'],
-            'estudianteDomicilio'   => ucwords(strtolower($datosValidado['estudianteDomicilio'])),
-            'estudianteEmail'       => strtolower($datosValidado['estudianteEmail']),
-            'estudianteTelefono'    => $datosValidado['estudianteTelefono'],
-            'estudianteLocalidad'   => strtolower($datosValidado['estudianteLocalidad']),
-            'estudianteNacimiento'  => $datosValidado['estudianteNacimiento'],
-            'estudianteFoto'        => $datosValidado['estudianteFoto'],
+            'estudianteNombre'      => ucwords(strtolower($request->estudianteNombre)),
+            'estudianteApellido'    => ucwords(strtolower($request->estudianteApellido)),
+            'estudianteDNI'         => $request->estudianteDNI,
+            'estudianteDomicilio'   => ucwords(strtolower($request->estudianteDomicilio)),
+            'estudianteEmail'       => strtolower($request->estudianteEmail),
+            'estudianteTelefono'    => $request->estudianteTelefono,
+            'estudianteLocalidad'   => strtolower($request->estudianteLocalidad),
+            'estudianteNacimiento'  => $request->estudianteNacimiento,
+            'estudianteFoto'        => $request->estudianteFoto,
         ]);
         
-        # Recordar: regular(RE), no regular(NR) o egresado(EG)
-        $matricula =  Matricula::create([
-            'matriculaSituacion'=>'RE',
-            'estudianteId'      =>$estudianteNuevo->estudianteId ,
-            'comisionId'        =>$request->get('comisionId') ,
-        ]);
-
-        # pregunto por las casillas 
-        if (is_null($request->get('pagoInscripcion')) && is_null($request->get('pagoCuota'))) {
-            # es porque ninguna de las dos casilla esta tildada..
-            # return view('home')->with('comisiones', Comision::all());
-            return $this->showAll(Comision::all());
-        } else {
+        // return ($request->get('pagoInscripcion') && $request->get('pagoCuota'));
+        # pregunto por las casillas, pero siempre va al else por como tengo el formulario(que puede que se tenga q cambiar) 
+        if ($request->get('pagoInscripcion') || $request->get('pagoCuota') ) {          
+            # Recordar: regular(RE), no regular(NR) o egresado(EG)
+            $matricula =  Matricula::create([
+                'matriculaSituacion'=>'RE',
+                'estudianteId'      =>$estudianteNuevo->estudianteId ,
+                'comisionId'        =>$request->get('comisionId') ,
+            ]);
             # Si alguna casilla(inscripcion o cuota) esta tildada.
             # generar las cuotas de la matricula..
             $nuevafecha = $matricula->comision->comisionFI;
@@ -109,10 +111,12 @@ class EstudianteController extends ApiController
             }
             # return redirect()->route('alumnos.cuotas', $matricula);
             return $this->showOne($matricula);
-        }
-        
+        }else{ 
+        # es porque ninguna de las dos casilla esta tildada..
+        # return view('home')->with('comisiones', Comision::all());
+        return $this->successResponse(null,200); # devuelvo '0' para saber q solo se inscribio y no se matriculo(pago inscripcion y/o cuota)
+        } 
     }
-
     /**
      * Este api lo usabaa para filtrado por DNI y/o por apellido.
      *
