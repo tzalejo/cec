@@ -67,6 +67,10 @@ class Handler extends ExceptionHandler
 
     protected function ApiException($request, Exception $exception){
 
+        // if ($exception instanceof CustomException) {
+        //     return $this->errorResponse('Error Servidor', 500);
+        // }
+
         if($exception instanceof ModelNotFoundException ){
             $modelo =strtolower(class_basename( $exception->getModel()));
             return $this->errorResponse("No exite ninguna instancia de {$modelo} con el id expecificado",404);
