@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Cuota;
 
-use App\{Cuota,Pago};
+use App\{Cuota, Pago, Matricula, Estudiante};
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
@@ -11,13 +11,15 @@ class CuotaController extends ApiController
 {
     use ApiResponser;
     /**
-     * Display a listing of the resource.
+     * Regreso todas las cuotas de una matricula.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Matricula $matricula)
     {
-        //
+        # devuelvo estudiante->matricula->cuotas->pagos;
+        return $this->showArray($matricula->load(['estudiante','cuotas','cuotas.pagos']));
+        // return $this->showAll($matricula->cuotas);
     }
 
     /**
@@ -28,30 +30,23 @@ class CuotaController extends ApiController
      */
     public function store(Request $request)
     {
-        
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Cuota  $cuota
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Cuota $cuota)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Cuota  $cuota
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Cuota $cuota)
-    {
         // return response()->json($cuota->cuotaPagada() , 200);
+        # valido cuotaId
+        $datosValidoCuota = $request->validate([
+            'cuotaId' => 'required|numeric'
+        ],[
+            'cuotaId.required' => 'La cuota es requerda, por favor verifique.',
+            'cuotaId.numeric' => 'Se espera un valor numerico, por favor verifique.',
+        ]);
+         # verifico si hubo errores en la validaciones..
+         if ($datosValidoCuota->fails()) {
+            $errors = $datosValidoCuota->errors();
+            // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
+            # retorno error 400..
+            return $this->errorResponse($errors,400);
+        }
+
+        $cuota = Cuota::find($request->cuotaId);
         # verifico si la cuota seleccionada esta realmente pagada..
         if ($cuota->cuotaPagada()){
             return $this->errorResponse('Esta cuota esta abonada',422);
@@ -115,6 +110,29 @@ class CuotaController extends ApiController
         }
         // return redirect()->route('alumnos.cuotas',$cuota->matricula);
         return $this->successResponse('Cuota fue abonada correctamente',201);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Cuota  $cuota
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Cuota $cuota)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Cuota  $cuota
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Cuota $cuota)
+    {
+      
     }
 
     /**
