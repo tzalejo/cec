@@ -18,10 +18,10 @@ use Illuminate\Http\Request;
 
 # Para manejo de credenciales de los usuarios, agrego cors a las rutas
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login',  'AuthController@login'); # Me Logueo
+    Route::post('login', 'AuthController@login'); # Me Logueo
     Route::post('signup', 'AuthController@signup'); # Creo un usuario(Users)
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'AuthController@logout'); # Salgo
+        Route::get('logout', '    0@logout'); # Salgo
         Route::get('delete/user', 'AuthController@delete'); # elimino pero solo admin  VER LOS PERMISOS!!
     });
 });
@@ -30,20 +30,38 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'estudiante'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
-        
-        Route::get('mostrar','Estudiante\EstudianteController@show');
-        Route::post('crear' ,'Estudiante\EstudianteController@store'); # Creo un estudiante
-        Route::put('modificar/{estudiante}' ,'Estudiante\EstudianteController@update'); # Modifico un estudiante
+        Route::get('mostrar', 'Estudiante\EstudianteController@show');
+        Route::post('crear', 'Estudiante\EstudianteController@store'); # Creo un estudiante
+        Route::put('modificar/{estudiante}', 'Estudiante\EstudianteController@update'); # Modifico un estudiante
     });
 });
 
-# para realizar un pago de un cuota..
-Route::put('cuota/{cuota}' ,'Cuota\CuotaController@update');
+# Group de ruta con prefijo matricula, agrego cors a las rutas
+Route::group(['prefix' => 'matricula'], function () {
+    # Rutas con middleware auth
+    Route::group(['middleware' => ['auth:api']], function () {
+        
+        // Route::get('/{matricula}','Matricula\MatriculaController@show')->where(['matricula' => '[0-9]+']);
+    });
+});
 
-#Para manejo de comsiones 
+# Group de ruta con prefijo matricula, agrego cors a las rutas
+Route::group(['prefix' => 'cuota'], function () {
+    # Rutas con middleware auth
+    Route::group(['middleware' => ['auth:api']], function () {
+        
+        # devolvemos matricua->cuotas->pagos
+        Route::get('{matricula}', 'Cuota\CuotaController@index');
+        # para realizar un pago de un cuota..
+        Route::post('', 'Cuota\CuotaController@store');
+    });
+});
+
+
+#Para manejo de comsiones
 Route::group(['prefix' => 'comision'], function () {
     # Rutas con middleware auth
-    Route::group(['middleware' => ['auth:api']], function () {       
+    Route::group(['middleware' => ['auth:api']], function () {
         
         # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
         Route::get('', 'Comision\ComisionController@index');
@@ -58,5 +76,3 @@ Route::group(['prefix' => 'cursos'], function () {
         // Route::get('crear', 'CursoController@create');
     });
 });
-
-
