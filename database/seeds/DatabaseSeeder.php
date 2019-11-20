@@ -41,10 +41,11 @@ class DatabaseSeeder extends Seeder
      * Creo una fc para desactivar y activar la revision de foreign key,
      * es muy util porque a veces las tablas tienen restricciones q no
      * dejan correr al seed.
-     * 
-     * 
+     *
+     *
      */
-    protected function truncateTables(array $tables){
+    protected function truncateTables(array $tables)
+    {
         
         # para desactivar la revision de llave foranea en la bd
         Schema::disableForeignKeyConstraints();

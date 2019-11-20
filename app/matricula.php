@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+
 use App\Estudiante;
 use App\Comision;
 use App\Cuota;
@@ -8,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Matricula extends Model
 {
-     /**
-     * 
-     * si queremos desactivar los campos de creacion y actualizacion
-     * que se crean automaticamente al crear una tabla
-     * 
-     */
+    /**
+    *
+    * si queremos desactivar los campos de creacion y actualizacion
+    * que se crean automaticamente al crear una tabla
+    *
+    */
     public $timestamps = false;
     
     protected $primaryKey = 'matriculaId';
@@ -26,17 +27,17 @@ class Matricula extends Model
 
     /**
      * Indico la relacion Matricula tiene un y solo un alumno
-     * 
+     *
      * @var colection
      */
     public function estudiante()
     {
-        return $this->belongsTo(Estudiante::Class, 'estudianteId');
+        return $this->belongsTo(Estudiante::class, 'estudianteId');
     }
 
     /**
      * Relacion una matricula tien una y solo una  comision
-     * 
+     *
      * @var colection
      */
     public function comision()
@@ -45,8 +46,8 @@ class Matricula extends Model
     }
 
     /**
-     * Relacion 
-     * 
+     * Relacion
+     *
      * @var colection
      */
     public function cuotas()
@@ -57,27 +58,29 @@ class Matricula extends Model
 
     /**
      * Funcion si una matricula esta regular(RE) o no regular(eliminada-NR)
-     * 
+     *
      * @var boolean
      */
-    public function esMatriculaRegular(){
+    public function esMatriculaRegular()
+    {
         return $this->matriculaSituacion == 'RE';
     }
 
     /**
      * Funcion para saber si una matricula cancelo todas las cuotas.
-     * 
+     *
      * @var boolean
      */
-    public function matriculaCancelada(){
-        $cantidadCuotas = $this->comision->curso->cursoNroCuota; 
+    public function matriculaCancelada()
+    {
+        $cantidadCuotas = $this->comision->curso->cursoNroCuota;
 
         // obtengo un arreglo de todas las cuotas con matriculaId
         // $cuotas = Cuota::whereMatriculaId($this->matriculaId)->get();
-        $cuotas = Cuota::where('matriculaId',$this->matriculaId)->get();
+        $cuotas = Cuota::where('matriculaId', $this->matriculaId)->get();
         
         // recorro las cuotas y verifico si estan pagadas o no..
-        for ($i=1; $i <= $cantidadCuotas ; $i++) { 
+        for ($i=1; $i <= $cantidadCuotas ; $i++) {
             # code...
             if (!$cuotas[$i]->cuotaPagada()) {
                 # si alguna cuota no fue pagada retorno false..
@@ -87,5 +90,4 @@ class Matricula extends Model
         // fue pagada si llego aca..
         return true;
     }
-
 }

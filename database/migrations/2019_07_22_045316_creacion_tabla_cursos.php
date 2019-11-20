@@ -15,7 +15,7 @@ class CreacionTablaCursos extends Migration
     {
         Schema::create('cursos', function (Blueprint $table) {
             $table->bigIncrements('cursoId');
-            $table->string('cursoNombre',100);
+            $table->string('cursoNombre', 100);
             $table->smallInteger('cursoNroCuota');
             $table->float('cursoCostoMes', 10, 2);
             $table->float('cursoInscripcion', 10, 2);

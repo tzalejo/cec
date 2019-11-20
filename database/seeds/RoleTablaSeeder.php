@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Role;
+
 class RoleTablaSeeder extends Seeder
 {
     /**
@@ -35,7 +36,5 @@ class RoleTablaSeeder extends Seeder
         // $role->roleId = 2;
         $role->roleDescripcion = 'Secretaria';
         $role->save();
-
-
     }
 }

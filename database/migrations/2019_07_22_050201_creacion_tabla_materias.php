@@ -15,7 +15,7 @@ class CreacionTablaMaterias extends Migration
     {
         Schema::create('materias', function (Blueprint $table) {
             $table->bigIncrements('materiaId');
-            $table->string('materiaNombre',50);
+            $table->string('materiaNombre', 50);
             $table->boolean('materiaSeminario');
             // $table->timestamps();
         });

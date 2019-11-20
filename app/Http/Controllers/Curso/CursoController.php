@@ -25,15 +25,16 @@ class CursoController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         # valido el curso..
-        $datosValidado = $request->validate([
+        $datosValidado = $request->validate(
+            [
             'cursoNombre'       => 'required|min:2|max:100',
             'cursoNroCuota'     => 'required|numeric|max:48',
             'cursoCostoMes'     => 'required|numeric',
             'cursoInscripcion'  => 'required|numeric',
         ],
-        [
+            [
             'cursoNombre.required'        => 'El Nombre del curso es requerido',
             'cursoNroCuota.required'      => 'La cantidad de cuotas es requerido',
             'cursoNroCuota.max'           => 'La cantidad de cuotas supera el valor maximo',
@@ -42,7 +43,8 @@ class CursoController extends ApiController
             'cursoNroCuota.numeric'       => 'Debe ingresar un valor numerico',
             'cursoCostoMes.numeric'       => 'Debe ingresar un valor numerico',
             'cursoInscripcion.numeric'    => 'Debe ingresar un valor numerico',
-        ]);
+        ]
+        );
         # Agrego el curso
         $cursoNuevo = Curso::create([
             'cursoNombre'       => $datosValidado['cursoNombre'],
@@ -52,18 +54,16 @@ class CursoController extends ApiController
         ]);
         
         # verifico si  seleccione materia, para agregar la relacion.
-        if(!is_null($request['sele_materia'])){
-
+        if (!is_null($request['sele_materia'])) {
             $seleccionMaterias = $request['sele_materia'];
             # agrego las materias..
-            $cursoNuevo->materias()->attach($seleccionMaterias); 
+            $cursoNuevo->materias()->attach($seleccionMaterias);
             // Ya no lo necesito al cartel: toast('Se guardó correctamente la Curso.','success');
             
             // return redirect()
             // ->route('home')->with('comisiones', Comision::all());
         }
         return $this->showAll(Comision::all());
-        
     }
 
     /**

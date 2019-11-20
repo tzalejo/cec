@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Materia extends Model
 {
-     /**
-     * 
-     * si queremos desactivar los campos de creacion y actualizacion
-     * que se crean automaticamente al crear una tabla
-     * 
-     */
+    /**
+    *
+    * si queremos desactivar los campos de creacion y actualizacion
+    * que se crean automaticamente al crear una tabla
+    *
+    */
     public $timestamps    = false;
 
     protected $fillable   = ['materiaNombre', 'materiaSeminario'];
@@ -19,10 +19,11 @@ class Materia extends Model
 
     /**
      * Relacion muchos a muchos materia <----> curso
-     * 
-     * 
+     *
+     *
      */
-    public function cursos(){
-        return $this->belongsToMany(Curso::class, 'curso_materia','materiaId','cursoId');
+    public function cursos()
+    {
+        return $this->belongsToMany(Curso::class, 'curso_materia', 'materiaId', 'cursoId');
     }
 }

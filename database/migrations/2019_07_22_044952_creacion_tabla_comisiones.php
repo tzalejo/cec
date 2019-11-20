@@ -15,8 +15,8 @@ class CreacionTablaComisiones extends Migration
     {
         Schema::create('comisiones', function (Blueprint $table) {
             $table->bigIncrements('comisionId');
-            $table->string('comisionNombre',50);
-            $table->string('comisionHorario',50);
+            $table->string('comisionNombre', 50);
+            $table->string('comisionHorario', 50);
             $table->date('comisionFI');
             $table->date('comisionFF');
             // $table->timestamps();

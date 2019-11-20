@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Pago;
 use App\Cuota;
+
 class PagoSeeder extends Seeder
 {
     /**
@@ -43,13 +44,13 @@ class PagoSeeder extends Seeder
             'pagoFAbono' =>  '2019-02-11',
             'cuotaId' =>  $cuota->cuotaId,
         ]);
-        // $cuota = Cuota::find(4);
-        // // cuota 3, pagada
-        // Pago::create([
-        //     'pagoAbono' => 850,
-        //     'pagoFAbono' =>  '2019-03-05',
-        //     'cuotaId' =>  $cuota->cuotaId,
-        // ]);
+        $cuota = Cuota::find(4);
+        // cuota 3, pagada
+        Pago::create([
+            'pagoAbono' => 450,
+            'pagoFAbono' =>  '2019-03-05',
+            'cuotaId' =>  $cuota->cuotaId,
+        ]);
         // $cuota = Cuota::find(5);
         // // cuota 4 , pago parcial
         // Pago::create([

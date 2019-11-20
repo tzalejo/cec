@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Matricula;
+
 class MatriculaSeeder extends Seeder
 {
     /**
@@ -9,8 +10,9 @@ class MatriculaSeeder extends Seeder
      *
      * @return void
      */
-    public function run(){
-        // Recordar: regular(RE), no regular(NR) o egresado(EG) 
+    public function run()
+    {
+        // Recordar: regular(RE), no regular(NR) o egresado(EG)
         Matricula::create([
             'matriculaSituacion'=>'RE',
             'estudianteId'=>1 ,
@@ -118,8 +120,5 @@ class MatriculaSeeder extends Seeder
         //     'estudianteId'=> 21,
         //     'comisionId'=>5 ,
         // ]);
-
-        
-
     }
 }

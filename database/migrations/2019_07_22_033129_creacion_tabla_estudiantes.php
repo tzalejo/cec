@@ -15,13 +15,13 @@ class CreacionTablaEstudiantes extends Migration
     {
         Schema::create('estudiantes', function (Blueprint $table) {
             $table->bigIncrements('estudianteId');
-            $table->string('estudianteDNI',9)->unique();
-            $table->string('estudianteApellido',50);
-            $table->string('estudianteNombre',50);
-            $table->string('estudianteDomicilio',100);
-            $table->string('estudianteTelefono',50)->nullable();
-            $table->string('estudianteLocalidad',100);
-            $table->string('estudianteEmail',100)->nullable();
+            $table->string('estudianteDNI', 9)->unique();
+            $table->string('estudianteApellido', 50);
+            $table->string('estudianteNombre', 50);
+            $table->string('estudianteDomicilio', 100);
+            $table->string('estudianteTelefono', 50)->nullable();
+            $table->string('estudianteLocalidad', 100);
+            $table->string('estudianteEmail', 100)->nullable();
             $table->date('estudianteNacimiento');
             $table->string('estudianteFoto')->nullable();
             // $table->timestamps();

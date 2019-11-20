@@ -59,34 +59,35 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         # cuando genera algun otro error llamo al metodo ApiException
-        if($request->expectsJson()){
-            return $this->ApiException($request,$exception);
+        if ($request->expectsJson()) {
+            return $this->ApiException($request, $exception);
         }
         return parent::render($request, $exception);
     }
 
-    protected function ApiException($request, Exception $exception){
+    protected function ApiException($request, Exception $exception)
+    {
 
         // if ($exception instanceof CustomException) {
         //     return $this->errorResponse('Error Servidor', 500);
         // }
 
-        if($exception instanceof ModelNotFoundException ){
-            $modelo =strtolower(class_basename( $exception->getModel()));
-            return $this->errorResponse("No exite ninguna instancia de {$modelo} con el id expecificado",404);
+        if ($exception instanceof ModelNotFoundException) {
+            $modelo =strtolower(class_basename($exception->getModel()));
+            return $this->errorResponse("No exite ninguna instancia de {$modelo} con el id expecificado", 404);
         }
 
-        if($exception instanceof NotFoundHttpException){
-            return $this->errorResponse('No se encontro la url expecificada ',404);
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->errorResponse('No se encontro la url expecificada ', 404);
         }
 
-        if($exception instanceof MethodNotAllowedHttpException){
-            return $this->errorResponse('El metodo expecificado en la peticion no es valido ',405);
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return $this->errorResponse('El metodo expecificado en la peticion no es valido ', 405);
         }
-        if($exception instanceof QueryException){
+        if ($exception instanceof QueryException) {
             $codigo=$exception->errorInfo[1];
-            if($codigo==1451){
-                return $this->errorResponse('No se puede eliminar de forma permanente el recurso porque esta relaiconado con algun otro.',409);
+            if ($codigo==1451) {
+                return $this->errorResponse('No se puede eliminar de forma permanente el recurso porque esta relaiconado con algun otro.', 409);
             }
         }
 
@@ -99,16 +100,15 @@ class Handler extends ExceptionHandler
         // }
         
         # si estamos en modo depuracion..
-        if(config('app.debug')){
+        if (config('app.debug')) {
             return parent::render($request, $exception);
         }
 
-        return $this->errorResponse('Falla inesperada. intente luego.',500);
+        return $this->errorResponse('Falla inesperada. intente luego.', 500);
     }
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        
         return $request->expectsJson()
                     ? $this->errorResponse(['message' => "Usuario no autoriazado"], 401)
                     : redirect()->guest($exception->redirectTo() ?? route('login'));
@@ -122,5 +122,4 @@ class Handler extends ExceptionHandler
             'errors' => $exception->errors(),
         ], $exception->status);
     }
-    
 }

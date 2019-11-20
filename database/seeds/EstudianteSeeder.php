@@ -47,7 +47,7 @@ class EstudianteSeeder extends Seeder
         // ]);
 
 
-        // otra forma de inserta usando sql(manualmente): 
+        // otra forma de inserta usando sql(manualmente):
         // DB:insert('INSERT INTO estudiantes (estudianteDNI, ...) VALUES (:campos)',[
         //     'estudianteDNI'=>12345678,
         //     'estudianteApellido'=>'Gonza',
@@ -73,15 +73,12 @@ class EstudianteSeeder extends Seeder
         // $estudiante = DB::table('estudiantes')
         //     ->select('estudianteId','estudianteDNI')
         //     ->where('estudianteApellido','=','Gonza')
-        //     ->first(); 
+        //     ->first();
         
         // devuelve el valor de id
         // $estudiante = DB::table('estudiantes')
         //     ->where('estudianteApellido','=','Gonza')
-        //     ->value('estudianteId'); 
+        //     ->value('estudianteId');
         // dd($estudiante);
-
-
-
-        }
+    }
 }

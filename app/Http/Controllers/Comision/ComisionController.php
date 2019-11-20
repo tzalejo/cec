@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Comision;
 
-use App\{Comision,Matricula,Curso};
+use App\Comision;
+use App\Matricula;
+use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
@@ -17,24 +19,23 @@ class ComisionController extends ApiController
      */
     public function index()
     {
-        # obtengo las comisiones activas, 
+        # obtengo las comisiones activas,
         $comisionesActivas = Comision::ComisionesActivas()
                                 ->with('curso') # para optimizar la consulta
                                 ->get() # uso un scope
                                 ->load(['matriculas']); # envio tmb las matriculas que tiene cada curso
         # devuelvo las comisiones
         # return response()->json([$comisionesActivas],200);
-        return $this->showAll($comisionesActivas); # usamos metodos de Traits para devolver  
+        return $this->showAll($comisionesActivas); # usamos metodos de Traits para devolver
         
         #########################
         # esto estaba en el home:
        
-        #$comisiones = Comision::with('matriculas') 
+        #$comisiones = Comision::with('matriculas')
         #                    ->with('curso')
         #                    ->get();
-        # envio a mi api 
+        # envio a mi api
         #return response()->json($comisiones, 200);  # return view('home')->with('comisiones', $comisiones);
-        
     }
 
     /**
@@ -56,8 +57,6 @@ class ComisionController extends ApiController
      */
     public function show(Comision $comision)
     {
-        
-        
     }
 
     /**

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Estudiante;
 
-use App\{Estudiante,Comision,Matricula,Cuota};
+use App\Estudiante;
+use App\Comision;
+use App\Matricula;
+use App\Cuota;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
@@ -19,7 +22,6 @@ class EstudianteController extends ApiController
      */
     public function index()
     {
-        
     }
 
     /**
@@ -29,29 +31,29 @@ class EstudianteController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         # ucfirst('texto') ->> 'Texto'
         #return $request; #viene null cuando no esta tildada la casilla, caso contrario en on
         # validamos los campos
         // $datosValidado = $request->validate([
-        $datosValidado = Validator::make($request->all(),[ 
+        $datosValidado = Validator::make($request->all(), [
             'estudianteNombre'      => 'required|min:3|max:50',
             'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes','estudianteDNI')], // 'required|numeric', //required|unique:estudiantes,estudianteDNI // 
+            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes', 'estudianteDNI')], // 'required|numeric', //required|unique:estudiantes,estudianteDNI //
             'estudianteDomicilio'   => 'required|max:100',
-            'estudianteEmail'       => ['required','email','max:100',Rule::unique('estudiantes','estudianteEmail')],    // 'estudianteEmail'       => 'required|email',
+            'estudianteEmail'       => ['required','email','max:100',Rule::unique('estudiantes', 'estudianteEmail')],    // 'estudianteEmail'       => 'required|email',
             'estudianteTelefono'    => 'max:50',
             'estudianteLocalidad'   => 'required|max:100',
             'estudianteNacimiento'  => 'required|date',
             'estudianteFoto'        => ''
-        ],[
+        ], [
             'estudianteDNI.required'        => 'El DNI del estudiante es requerido',
             'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
             'estudianteNombre.required'     => 'El Nombre del estudiante es requerido',
             'estudianteApellido.required'   => 'El Apellido del estudiante es requerido',
             'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerido',
             'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerido',
-            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',            
+            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',
             'estudianteEmail.email'         => 'El Email es incorrecto, verifique el formato example@mail.com',
             'estudianteEmail.unique'        => 'El Email del estudiante ya esta registrado, verifique',
             
@@ -62,7 +64,7 @@ class EstudianteController extends ApiController
             $errors = $datosValidado->errors();
             // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
             # retorno error 400..
-            return $this->errorResponse($errors,400);
+            return $this->errorResponse($errors, 400);
         }
 
         # creo el estudiante, con su respectiva matricula
@@ -79,8 +81,8 @@ class EstudianteController extends ApiController
         ]);
         
         // return ($request->get('pagoInscripcion') && $request->get('pagoCuota'));
-        # pregunto por las casillas, pero siempre va al else por como tengo el formulario(que puede que se tenga q cambiar) 
-        if ($request->get('pagoInscripcion') || $request->get('pagoCuota') ) {          
+        # pregunto por las casillas, pero siempre va al else por como tengo el formulario(que puede que se tenga q cambiar)
+        if ($request->get('pagoInscripcion') || $request->get('pagoCuota')) {
             # Recordar: regular(RE), no regular(NR) o egresado(EG)
             $matricula =  Matricula::create([
                 'matriculaSituacion'=>'RE',
@@ -97,7 +99,7 @@ class EstudianteController extends ApiController
                 'cuotaBonificacion' => 0,
                 'matriculaId'       => $matricula->matriculaId,
                 ]);
-            for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) { 
+            for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) {
                 # code...
                 Cuota::create([
                     'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
@@ -106,16 +108,16 @@ class EstudianteController extends ApiController
                     'cuotaBonificacion' => 0,
                     'matriculaId'       => $matricula->matriculaId,
                     ]);
-                $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $matricula->comision->comisionFI ) ) ;
-                $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+                $nuevafecha = strtotime('+'.$i.' month', strtotime($matricula->comision->comisionFI)) ;
+                $nuevafecha = date('Y-m-j', $nuevafecha);
             }
             # return redirect()->route('alumnos.cuotas', $matricula);
             return $this->showOne($matricula);
-        }else{ 
-        # es porque ninguna de las dos casilla esta tildada..
+        } else {
+            # es porque ninguna de las dos casilla esta tildada..
         # return view('home')->with('comisiones', Comision::all());
-        return $this->successResponse(null,200); # devuelvo '0' para saber q solo se inscribio y no se matriculo(pago inscripcion y/o cuota)
-        } 
+        return $this->successResponse(null, 200); # devuelvo '0' para saber q solo se inscribio y no se matriculo(pago inscripcion y/o cuota)
+        }
     }
     /**
      * Este api lo usabaa para filtrado por DNI y/o por apellido.
@@ -132,13 +134,13 @@ class EstudianteController extends ApiController
         ->with('matriculas.comision.curso')  # me genera menos query..?¿?¿?¿
         ->estudianteApellido($apellido)
         ->estudianteDNI($DNI)
-        ->orderBy('estudianteId','ASC')
+        ->orderBy('estudianteId', 'ASC')
         ->paginate(10);
         
         # return view('alumnos.mostrar')->with('estudiantes', $estudiantes);
         # devuelve el estudiante con sus matriculas
         // return response()->json($estudiantes, 200);
-        return $this->successResponse($estudiantes,200);
+        return $this->successResponse($estudiantes, 200);
     }
 
     /**
@@ -153,20 +155,21 @@ class EstudianteController extends ApiController
         # ver el tema de las cuotas si hay cambio..                    *Falta!*
         
         # validamos los campos
-        $datosValidado = $request->validate([
+        $datosValidado = $request->validate(
+            [
             'estudianteNombre'      => 'required|min:3|max:50',
             'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes')->ignore($estudiante->estudianteDNI,'estudianteDNI')], 
+            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes')->ignore($estudiante->estudianteDNI, 'estudianteDNI')],
             'estudianteDomicilio'   => 'required|max:100',
-            # estoy indicando que el valor sea unico en la tabla estudiantes del campo estudianteEmail PERO ESCLUYENDO EL estudianteId!!, el cual estoy modificando.. 
-            # 'estudianteEmail'       => ['email','max:100',Rule::unique('estudiantes','estudianteEmail' )->ignore($estudiante->estudianteId, 'estudianteId') ], 
-            'estudianteEmail'       => '', 
+            # estoy indicando que el valor sea unico en la tabla estudiantes del campo estudianteEmail PERO ESCLUYENDO EL estudianteId!!, el cual estoy modificando..
+            # 'estudianteEmail'       => ['email','max:100',Rule::unique('estudiantes','estudianteEmail' )->ignore($estudiante->estudianteId, 'estudianteId') ],
+            'estudianteEmail'       => '',
             'estudianteTelefono'    => 'max:50',
             'estudianteLocalidad'   => 'required|max:100',
             'estudianteNacimiento'  => 'required|date',
             'estudianteFoto'        => ''
         ],
-        [
+            [
             'estudianteDNI.required'        => 'El DNI del estudiante es requerido',
             'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
             'estudianteNombre.required'     => 'El Nombre del estudiante es requerido',
@@ -178,9 +181,10 @@ class EstudianteController extends ApiController
             # 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
             # 'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, verifique',
             
-        ]); 
+        ]
+        );
         # actualizar Estudiante y matricula(comision)
-        $matricula = Matricula::find($request->get('matricula'));# busco la matricula 
+        $matricula = Matricula::find($request->get('matricula'));# busco la matricula
         $matricula->comisionId = $request->get('comisionId'); # modifico con la nueva comsion
         $matricula->save();
         // return response()->json( is_null($request->get('estudianteFoto')), 200);
@@ -201,7 +205,7 @@ class EstudianteController extends ApiController
             ]);
         } else {
             # code...
-            $estudiante->update($datosValidado); 
+            $estudiante->update($datosValidado);
         }
         # return redirect()->route('home');
         return $this->showOne($estudiante);

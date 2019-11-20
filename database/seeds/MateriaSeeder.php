@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Materia;
+
 class MateriaSeeder extends Seeder
 {
     /**
@@ -76,6 +77,5 @@ class MateriaSeeder extends Seeder
             'materiaNombre'=>'Sistema Contable 2',
             'materiaSeminario'=>false,
         ]);
-
     }
 }

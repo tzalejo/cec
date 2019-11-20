@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Matricula;
 
-use App\{Matricula,Cuota};
+use App\Matricula;
+use App\Cuota;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
@@ -45,7 +46,7 @@ class MatriculaController extends ApiController
             'cuotaBonificacion' => 0,
             'matriculaId'       => $matricula->matriculaId,
             ]);
-        for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) { 
+        for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) {
             # code...
             Cuota::create([
                 'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
@@ -54,26 +55,24 @@ class MatriculaController extends ApiController
                 'cuotaBonificacion' => 0,
                 'matriculaId'       => $matricula->matriculaId,
                 ]);
-            $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $matricula->comision->comisionFI ) ) ;
-            $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+            $nuevafecha = strtotime('+'.$i.' month', strtotime($matricula->comision->comisionFI)) ;
+            $nuevafecha = date('Y-m-j', $nuevafecha);
         }
         return $this->showOne($matricula);
         // return redirect()
         // ->route('alumnos.cuotas', $matricula);/** */
-
-
     }
 
     /**
-     * 
+     *
      *
      * @param  \App\Matricula  $matricula
      * @return \Illuminate\Http\Response
      */
     public function show(Matricula $matricula)
-    {   
+    {
         # validar que exista la matricula..
-        return $this->showOne($matricula,200);
+        return $this->showOne($matricula, 200);
         
         // return $request->validate([
         //     'matriculaId'      => 'required|numeric']);
@@ -97,10 +96,9 @@ class MatriculaController extends ApiController
         // return view('alumnos.editar')
         // ->with('estudiante',$estudiante)
         // # envio la matricula para luego modificar la  comsion de esa matricula
-        // ->with('matricula',$matricula->matriculaId) 
+        // ->with('matricula',$matricula->matriculaId)
         // ->with('comisionesAbiertas',$comisionesAbiertas)
         // ->with('miComision',$miComision);
-        
     }
 
     /**
@@ -131,6 +129,5 @@ class MatriculaController extends ApiController
         
         # dd(Auth::user()->userNombre);
         return redirect()->route('home');
-
     }
 }

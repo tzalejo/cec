@@ -20,7 +20,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
         # necesitaba cors
-        \App\Http\Middleware\Cors::class, 
+        \App\Http\Middleware\Cors::class,
     ];
 
     /**
@@ -38,7 +38,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             
-            // para cartel de sweetalert 
+            // para cartel de sweetalert
             \RealRashid\SweetAlert\ToSweetAlert::class
         ],
 
@@ -68,7 +68,7 @@ class Kernel extends HttpKernel
         # mi middleware para verificar si es director..
         'director' => \App\Http\Middleware\AdminMiddleware::class,
         # necesitaba cors
-        'cors' => \App\Http\Middleware\Cors::class, 
+        'cors' => \App\Http\Middleware\Cors::class,
 
     ];
 

@@ -16,12 +16,10 @@ class CreacionTablaMatriculas extends Migration
         Schema::create('matriculas', function (Blueprint $table) {
             $table->bigIncrements('matriculaId');
             //Este atributo representa la situación del alumno si es alumno regular(RE), no regular(NR) o egresado(EG).
-            $table->string('matriculaSituacion',2); 
+            $table->string('matriculaSituacion', 2);
             // $table->timestamps();
             $table->unsignedInteger('estudianteId');
             $table->foreign('estudianteId')->references('estudianteId')->on('estudiantes');
-            
-
         });
     }
 

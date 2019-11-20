@@ -23,7 +23,7 @@
 // # vamos a manejar inscripcion(abm) y legajo
 // Route::get('/alumnos/inscripcion','AlumnosController@inscripcion')
 //         ->name('alumnos.inscripcion'); // con esto podemos nombrando a la ruta y podesmo usar ese nombre para referirnos a ella route('alumno.inscripcion')
-//         // ->name('alumnos.inscripcion',['id'=> 'mis_valor']) asi enviamos un valor 
+//         // ->name('alumnos.inscripcion',['id'=> 'mis_valor']) asi enviamos un valor
 // Route::post('/alumnos/crear','AlumnosController@store')
 //         ->name('alumnos.crear');
 
@@ -31,7 +31,7 @@
 // Route::get('/alumnos/mostrar','AlumnosController@show')
 //         ->name('alumnos.mostrar');
 
-// # pantalla de la matricula con los pagos  
+// # pantalla de la matricula con los pagos
 // Route::get('/alumnos/{matricula}/cuotas','AlumnosController@cuotas')
 //         ->name('alumnos.cuotas');
 
@@ -60,16 +60,16 @@
 // Route::post('/alumnos/{cuota}/pago','AlumnosController@cancelarPago')
 //         ->name('alumnos.cancelarPago');
 
-// # para los alumnos q ya se inscribieron 
+// # para los alumnos q ya se inscribieron
 // Route::get('/alumnos/reinscripcion','AlumnosController@reinscripcion')
 //         ->name('alumnos.reinscripcion');
 
 // # vamos a manejar inscripcion(abm) y legajo
 // Route::get('/alumnos/{estudiante}/inscripcion','AlumnosController@reinscripcionEstudiante')
-//         ->name('alumnos.reinscripcionEstudiante'); 
+//         ->name('alumnos.reinscripcionEstudiante');
 
 // Route::post('/alumnos/{estudiante}/inscripcion','AlumnosController@altaReinscripcionEstudiante')
-//         ->name('alumnos.altaReinscripcionEstudiante'); 
+//         ->name('alumnos.altaReinscripcionEstudiante');
 
 
 // ### ****** rutas del gerente ********* ###

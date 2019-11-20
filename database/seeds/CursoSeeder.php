@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Curso;
+
 class CursoSeeder extends Seeder
 {
     /**

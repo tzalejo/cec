@@ -15,7 +15,7 @@ class CreacionTablaPagos extends Migration
     {
         Schema::create('pagos', function (Blueprint $table) {
             $table->bigIncrements('pagoId');
-            $table->float('pagoAbono',10,2);
+            $table->float('pagoAbono', 10, 2);
             $table->date('pagoFAbono');
             // $table->timestamps(); lo desactivo
 

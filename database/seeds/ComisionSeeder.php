@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Comision;
+
 class ComisionSeeder extends Seeder
 {
     /**
@@ -47,6 +48,5 @@ class ComisionSeeder extends Seeder
             'comisionFF'=>'2020-1-4',  //dateTimeThisYear('now', null) ,
             'cursoId'=> 2 ,
         ]);
-     
     }
 }

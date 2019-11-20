@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Cuota;
+
 class Pago extends Model
 {
-    
     protected $primaryKey = 'pagoId';
     protected $fillable = [
         'pagoId',
@@ -16,15 +16,15 @@ class Pago extends Model
     ];
 
     /**
-     * 
+     *
      * si queremos desactivar los campos de creacion y actualizacion
      * que se crean automaticamente al crear una tabla
-     * 
+     *
      */
     public $timestamps = false;
 
     public function cuota()
     {
-        return $this->belongsTo(Cuota::Class, 'cuotaId');
+        return $this->belongsTo(Cuota::class, 'cuotaId');
     }
 }

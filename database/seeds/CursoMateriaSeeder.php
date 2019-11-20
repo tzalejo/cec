@@ -74,6 +74,5 @@ class CursoMateriaSeeder extends Seeder
             'materiaId' => 6
             ]
         ]);
-
     }
 }

@@ -7,7 +7,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
@@ -15,14 +14,14 @@ class User extends Authenticatable
     /**
      *  Si queremos crear un nombre de una tabla distinta en la bd
      *  protected $table = 'nombre_tabla'
-     * 
+     *
      */
     
     /**
-     * 
+     *
      * si queremos desactivar los campos de creacion y actualizacion
      * que se crean automaticamente al crear una tabla
-     * 
+     *
      * public $timestamps = false;
      */
 
@@ -41,20 +40,23 @@ class User extends Authenticatable
     ];
 
     /**
-     * Mutadores: se lo utiliza para modificar antes de ser insertado en la bd 
+     * Mutadores: se lo utiliza para modificar antes de ser insertado en la bd
      * para que siempre los nombre(userNombre.users) esten en minusculas al momento de establecer..
      */
 
-    public function setUserNombreAttribute($valor){
+    public function setUserNombreAttribute($valor)
+    {
         $this->attributes['userNombre'] = strtolower($valor);
     }
-    public function setEmailAttribute($valor){
+    public function setEmailAttribute($valor)
+    {
         $this->attributes['email'] = strtolower($valor);
     }
     # estamos devolviendo el valor con cada caracter inical con mayuscual,
-    # pero esta transformacion no se encuentra en la bd. 
-    public function getUserNombreAttribute($valor){
-        return ucwords($valor); 
+    # pero esta transformacion no se encuentra en la bd.
+    public function getUserNombreAttribute($valor)
+    {
+        return ucwords($valor);
     }
 
     /**
@@ -77,10 +79,11 @@ class User extends Authenticatable
 
     /**
      * Estoy indicando que un Usuario pertenece a una Role
-     * @var array 
+     * @var array
      */
-    public function role(){
-        return $this->belongsTo(Role::class,'roleId');
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'roleId');
     }
     
     // public function autorizaRoles($roles){
@@ -116,14 +119,14 @@ class User extends Authenticatable
     //     return false;
     // }
 
-    public function esDirector(){
-        return $this->roleId === Role::where('roleDescripcion','Director')->first()->value('roleId');
+    public function esDirector()
+    {
+        return $this->roleId === Role::where('roleDescripcion', 'Director')->first()->value('roleId');
     }
 
-    public static function buscarPorEmail($email){
+    public static function buscarPorEmail($email)
+    {
         // es static es similar a user o this
         return static::where(compact('email'))->first();
     }
-
-    
 }

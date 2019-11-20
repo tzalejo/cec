@@ -14,7 +14,7 @@ $factory->define(Estudiante::class, function (Faker $faker) {
         'estudianteTelefono'    => $faker->tollFreePhoneNumber,
         'estudianteLocalidad'   => $faker->country,
         'estudianteEmail'       => $faker->email,
-        'estudianteNacimiento'  => $faker->date('Y-m-d','now'),
+        'estudianteNacimiento'  => $faker->date('Y-m-d', 'now'),
         'estudianteFoto'        => $faker->mimeType,
     ];
 });

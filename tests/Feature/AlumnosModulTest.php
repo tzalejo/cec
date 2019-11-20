@@ -1,7 +1,11 @@
 <?php
 
 namespace Tests\Feature;
-use App\{User,Comision,Curso,Role};
+
+use App\User;
+use App\Comision;
+use App\Curso;
+use App\Role;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,7 +17,7 @@ class AlumnosModulTest extends TestCase
      * A basic feature test example.
      * @test
      */
-    function Alumno_Inscripcion()
+    public function Alumno_Inscripcion()
     {
         $this->withoutExceptionHandling();
 
@@ -53,6 +57,5 @@ class AlumnosModulTest extends TestCase
             ->actingAs('api')
             ->assertStatus(200)
             ->assertSee('comision_test');
-
     }
 }

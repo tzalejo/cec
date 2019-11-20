@@ -60,13 +60,13 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
-     * Cambiar el método create() para definir por defecto el Role para los nuevos 
+     * Cambiar el método create() para definir por defecto el Role para los nuevos
      * @param  array  $data
      * @return \App\User
      */
     protected function create(array $data)
     {
-        $role_secre=Role::where('roleDescripcion','Secretaria')->first();
+        $role_secre=Role::where('roleDescripcion', 'Secretaria')->first();
         // dd($role_secre->roleId);
         return User::create([
             'userNombre'    => $data['name'],
@@ -79,6 +79,5 @@ class RegisterController extends Controller
         //     ->attach(Role::where('roleDescripcion','Secretaria'))->first();
 
         // return $user;
-
     }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Cuota;
 use App\Matricula;
+
 class CuotaSeeder extends Seeder
 {
     /**
@@ -23,7 +24,7 @@ class CuotaSeeder extends Seeder
             'cuotaBonificacion' => 0,
             'matriculaId' => $matricula->matriculaId,
             ]);
-        for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) { 
+        for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) {
             # code...
             Cuota::create([
                 'cuotaConcepto' => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
@@ -32,9 +33,8 @@ class CuotaSeeder extends Seeder
                 'cuotaBonificacion' => 0,
                 'matriculaId' => $matricula->matriculaId,
                 ]);
-            $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $matricula->comision->comisionFI ) ) ;
-            $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+            $nuevafecha = strtotime('+'.$i.' month', strtotime($matricula->comision->comisionFI)) ;
+            $nuevafecha = date('Y-m-j', $nuevafecha);
         }
-
     }
 }

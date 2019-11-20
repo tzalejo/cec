@@ -27,8 +27,8 @@ class MateriaController extends ApiController
     public function store(Request $request)
     {
         $datosValidado = $request->validate([
-            'materiaNombre'     => 'required|min:2|max:100', 
-        ],[
+            'materiaNombre'     => 'required|min:2|max:100',
+        ], [
             'materiaNombre.required' => 'El Nombre del curso es requerido',
         ]);
         # veo si es seminario o materia
@@ -39,7 +39,7 @@ class MateriaController extends ApiController
             'materiaSeminario'    => $seminario,
         ]);
         # mesaje de ok..
-        toast('Se guardó correctamente la Materia.','success');
+        toast('Se guardó correctamente la Materia.', 'success');
         # envio al mismo formulario de crear materia, solo actualizo el listado
 
         return redirect()
@@ -60,8 +60,8 @@ class MateriaController extends ApiController
         $materias = Materia::all();
         $seleccion_materias = array();
         return view('curso.crear')
-        ->with('materias',$materias)
-        ->with('seleccion_materias',$seleccion_materias); ## variable de .blade ##
+        ->with('materias', $materias)
+        ->with('seleccion_materias', $seleccion_materias); ## variable de .blade ##
     }
 
     /**
@@ -91,7 +91,7 @@ class MateriaController extends ApiController
         # elimino la materia seleccionada..
         $materia->delete();
         # mesaje de ok..
-        toast('Se elimino correctamente la Materia.','success');
+        toast('Se elimino correctamente la Materia.', 'success');
         return redirect()
             // ->withToastSuccess('No tiene suficientes Privilegios para acceder a esta seccion.')
             ->route('materia.crear')->with('materias', Materia::all());
