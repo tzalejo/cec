@@ -60,10 +60,13 @@ class CuotaController extends ApiController
         if ($cuota->cuotaPagada()) {
             return $this->errorResponse('Esta cuota esta abonada', 422);
         }
-        # verificar si es la ultima cuota que se debe pagar
-        $cuotaAnterior = Cuota::find($cuota->cuotaId-1);
-        if (!$cuotaAnterior->cuotaPagada()) {
-            return $this->errorResponse('Hay cuotas anteriores que se deben abonar', 422);
+        # primero veo si es una inscripcion
+        if (!$cuota->esInscripcion()) {
+            # verificar si es la ultima cuota que se debe pagar
+            $cuotaAnterior = Cuota::find($cuota->cuotaId-1);
+            if (!$cuotaAnterior->cuotaPagada()) {
+                return $this->errorResponse('Hay cuotas anteriores que se deben abonar', 422);
+            }
         }
 
         # genero los pagos automatico..

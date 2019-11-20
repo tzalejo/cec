@@ -81,4 +81,13 @@ class Cuota extends Model
             return 'No vencida - $'.(string)($this->cuotaMonto-(Pago::where('cuotaId', $this->cuotaId)->sum('pagoAbono')));
         }
     }
+    public function esInscripcion()
+    {
+        /**
+         *  Verifico si la cuota es un inscripcion
+         *  return @return boolean           
+         */
+        $matricula = Matricula::find($this->matriculaId);
+        return $matricula->cuotas->first()->cuotaId === $this->cuotaId;
+    } 
 }
