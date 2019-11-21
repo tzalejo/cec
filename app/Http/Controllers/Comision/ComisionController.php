@@ -22,8 +22,8 @@ class ComisionController extends ApiController
         # obtengo las comisiones activas,
         $comisionesActivas = Comision::ComisionesActivas()
                                 ->with('curso') # para optimizar la consulta
-                                ->get() # uso un scope
-                                ->load(['matriculas']); # envio tmb las matriculas que tiene cada curso
+                                ->withCount('matriculas') # envio cantidad de matricula por comision..
+                                ->get(); # uso un scope
         # devuelvo las comisiones
         # return response()->json([$comisionesActivas],200);
         return $this->showAll($comisionesActivas); # usamos metodos de Traits para devolver
