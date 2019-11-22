@@ -69,24 +69,46 @@ class CuotaController extends ApiController
             }
         }
 
-        # genero los pagos automatico..
-
         # fecha q necesito para el pago
         $now = date('Y-m-d');
         # id de la cuota a pagar..para luego ir recorriendo si son mas d una que se puede abonar..
         $cuotaPagada =  $cuota->cuotaId;
-        
+        $monto =$request['cuotaMonto'];
         # genero el registro de esta cuota para consultar el saldo
         $cuotaBuscada = Cuota::find($cuotaPagada);
-        
+
+        # primero veo si primero pago una inscripcion, para hacer un tratamiento especial
+        if ($cuotaBuscada->esInscripcion()) {
+            if ($monto<$cuotaBuscada->cuotaFaltante()) {
+                # code...
+                $pago = $monto;
+                $monto = 0; 
+                
+            }else {
+                # code...
+                $pago = $cuotaBuscada->cuotaFaltante(); 
+                $monto = $monto- $cuotaBuscada->cuotaFaltante();
+            }
+            # creo el pago, con su respectivo montos(cuotaFaltante)
+            Pago::create([
+                'pagoAbono'     => $pago,
+                'pagoFAbono'    => $now,
+                'cuotaId'       => $cuotaBuscada->cuotaId
+            ]);
+            # como los pagos son secuenciales, sumo uno para ir a la siguiente cuota
+            $cuotaPagada++;
+            # genero el registro de esta cuota para consultar el saldo
+            $cuotaBuscada = Cuota::find($cuotaPagada);
+        }
+    
         # resto del monto q voy abonar del saldo..
-        if ($request['cuotaMonto']>$cuotaBuscada->cuotaFaltante()) {
+        if ($monto>$cuotaBuscada->cuotaFaltante()) {
             # 1700 - 850 = 850
-            $resto = $request['cuotaMonto']-$cuotaBuscada->cuotaFaltante();
+            $resto = $monto-$cuotaBuscada->cuotaFaltante();
             # busco cuantas cuota tengo para pagar..
             $cociente= intdiv($resto, $cuotaBuscada->cuotaMonto);
         } else {
-            $resto = $request['cuotaMonto'];
+            $resto = $monto;
             $cociente=-1;
         }
         for ($i=0; $i <= $cociente  ; $i++) {
