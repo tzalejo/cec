@@ -58,7 +58,7 @@ class MatriculaController extends ApiController
             $nuevafecha = strtotime('+'.$i.' month', strtotime($matricula->comision->comisionFI)) ;
             $nuevafecha = date('Y-m-j', $nuevafecha);
         }
-        return $this->showOne($matricula);
+        return $this->showOne($matricula,201);
         // return redirect()
         // ->route('alumnos.cuotas', $matricula);/** */
     }
