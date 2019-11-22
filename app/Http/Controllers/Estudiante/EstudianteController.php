@@ -22,6 +22,7 @@ class EstudianteController extends ApiController
      */
     public function index()
     {
+        return Estudiante::query()->orderBy('estudianteApellido','ASC')->get();
     }
 
     /**

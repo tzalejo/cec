@@ -30,6 +30,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'estudiante'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
+        Route::get('', 'Estudiante\EstudianteController@index');
         Route::get('mostrar', 'Estudiante\EstudianteController@show');
         Route::post('crear', 'Estudiante\EstudianteController@store'); # Creo un estudiante
         Route::put('modificar/{estudiante}', 'Estudiante\EstudianteController@update'); # Modifico un estudiante
@@ -40,7 +41,8 @@ Route::group(['prefix' => 'estudiante'], function () {
 Route::group(['prefix' => 'matricula'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
-        
+        # lo consumo desde reinscripcion de alumno..
+        Route::post('crear','Matricula\MatriculaController@store');
         // Route::get('/{matricula}','Matricula\MatriculaController@show')->where(['matricula' => '[0-9]+']);
     });
 });
