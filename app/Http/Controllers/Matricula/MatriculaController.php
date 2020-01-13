@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Matricula;
 
 use App\Matricula;
 use App\Cuota;
+use App\Estudiante;
+use App\Comision;
+use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
@@ -16,9 +19,17 @@ class MatriculaController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $apellido = $request->get('estudianteApellido');
+        $DNI = $request->get('estudianteDNI');
+        $estudiante = Estudiante::has('matriculas')             # has: limitar sus resultados en función de la existencia de una relación
+                        ->with('matriculas.comision.curso')     
+                        ->estudianteApellido($apellido)         # utilizamos scope
+                        ->estudianteDNI($DNI)                   # utilizamos scope
+                        ->get();
+                        // ->paginate(10); 
+        return $this->successResponse($estudiante, 200);
     }
 
     /**
@@ -72,7 +83,7 @@ class MatriculaController extends ApiController
     public function show(Matricula $matricula)
     {
         # validar que exista la matricula..
-        return $this->showOne($matricula, 200);
+        $this->showOne($matricula, 200);
         
         // return $request->validate([
         //     'matriculaId'      => 'required|numeric']);

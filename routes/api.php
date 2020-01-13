@@ -43,11 +43,12 @@ Route::group(['prefix' => 'matricula'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
         # lo consumo desde reinscripcion de alumno..
         Route::post('crear','Matricula\MatriculaController@store');
-        // Route::get('/{matricula}','Matricula\MatriculaController@show')->where(['matricula' => '[0-9]+']);
+        # consulta todas las matriculas (por apellido o dni)
+        Route::get('mostrar','Matricula\MatriculaController@index');
     });
 });
 
-# Group de ruta con prefijo matricula, agrego cors a las rutas
+# Group de ruta con prefijo cuota, agrego cors a las rutas
 Route::group(['prefix' => 'cuota'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
