@@ -49,7 +49,7 @@ class Estudiante extends Model
     public function scopeEstudianteApellido($query, $estudianteApellido)
     {
         if (trim($estudianteApellido)) {
-            return $query->where('estudianteApellido', 'LIKE', "%$estudianteApellido%");
+            return $query->where('estudianteApellido', 'LIKE', $estudianteApellido.'%');
         }
     }
 
@@ -59,7 +59,7 @@ class Estudiante extends Model
     public function scopeEstudianteDNI($query, $estudianteDNI)
     {
         if (trim($estudianteDNI)) {
-            return $query->where('estudianteDNI', 'LIKE', "%$estudianteDNI%");
+            return $query->where('estudianteDNI', 'LIKE', $estudianteDNI.'%');
         }
     }
 
