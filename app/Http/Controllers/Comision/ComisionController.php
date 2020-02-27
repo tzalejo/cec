@@ -8,6 +8,9 @@ use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
+# para usar validator
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ComisionController extends ApiController
 {
@@ -46,7 +49,44 @@ class ComisionController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
+        // Validamos
+        $datosValidos = Validator::make($request->all(),[
+            'comisionNombre'    => 'required|min:3|max:150',
+            'comisionHorario'   => 'required|min:3|max:150',
+            'comisionFI'        => 'required|date',
+            'comisionFF'        => '', # no la necesito validar porque se calcula 
+            'cursoId'           => 'required|numeric',
+        ],[
+            'comisionNombre.required'       => 'El Nombre del comision es requerido',
+            'comisionNombre.min'            => 'La cantidad min caracteres no son lo establecido, Verifique.',
+            'comisionNombre.max'            => 'La cantidad max caracteres no son lo establecido, Verifique.',
+            'comisionHorario.required'      => 'El Horarios es requerido',
+            'comisionHorario.min'           => 'La cantidad min caracteres no son lo establecido, Verifique.',
+            'comisionHorario.max'           => 'La cantidad max caracteres no son lo establecido, Verifique.',
+            'comisionFI.required'           => 'La Fecha de Inicio es requerido',
+            'comisionFI.date'               => 'La Fecha de Inicio no es valida',
+            'cursoId.required'              => 'El curso es requerido',
+        ]);
+
+        # verifico si hubo errores en la validaciones..
+        if ($datosValidos->fails()) {
+            $errors = $datosValidos->errors();
+            # retorno error 400..
+            return $this->errorResponse($errors, 400);
+        }
+
+        # creo la comision
+        $comisionNuevo = comision::create([
+            'comisionNombre'    => strtoupper($request->comisionNombre),
+            'comisionHorario'   => strtoupper($request->comisionHorario),
+            'comisionFI'        => $request->comisionFI,
+            'comisionFF'        => $request->comisionFF,
+            'cursoId'           => $request->cursoId,
+        ]);
+
+         # retorno ok
+         return $this->successResponse('Comision fue creada correctamente', 201);
     }
 
     /**

@@ -9,13 +9,15 @@ use App\Http\Controllers\ApiController;
 class CursoController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * devulveo todo los cursos en orden por nombre ascendente.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return Curso::query()
+                    ->orderBy('cursoNombre','ASC')
+                    ->get();
     }
 
     /**

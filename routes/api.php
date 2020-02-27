@@ -68,14 +68,16 @@ Route::group(['prefix' => 'comision'], function () {
         
         # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
         Route::get('', 'Comision\ComisionController@index');
+        Route::post('crear', 'Comision\ComisionController@store');
     });
 });
 
 
 # Group de ruta con prefijo cursos/
-Route::group(['prefix' => 'cursos'], function () {
+Route::group(['prefix' => 'curso'], function () {
     # Ruta que solo acceda el usuario director..
     Route::group(['middleware' => ['auth:api','director']], function () {
-        // Route::get('crear', 'CursoController@create');
+        Route::get('', 'Curso\CursoController@index');
+        // Route::post('crear', 'Curso\CursoController@store');
     });
 });
