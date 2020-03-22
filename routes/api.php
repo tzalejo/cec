@@ -69,6 +69,9 @@ Route::group(['prefix' => 'comision'], function () {
         # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
         Route::get('', 'Comision\ComisionController@index');
         Route::post('crear', 'Comision\ComisionController@store');
+        Route::put('modificar/{comision}', 'Comision\ComisionController@update');
+        Route::delete('eliminar/{comision}', 'Comision\ComisionController@destroy');
+        Route::get('mostrar/{comision}', 'Comision\ComisionController@show');
     });
 });
 
