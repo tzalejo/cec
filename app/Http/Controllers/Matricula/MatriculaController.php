@@ -10,7 +10,7 @@ use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
-
+use Illuminate\Support\Facades\Validator;
 class MatriculaController extends ApiController
 {
     use ApiResponser;
@@ -121,7 +121,32 @@ class MatriculaController extends ApiController
      */
     public function update(Request $request, Matricula $matricula)
     {
-        //
+        // return $request;
+        $datosValidos =  Validator::make($request->all(),[
+            'matriculaSituacion'=>'required',
+            'estudianteId'      =>'required|numeric',
+            'comisionId'        =>'required|numeric' ,
+        ],[
+            'matriculaSituacion.required' => 'La Situacion es requerido',
+            'estudianteId.required' => 'El estudiante es requerido',
+            'comisionId.required' => 'La comision es requerida',
+        ]);
+
+        # verifico si hubo errores en la validaciones..
+        if ($datosValidos->fails()) {
+            $errors = $datosValidos->errors();
+            # retorno error 400..
+            return $this->errorResponse($errors, 400);
+        }
+
+        # actualizo
+        $matricula->update([
+            'matriculaSituacion' => $request->matriculaSituacion,
+            'estudianteId'       => $request->estudianteId,
+            'comisionId'         => $request->comisionId ,
+        ]);
+
+        return $this->successResponse('Matricula fue modificada correctamente', 200);
     }
 
     /**
