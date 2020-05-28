@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,7 +21,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login'); # Me Logueo
     Route::post('signup', 'AuthController@signup'); # Creo un usuario(Users)
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', '    0@logout'); # Salgo
+        Route::get('logout', '    AuthController@logout'); # Salgo
         Route::get('delete/user', 'AuthController@delete'); # elimino pero solo admin  VER LOS PERMISOS!!
     });
 });
@@ -45,6 +45,8 @@ Route::group(['prefix' => 'matricula'], function () {
         Route::post('crear','Matricula\MatriculaController@store');
         # consulta todas las matriculas (por apellido o dni)
         Route::get('mostrar','Matricula\MatriculaController@index');
+        # modifico matricula
+        Route::put('modificar/{matricula}','Matricula\MatriculaController@update');
     });
 });
 
@@ -67,11 +69,11 @@ Route::group(['prefix' => 'comision'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
         
         # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
-        Route::get('', 'Comision\ComisionController@index');
+        Route::get('{curso?}', 'Comision\ComisionController@index');
         Route::post('crear', 'Comision\ComisionController@store');
         Route::put('modificar/{comision}', 'Comision\ComisionController@update');
         Route::delete('eliminar/{comision}', 'Comision\ComisionController@destroy');
-        Route::get('mostrar/{comision}', 'Comision\ComisionController@show');
+        Route::get('mostrar/{comisionId}', 'Comision\ComisionController@show');
     });
 });
 
