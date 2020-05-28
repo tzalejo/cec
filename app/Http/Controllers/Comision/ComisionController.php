@@ -20,14 +20,28 @@ class ComisionController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($curso = null)
     {
-        # obtengo las comisiones activas,
-        $comisionesActivas = Comision::ComisionesActivas()
-                                ->with('curso') # para optimizar la consulta
-                                ->with('matriculas') # para obtener los alumnos d esta comision
-                                ->withCount('matriculas') # envio cantidad de matricula por comision..
-                                ->get(); # uso un scope
+        if ($curso) {
+            # cuando hago un get con parametro cursoId y obtengo todo las comision de este curso..
+            $comisionesActivas = Comision::ComisionesActivas()
+                                    ->with('curso') # para optimizar la consulta
+                                    ->with('matriculas') # para obtener los alumnos d esta comision
+                                    ->withCount('matriculas') # envio cantidad de matricula por comision..
+                                    ->where('cursoId', $curso)
+                                    ->orderBy('cursoId', 'ASC')
+                                    ->get(); # uso un scope
+
+        } else {
+            # obtengo las comisiones activas,
+            $comisionesActivas = Comision::ComisionesActivas()
+                                    ->with('curso') # para optimizar la consulta
+                                    ->with('matriculas') # para obtener los alumnos d esta comision
+                                    ->withCount('matriculas') # envio cantidad de matricula por comision..
+                                    ->orderBy('cursoId', 'ASC')
+                                    ->get(); # uso un scope
+        }
+                                
         # devuelvo las comisiones
         # return response()->json([$comisionesActivas],200);
         return $this->showAll($comisionesActivas); # usamos metodos de Traits para devolver
@@ -78,7 +92,7 @@ class ComisionController extends ApiController
         }
 
         # creo la comision
-        $comisionNuevo = comision::create([
+        $comisionNuevo = Comision::create([
             'comisionNombre'    => strtoupper($request->comisionNombre),
             'comisionHorario'   => strtoupper($request->comisionHorario),
             'comisionFI'        => $request->comisionFI,
@@ -96,9 +110,13 @@ class ComisionController extends ApiController
      * @param  \App\Comision  $comision
      * @return \Illuminate\Http\Response
      */
-    public function show(Comision $comision)
+    public function show($comisionId)
     {
-        return $this->successResponse($comision, 200);
+        $resultado = Comision::ComisionesActivas()
+                    ->with('matriculas.estudiante') # para obtener los alumnos d esta comision
+                    ->where('comisionId', $comisionId)
+                    ->get(); # uso un scope
+        return $this->successResponse($resultado, 200);
     }
 
     /**
