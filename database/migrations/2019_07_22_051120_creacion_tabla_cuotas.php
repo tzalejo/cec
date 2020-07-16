@@ -21,7 +21,7 @@ class CreacionTablaCuotas extends Migration
             $table->float('cuotaBonificacion', 10, 2)->default(0.0);
             // $table->timestamps();
 
-            $table->unsignedInteger('matriculaId');
+            $table->unsignedBigInteger('matriculaId');
             $table->foreign('matriculaId')->references('matriculaId')->on('matriculas');
         });
     }

@@ -14,7 +14,7 @@ class ModificarTablaMatriculasAgregarComisionId extends Migration
     public function up()
     {
         Schema::table('matriculas', function (Blueprint $table) {
-            $table->unsignedInteger('comisionId');
+            $table->unsignedBigInteger('comisionId');
             $table->foreign('comisionId')->references('comisionId')->on('comisiones');
         });
     }
@@ -27,6 +27,8 @@ class ModificarTablaMatriculasAgregarComisionId extends Migration
     public function down()
     {
         Schema::table('matriculas', function (Blueprint $table) {
+            // elimino primero clave foranea
+            $table->dropForeign(['comisionId']);
             $table->dropColumn('comisionId');
         });
     }

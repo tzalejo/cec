@@ -15,7 +15,7 @@ class ModificarTablaUsersAgregarRol extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // agrego la relacion
-            $table->unsignedInteger('roleId');
+            $table->unsignedBigInteger('roleId');
             $table->foreign('roleId')->references('roleId')->on('roles');
         });
     }
@@ -28,7 +28,8 @@ class ModificarTablaUsersAgregarRol extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            // elimino primero clave foranea
+            $table->dropForeign(['roleId']);
             $table->dropColumn('roleId');
         });
     }

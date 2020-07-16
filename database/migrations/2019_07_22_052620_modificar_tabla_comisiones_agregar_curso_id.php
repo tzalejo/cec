@@ -15,7 +15,7 @@ class ModificarTablaComisionesAgregarCursoId extends Migration
     {
         Schema::table('comisiones', function (Blueprint $table) {
             // forekey cursos
-            $table->unsignedInteger('cursoId');
+            $table->unsignedBigInteger('cursoId');
             $table->foreign('cursoId')->references('cursoId')->on('cursos');
         });
     }
@@ -28,7 +28,8 @@ class ModificarTablaComisionesAgregarCursoId extends Migration
     public function down()
     {
         Schema::table('comisiones', function (Blueprint $table) {
-            //
+            // elimino primero clave foranea
+            $table->dropForeign(['cursoId']);
             $table->dropColumn('cursoId');
         });
     }
