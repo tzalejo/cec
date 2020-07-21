@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Argentina/Buenos_Aires',
 
     /*
     |--------------------------------------------------------------------------
@@ -234,7 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Form' => Collective\Html\FormFacade::class,
-        
+
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
     ],
 
