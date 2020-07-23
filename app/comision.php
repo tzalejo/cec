@@ -18,7 +18,7 @@ class Comision extends Model
      *
      */
     public $timestamps = false;
-    
+
     protected $primaryKey = 'comisionId';
 
     protected $fillable = [
@@ -28,7 +28,7 @@ class Comision extends Model
         'comisionFF',
         'cursoId',
     ];
-    
+
     /**
     * Estoy indicando que un Comision pertenece a un curso.
     * Usando tinker $comsion= Comision::first()
@@ -39,7 +39,7 @@ class Comision extends Model
     {
         return $this->belongsTo(Curso::class, 'cursoId');
     }
-    
+
     /**
     * Estoy indicando la relacion comision tiene muchas matriculas('s' de muchos).
     * Usando tinker $comision= Comision::first()
@@ -50,7 +50,7 @@ class Comision extends Model
     {
         return $this->hasMany(Matricula::class, 'comisionId');
     }
-    
+
     // funcion que me devuelve la cantidad de alumnos que tiene una comision..
     public function cantidadAlumnos()
     {
@@ -71,7 +71,7 @@ class Comision extends Model
         return Curso::where('cursoId', $this->cursoId)
                 ->value('cursoNombre');
     }
-    
+
     public function obtenerAlumnos()
     {
         return Matricula::where('comisionId', $this->comisionId)
@@ -87,5 +87,25 @@ class Comision extends Model
     {
         $now = date('Y-m-d');
         return $query->where('comisionFF', '>', $now);
+    }
+
+    public function scopeComisionesInactivas($query)
+    {
+        $now = date('Y-m-d');
+        return $query->where('comisionFF', '<', $now);
+    }
+    /**
+     *  scope Comisiones con fecha de inicio
+     */
+    public function scopeComisionesFechaDesde($query, $fechaDesde)
+    {
+        return $query->where('comisionFI', '>=', $fechaDesde);
+    }
+    /**
+     *  scope Comisiones con fecha de fin
+     */
+    public function scopeComisionesFechaHasta($query, $fechaHasta)
+    {
+        return $query->where('comisionFI', '<=', $fechaHasta);
     }
 }
