@@ -20,11 +20,11 @@ class ComisionController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($curso = null)
+    public function index($fechaDesde = null, $fechaHasta = null, $curso = null )
     {
         if ($curso) {
             # cuando hago un get con parametro cursoId y obtengo todo las comision de este curso..
-            $comisionesActivas = Comision::ComisionesActivas()
+            $comisiones = Comision::ComisionesActivas()
                                     ->with('curso') # para optimizar la consulta
                                     ->with('matriculas') # para obtener los alumnos d esta comision
                                     ->withCount('matriculas') # envio cantidad de matricula por comision..
@@ -33,22 +33,35 @@ class ComisionController extends ApiController
                                     ->get(); # uso un scope
 
         } else {
-            # obtengo las comisiones activas,
-            $comisionesActivas = Comision::ComisionesActivas()
-                                    ->with('curso') # para optimizar la consulta
-                                    ->with('matriculas') # para obtener los alumnos d esta comision
-                                    ->withCount('matriculas') # envio cantidad de matricula por comision..
-                                    ->orderBy('cursoId', 'ASC')
-                                    ->get(); # uso un scope
+
+            if ($fechaDesde && $fechaHasta) {
+                # obtengo las comisiones NO activas y con fecha (Fecha Inicio) desde hasta
+                $comisiones = Comision::ComisionesInactivas()
+                                        ->with('curso') # para optimizar la consulta
+                                        ->with('matriculas') # para obtener los alumnos d esta comision
+                                        ->withCount('matriculas') # envio cantidad de matricula por comision..
+                                        ->ComisionesFechaDesde($fechaDesde)
+                                        ->ComisionesFechaHasta($fechaHasta)
+                                        ->get();
+
+            } else {
+                # obtengo las comisiones activas, pero sin filtro alguno
+                $comisiones = Comision::ComisionesActivas()
+                                        ->with('curso') # para optimizar la consulta
+                                        ->with('matriculas') # para obtener los alumnos d esta comision
+                                        ->withCount('matriculas') # envio cantidad de matricula por comision..
+                                        ->orderBy('cursoId', 'ASC')
+                                        ->get(); # uso un scope
+            }
+
         }
-                                
         # devuelvo las comisiones
-        # return response()->json([$comisionesActivas],200);
-        return $this->showAll($comisionesActivas); # usamos metodos de Traits para devolver
-        
+        # return response()->json([$comisiones],200);
+        return $this->showAll($comisiones); # usamos metodos de Traits para devolver
+
         #########################
         # esto estaba en el home:
-       
+
         #$comisiones = Comision::with('matriculas')
         #                    ->with('curso')
         #                    ->get();
@@ -64,13 +77,12 @@ class ComisionController extends ApiController
      */
     public function store(Request $request)
     {
-        // return $request;
         // Validamos
         $datosValidos = Validator::make($request->all(),[
             'comisionNombre'    => 'required|min:3|max:150',
             'comisionHorario'   => 'required|min:3|max:150',
             'comisionFI'        => 'required|date',
-            'comisionFF'        => '', # no la necesito validar porque se calcula 
+            'comisionFF'        => '', # no la necesito validar porque se calcula
             'cursoId'           => 'required|numeric',
         ],[
             'comisionNombre.required'       => 'El Nombre del comision es requerido',
@@ -83,7 +95,6 @@ class ComisionController extends ApiController
             'comisionFI.date'               => 'La Fecha de Inicio no es valida',
             'cursoId.required'              => 'El curso es requerido',
         ]);
-
         # verifico si hubo errores en la validaciones..
         if ($datosValidos->fails()) {
             $errors = $datosValidos->errors();
@@ -128,12 +139,11 @@ class ComisionController extends ApiController
      */
     public function update(Request $request, Comision $comision)
     {
-        //
         $datosValidos = Validator::make($request->all(),[
             'comisionNombre'    => 'required|min:3|max:150',
             'comisionHorario'   => 'required|min:3|max:150',
             'comisionFI'        => 'required|date',
-            'comisionFF'        => 'required|date', # no la necesito validar porque se calcula 
+            'comisionFF'        => 'required|date', # no la necesito validar porque se calcula
             'cursoId'           => 'required|numeric',
         ],[
             'comisionNombre.required'       => 'El Nombre del comision es requerido',

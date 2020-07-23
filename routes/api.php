@@ -54,7 +54,7 @@ Route::group(['prefix' => 'matricula'], function () {
 Route::group(['prefix' => 'cuota'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
-        
+
         # devolvemos matricua->cuotas->pagos
         Route::get('{matricula}', 'Cuota\CuotaController@index');
         # para realizar un pago de un cuota..
@@ -67,9 +67,9 @@ Route::group(['prefix' => 'cuota'], function () {
 Route::group(['prefix' => 'comision'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
-        
+
         # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
-        Route::get('{curso?}', 'Comision\ComisionController@index');
+        Route::get('{fechaDesde?}/{fechaHasta?}/{curso?}/', 'Comision\ComisionController@index');
         Route::post('crear', 'Comision\ComisionController@store');
         Route::put('modificar/{comision}', 'Comision\ComisionController@update');
         Route::delete('eliminar/{comision}', 'Comision\ComisionController@destroy');
