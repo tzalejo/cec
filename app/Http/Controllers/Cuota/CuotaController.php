@@ -8,6 +8,7 @@ use App\Matricula;
 use App\Estudiante;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\StoreCuotaRequest;
 use App\Traits\ApiResponser;
 # para usar validator
 use Illuminate\Support\Facades\Validator;
@@ -34,27 +35,8 @@ class CuotaController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCuotaRequest $request)
     {
-        // return response()->json($request , 200);
-        # valido cuotaId
-        $datosValido = Validator::make($request->all(), [
-            'cuotaId'               => 'required|numeric',
-            'cuotaMonto'            => 'required|numeric|min:100'
-        ], [
-            'cuotaId.required'      => 'La cuota es requerda, por favor verifique.',
-            'cuotaId.numeric'       => 'Se espera un valor numerico, por favor verifique.',
-            'cuotaMonto.required'   => 'El Monto de la cuota es requerido, por favor verifique.',
-            'cuotaMonto.numeric'    => 'Se espera un valor numerico, por favor verifique.',
-        ]);
-        # verifico si hubo errores en la validaciones..
-        if ($datosValido->fails()) {
-            $errors = $datosValido->errors();
-            // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
-            # retorno error 400..
-            return $this->errorResponse($errors, 400);
-        }
-
         $cuota = Cuota::find($request->cuotaId);
         # verifico si la cuota seleccionada esta realmente pagada..
         if ($cuota->cuotaPagada()) {
