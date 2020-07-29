@@ -27,7 +27,7 @@ class StoreComisionRequest extends FormRequest
             //
             'comisionNombre'    => 'required|min:3|max:150',
             'comisionHorario'   => 'required|min:3|max:150',
-            'comisionFI'        => 'required|date',
+            'comisionFI'        => 'required|date|min:2000-01-01',
             'comisionFF'        => '', # no la necesito validar porque se calcula
             'cursoId'           => 'required|numeric',
         ];
@@ -49,6 +49,7 @@ class StoreComisionRequest extends FormRequest
             'comisionHorario.min'           => 'La cantidad min caracteres no son lo establecido, Verifique.',
             'comisionHorario.max'           => 'La cantidad max caracteres no son lo establecido, Verifique.',
             'comisionFI.required'           => 'La Fecha de Inicio es requerido',
+            'comisionFI.min'                => 'La Fecha de Inicio no es valida',
             'comisionFI.date'               => 'La Fecha de Inicio no es valida',
             'cursoId.required'              => 'El curso es requerido',
         ];
