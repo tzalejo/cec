@@ -8,6 +8,8 @@ use App\Matricula;
 use App\Cuota;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\StoreEstudianteRequest;
+use App\Http\Requests\UpdateEstudianteRequest;
 use App\Traits\ApiResponser;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -31,43 +33,9 @@ class EstudianteController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEstudianteRequest $request)
     {
-        # ucfirst('texto') ->> 'Texto'
-        #return $request; #viene null cuando no esta tildada la casilla, caso contrario en on
-        # validamos los campos
-        // $datosValidado = $request->validate([
-        $datosValidado = Validator::make($request->all(), [
-            'estudianteNombre'      => 'required|min:3|max:50',
-            'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes', 'estudianteDNI')], // 'required|numeric', //required|unique:estudiantes,estudianteDNI //
-            'estudianteDomicilio'   => 'required|max:100',
-            'estudianteEmail'       => ['required','email','max:100',Rule::unique('estudiantes', 'estudianteEmail')],    // 'estudianteEmail'       => 'required|email',
-            'estudianteTelefono'    => 'max:50',
-            'estudianteLocalidad'   => 'required|max:100',
-            'estudianteNacimiento'  => 'required|date',
-            'estudianteFoto'        => ''
-        ], [
-            'estudianteDNI.required'        => 'El DNI del estudiante es requerido',
-            'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
-            'estudianteNombre.required'     => 'El Nombre del estudiante es requerido',
-            'estudianteApellido.required'   => 'El Apellido del estudiante es requerido',
-            'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerido',
-            'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerido',
-            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',
-            'estudianteEmail.email'         => 'El Email es incorrecto, verifique el formato example@mail.com',
-            'estudianteEmail.unique'        => 'El Email del estudiante ya esta registrado, verifique',
-            
-        ]); # aca especifico el mensaje para cada posible error.
-        // return $datosValidado;
-        # verifico si hubo errores en la validaciones..
-        if ($datosValidado->fails()) {
-            $errors = $datosValidado->errors();
-            // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
-            # retorno error 400..
-            return $this->errorResponse($errors, 400);
-        }
-
+        
         # creo el estudiante, con su respectiva matricula
         $estudianteNuevo = Estudiante::create([
             'estudianteNombre'      => ucwords(strtolower($request->estudianteNombre)),
@@ -151,39 +119,9 @@ class EstudianteController extends ApiController
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Estudiante $estudiante)
+    public function update(UpdateEstudianteRequest $request, Estudiante $estudiante)
     {
         # ver el tema de las cuotas si hay cambio..                    *Falta!*
-        
-        # validamos los campos
-        $datosValidado = $request->validate(
-            [
-            'estudianteNombre'      => 'required|min:3|max:50',
-            'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes')->ignore($estudiante->estudianteDNI, 'estudianteDNI')],
-            'estudianteDomicilio'   => 'required|max:100',
-            # estoy indicando que el valor sea unico en la tabla estudiantes del campo estudianteEmail PERO ESCLUYENDO EL estudianteId!!, el cual estoy modificando..
-            # 'estudianteEmail'       => ['email','max:100',Rule::unique('estudiantes','estudianteEmail' )->ignore($estudiante->estudianteId, 'estudianteId') ],
-            'estudianteEmail'       => '',
-            'estudianteTelefono'    => 'max:50',
-            'estudianteLocalidad'   => 'required|max:100',
-            'estudianteNacimiento'  => 'required|date',
-            'estudianteFoto'        => ''
-        ],
-            [
-            'estudianteDNI.required'        => 'El DNI del estudiante es requerido',
-            'estudianteDNI.unique'          => 'El DNI del estudiante ya existe',
-            'estudianteNombre.required'     => 'El Nombre del estudiante es requerido',
-            'estudianteApellido.required'   => 'El Apellido del estudiante es requerido',
-            'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerido',
-            'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerido',
-            'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',
-            
-            # 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
-            # 'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, verifique',
-            
-        ]
-        );
         # actualizar Estudiante y matricula(comision)
         $matricula = Matricula::find($request->get('matricula'));# busco la matricula
         $matricula->comisionId = $request->get('comisionId'); # modifico con la nueva comsion
@@ -193,20 +131,20 @@ class EstudianteController extends ApiController
         # aca especifico el mensaje d cierto error.
         if (is_null($request->get('estudianteFoto'))) {
             $estudiante->update([
-                'estudianteNombre'      => ucwords(strtolower($datosValidado['estudianteNombre'])),
-                'estudianteApellido'    => ucwords(strtolower($datosValidado['estudianteApellido'])),
-                'estudianteDNI'         => $datosValidado['estudianteDNI'],
-                'estudianteDomicilio'   => ucwords(strtolower($datosValidado['estudianteDomicilio'])),
-                'estudianteEmail'       => $datosValidado['estudianteEmail'],
-                'estudianteTelefono'    => $datosValidado['estudianteTelefono'],
-                'estudianteLocalidad'   => strtolower($datosValidado['estudianteLocalidad']),
-                'estudianteNacimiento'  => $datosValidado['estudianteNacimiento'],
+                'estudianteNombre'      => ucwords(strtolower($request['estudianteNombre'])),
+                'estudianteApellido'    => ucwords(strtolower($request['estudianteApellido'])),
+                'estudianteDNI'         => $request['estudianteDNI'],
+                'estudianteDomicilio'   => ucwords(strtolower($request['estudianteDomicilio'])),
+                'estudianteEmail'       => $request['estudianteEmail'],
+                'estudianteTelefono'    => $request['estudianteTelefono'],
+                'estudianteLocalidad'   => strtolower($request['estudianteLocalidad']),
+                'estudianteNacimiento'  => $request['estudianteNacimiento'],
                 # verifico si viene la foto null no modifico caso contrario agrego el nueva imagen..
-                # 'estudianteFoto'        => $datosValidado['estudianteFoto'], xq no se modifico la imagien
+                # 'estudianteFoto'        => $request['estudianteFoto'], xq no se modifico la imagien
             ]);
         } else {
             # code...
-            $estudiante->update($datosValidado);
+            $estudiante->update([$request]);
         }
         # return redirect()->route('home');
         return $this->showOne($estudiante);
