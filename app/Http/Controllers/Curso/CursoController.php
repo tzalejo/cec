@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Curso;
 
+use App\Comision;
 use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\StoreCursoRequest;
 
 class CursoController extends ApiController
 {
@@ -26,33 +28,14 @@ class CursoController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCursoRequest $request)
     {
-        # valido el curso..
-        $datosValidado = $request->validate(
-            [
-            'cursoNombre'       => 'required|min:2|max:100',
-            'cursoNroCuota'     => 'required|numeric|max:48',
-            'cursoCostoMes'     => 'required|numeric',
-            'cursoInscripcion'  => 'required|numeric',
-        ],
-            [
-            'cursoNombre.required'        => 'El Nombre del curso es requerido',
-            'cursoNroCuota.required'      => 'La cantidad de cuotas es requerido',
-            'cursoNroCuota.max'           => 'La cantidad de cuotas supera el valor maximo',
-            'cursoCostoMes.required'      => 'El costo por mes es requerido',
-            'cursoInscripcion.required'   => 'El Apellido del estudiante es requerdio',
-            'cursoNroCuota.numeric'       => 'Debe ingresar un valor numerico',
-            'cursoCostoMes.numeric'       => 'Debe ingresar un valor numerico',
-            'cursoInscripcion.numeric'    => 'Debe ingresar un valor numerico',
-        ]
-        );
         # Agrego el curso
         $cursoNuevo = Curso::create([
-            'cursoNombre'       => $datosValidado['cursoNombre'],
-            'cursoNroCuota'     => $datosValidado['cursoNroCuota'],
-            'cursoCostoMes'     => $datosValidado['cursoCostoMes'],
-            'cursoInscripcion'  => $datosValidado['cursoInscripcion'],
+            'cursoNombre'       => $request['cursoNombre'],
+            'cursoNroCuota'     => $request['cursoNroCuota'],
+            'cursoCostoMes'     => $request['cursoCostoMes'],
+            'cursoInscripcion'  => $request['cursoInscripcion'],
         ]);
         
         # verifico si  seleccione materia, para agregar la relacion.
