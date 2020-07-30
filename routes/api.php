@@ -72,7 +72,7 @@ Route::group(['prefix' => 'comision'], function () {
         Route::get('{fechaDesde?}/{fechaHasta?}/{curso?}/', 'Comision\ComisionController@index');
         Route::post('crear', 'Comision\ComisionController@store');
         Route::put('modificar/{comision}', 'Comision\ComisionController@update');
-        Route::delete('eliminar/{comision}', 'Comision\ComisionController@destroy');
+        Route::delete('eliminar', 'Comision\ComisionController@destroy');
         Route::get('mostrar/{comisionId}', 'Comision\ComisionController@show');
     });
 });

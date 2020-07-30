@@ -7,6 +7,7 @@ use App\Matricula;
 use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\DestroyComisionRequest;
 use App\Http\Requests\StoreComisionRequest;
 use App\Http\Requests\UpdateComisionRequest;
 use App\Traits\ApiResponser;
@@ -79,32 +80,6 @@ class ComisionController extends ApiController
      */
     public function store(StoreComisionRequest $request)
     {
-        // Validamos
-        // $datosValidos = Validator::make($request->all(),[
-        //     'comisionNombre'    => 'required|min:3|max:150',
-        //     'comisionHorario'   => 'required|min:3|max:150',
-        //     'comisionFI'        => 'required|date',
-        //     'comisionFF'        => '', # no la necesito validar porque se calcula
-        //     'cursoId'           => 'required|numeric',
-        // ],[
-        //     'comisionNombre.required'       => 'El Nombre del comision es requerido',
-        //     'comisionNombre.min'            => 'La cantidad min caracteres no son lo establecido, Verifique.',
-        //     'comisionNombre.max'            => 'La cantidad max caracteres no son lo establecido, Verifique.',
-        //     'comisionHorario.required'      => 'El Horarios es requerido',
-        //     'comisionHorario.min'           => 'La cantidad min caracteres no son lo establecido, Verifique.',
-        //     'comisionHorario.max'           => 'La cantidad max caracteres no son lo establecido, Verifique.',
-        //     'comisionFI.required'           => 'La Fecha de Inicio es requerido',
-        //     'comisionFI.date'               => 'La Fecha de Inicio no es valida',
-        //     'cursoId.required'              => 'El curso es requerido',
-        // ]);
-        # verifico si hubo errores en la validaciones..
-        // return $request->validated();
-        // if ($request->validated()) {
-        //     $errors = $request->errors();
-        //     # retorno error 400..
-        //     return $this->errorResponse($errors, 400);
-        // }
-
         # creo la comision
         Comision::create([
             'comisionNombre'    => strtoupper($request->comisionNombre),
@@ -142,32 +117,6 @@ class ComisionController extends ApiController
      */
     public function update(UpdateComisionRequest $request, Comision $comision)
     {
-        // $datosValidos = Validator::make($request->all(),[
-        //     'comisionNombre'    => 'required|min:3|max:150',
-        //     'comisionHorario'   => 'required|min:3|max:150',
-        //     'comisionFI'        => 'required|date',
-        //     'comisionFF'        => 'required|date', # no la necesito validar porque se calcula
-        //     'cursoId'           => 'required|numeric',
-        // ],[
-        //     'comisionNombre.required'       => 'El Nombre del comision es requerido',
-        //     'comisionNombre.min'            => 'La cantidad min caracteres no son lo establecido, Verifique.',
-        //     'comisionNombre.max'            => 'La cantidad max caracteres no son lo establecido, Verifique.',
-        //     'comisionHorario.required'      => 'El Horarios es requerido',
-        //     'comisionHorario.min'           => 'La cantidad min caracteres no son lo establecido, Verifique.',
-        //     'comisionHorario.max'           => 'La cantidad max caracteres no son lo establecido, Verifique.',
-        //     'comisionFI.required'           => 'La Fecha de Inicio es requerido',
-        //     'comisionFI.date'               => 'La Fecha de Inicio no es valida',
-        //     'comisionFF.required'           => 'La Fecha de Inicio es requerido',
-        //     'comisionFF.date'               => 'La Fecha de Inicio no es valida',
-        //     'cursoId.required'              => 'El curso es requerido',
-        // ]);
-        # verifico si hubo errores en la validaciones..
-        // if ($request->fails()) {
-        //     $errors = $request->errors();
-        //     # retorno error 400..
-        //     return $this->errorResponse($errors, 400);
-        // }
-
         # actualizo
         $comision->update([
             'comisionNombre'    => strtoupper($request->comisionNombre),
@@ -188,11 +137,12 @@ class ComisionController extends ApiController
      * @param  \App\Comision  $comision
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comision $comision)
+    public function destroy(DestroyComisionRequest $comision)
     {
-        //
-        // return $comision;
-        $comision->delete();
+        # validamos si existe la comision y
+        # si tiene matriculas
+        $comisionEliminar = Comision::find($comision->comisionId);
+        $comisionEliminar->delete();
         return $this->successResponse('Comision fue eliminada correctamente',200);
     }
 }
