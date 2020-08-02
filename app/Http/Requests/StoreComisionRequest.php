@@ -27,7 +27,7 @@ class StoreComisionRequest extends FormRequest
             //
             'comisionNombre'    => 'required|min:3|max:150',
             'comisionHorario'   => 'required|min:3|max:150',
-            'comisionFI'        => 'required|date|min:2000-01-01',
+            'comisionFI'        => 'required|date',
             'comisionFF'        => '', # no la necesito validar porque se calcula
             'cursoId'           => 'required|numeric',
         ];
