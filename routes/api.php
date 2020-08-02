@@ -69,11 +69,11 @@ Route::group(['prefix' => 'comision'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
 
         # devuelvo todas las comisiona ACTIVAS(que no se cerraron por la FFinal)
+        Route::get('mostrar/{comisionId}', 'Comision\ComisionController@show');
         Route::get('{fechaDesde?}/{fechaHasta?}/{curso?}/', 'Comision\ComisionController@index');
         Route::post('crear', 'Comision\ComisionController@store');
         Route::put('modificar/{comision}', 'Comision\ComisionController@update');
         Route::delete('eliminar', 'Comision\ComisionController@destroy');
-        Route::get('mostrar/{comisionId}', 'Comision\ComisionController@show');
     });
 });
 
