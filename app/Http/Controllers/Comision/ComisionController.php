@@ -19,57 +19,38 @@ class ComisionController extends ApiController
 {
     use ApiResponser;
     /**
-     * Devuelvo todas las comisiones activas(que no se cerraron por las fechas)
+     * Devuelvo todas las comisiones
+     *  - con curso especifico
+     *  - no activas con fecha de inicio desde hasta
+     *  - sin filtro
      *
      * @return \Illuminate\Http\Response
      */
     public function index($fechaDesde = null, $fechaHasta = null, $curso = null )
     {
+        $query = Comision::query()
+            ->with('curso') # para optimizar la consulta
+            ->with('matriculas') # para obtener los alumnos d esta comision
+            ->withCount('matriculas') # envio cantidad de matricula por comision..
+            ->orderBy('cursoId', 'ASC');
+        # cuando hago un get con parametro cursoId y obtengo todo las comision de este curso..
         if ($curso) {
-            # cuando hago un get con parametro cursoId y obtengo todo las comision de este curso..
-            $comisiones = Comision::ComisionesActivas()
-                                    ->with('curso') # para optimizar la consulta
-                                    ->with('matriculas') # para obtener los alumnos d esta comision
-                                    ->withCount('matriculas') # envio cantidad de matricula por comision..
-                                    ->where('cursoId', $curso)
-                                    ->orderBy('cursoId', 'ASC')
-                                    ->get(); # uso un scope
-
-        } else {
-
-            if ($fechaDesde && $fechaHasta) {
-                # obtengo las comisiones NO activas y con fecha (Fecha Inicio) desde hasta
-                $comisiones = Comision::ComisionesInactivas()
-                                        ->with('curso') # para optimizar la consulta
-                                        ->with('matriculas') # para obtener los alumnos d esta comision
-                                        ->withCount('matriculas') # envio cantidad de matricula por comision..
-                                        ->ComisionesFechaDesde($fechaDesde)
-                                        ->ComisionesFechaHasta($fechaHasta)
-                                        ->get();
-
-            } else {
-                # obtengo las comisiones activas, pero sin filtro alguno
-                $comisiones = Comision::ComisionesActivas()
-                                        ->with('curso') # para optimizar la consulta
-                                        ->with('matriculas') # para obtener los alumnos d esta comision
-                                        ->withCount('matriculas') # envio cantidad de matricula por comision..
-                                        ->orderBy('cursoId', 'ASC')
-                                        ->get(); # uso un scope
-            }
-
+            $query->ComisionesActivas()
+                ->where('cursoId', $curso);
         }
+        # obtengo las comisiones NO activas y con fecha (Fecha Inicio) desde hasta
+        if ($fechaDesde && $fechaHasta) {
+            $query->ComisionesInactivas()
+                ->ComisionesFechaDesde($fechaDesde)
+                ->ComisionesFechaHasta($fechaHasta);
+        }
+        # obtengo las comisiones activas, pero sin filtro alguno
+        if (!$curso && !$fechaDesde && !$fechaHasta) {
+            $query->ComisionesActivas();
+        }
+
         # devuelvo las comisiones
-        # return response()->json([$comisiones],200);
-        return $this->showAll($comisiones); # usamos metodos de Traits para devolver
-
-        #########################
-        # esto estaba en el home:
-
-        #$comisiones = Comision::with('matriculas')
-        #                    ->with('curso')
-        #                    ->get();
-        # envio a mi api
-        #return response()->json($comisiones, 200);  # return view('home')->with('comisiones', $comisiones);
+        return $this->showAll($query->get()); # usamos metodos de Traits para devolver
     }
 
     /**
