@@ -87,18 +87,18 @@ class Handler extends ExceptionHandler
         if ($exception instanceof QueryException) {
             $codigo=$exception->errorInfo[1];
             if ($codigo==1451) {
-                return $this->errorResponse('No se puede eliminar de forma permanente el recurso porque esta relaiconado con algun otro.', 409);
+                return $this->errorResponse('No se puede eliminar de forma permanente el recurso porque esta relacionado con algun otro.', 409);
             }
         }
 
         // if($exception instanceof ThrottleRequestsException){
         //     return $this->errorResponse('Limite de peticiones rebasado ',409);
         // }
-        
+
         // if($exception instanceof RequestException){
         //     return $this->errorResponse('Fallo en la llamada.',500);
         // }
-        
+
         # si estamos en modo depuracion..
         if (config('app.debug')) {
             return parent::render($request, $exception);
