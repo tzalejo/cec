@@ -24,6 +24,15 @@ class Materia extends Model
      */
     public function cursos()
     {
+        /**
+         * El orden del metodo BelongsToMany():
+         *
+         * Modelo a relacionar : Curso::class
+         * Nombre de la tabla pivot: 'curso_nombre'
+         * Llave foranea del modelo q realiza la relacion: 'materiaId'
+         * Llave foranea del modelo a relacionar: 'cursoId'
+         *
+         */
         return $this->belongsToMany(Curso::class, 'curso_materia', 'materiaId', 'cursoId');
     }
 }

@@ -20,7 +20,7 @@ class Curso extends Model
         'cursoCostoMes',
         'cursoInscripcion',
     ];
-    
+
     protected $primaryKey = 'cursoId';
 
     /**
@@ -36,6 +36,15 @@ class Curso extends Model
 
     public function materias()
     {
+        /**
+         * El orden del metodo BelongsToMany():
+         *
+         * Modelo a relacionar : Materia::class
+         * Nombre de la tabla pivot: 'curso_nombre'
+         * Llave foranea del modelo q realiza la relacion: 'cursoId'
+         * Llave foranea del modelo a relacionar: 'materiaId'
+         *
+         */
         return $this->belongsToMany(Materia::class, 'curso_materia', 'cursoId', 'materiaId');
     }
 }
