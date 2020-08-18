@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Notifications\SignupActivate;
 use App\Traits\ApiResponser;
+use App\Http\Requests\SignupUserRequest;
+use App\Http\Requests\LoginUserRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,15 +15,8 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     use ApiResponser;
-    public function signup(Request $request)
+    public function signup(SignupUserRequest $request)
     {
-        $request->validate([
-            'userNombre'    => 'required|string',
-            'email'         => 'required|string|email',
-            'password'      => 'required|string'
-        ]);
-        #return $request;
-
         $user = User::create([
             'userNombre'    => $request->userNombre,
             'email'         => $request->email,
@@ -35,20 +30,20 @@ class AuthController extends Controller
         //     'message' => 'Usuario '.$user->userNombre.' creado satisfactoriamente'
         // ],201);
     }
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
-        $request->validate([
+        /*$request->validate([
             'email'         => 'required|string|email',
             'userNombre'    => 'required_without:email|string',
             'password'      => 'required|string',
             'remember_me'   => 'boolean',
             ]);
-        
-        if ($request->has('email')) {
+        */
+        //if ($request->has('email')) {
             $credenciales = request(['email', 'password']);
-        } else {
-            $credenciales = request(['userNombre', 'password']);
-        }
+        //} else {
+        //    $credenciales = request(['userNombre', 'password']);
+        //}
         # El metrod Auth devuelve true si la autenticacion fue exitosa
         if (!Auth::attempt($credenciales)) {
             # code...
@@ -72,7 +67,7 @@ class AuthController extends Controller
             'userNombre'    => $user->userNombre,
             'email'         => $user->email,
             'userImagen'    => $user->userImagen,
-            'roleId'         => $user->roleId,
+            'roleId'        => $user->roleId,
             'token'         => $tokenResult->accessToken,
             'token_type'    => 'Bearer',
             'expires_at'    => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
