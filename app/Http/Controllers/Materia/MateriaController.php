@@ -2,20 +2,30 @@
 
 namespace App\Http\Controllers\Materia;
 
+use App\Curso;
 use App\Materia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
-
+use App\Http\Requests\StoreMateriaRequest;
+use App\Http\Requests\UpdateMateriaRequest;
+use App\Traits\ApiResponser;
 class MateriaController extends ApiController
 {
+    use ApiResponser;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($curso = null)
     {
-        //
+        $todoCursos = Materia::All();
+        # si viene curso, es porque necesito retornar los materias que no esten el curso
+        if ($curso) {
+            # diff retorna la diferencia
+            $todoCursos =  $todoCursos->diff( Curso::findOrFail($curso)->materias );
+        }
+        return $this->showAll($todoCursos, 200);
     }
 
     /**
@@ -24,56 +34,42 @@ class MateriaController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMateriaRequest $request)
     {
-        $datosValidado = $request->validate([
-            'materiaNombre'     => 'required|min:2|max:100',
-        ], [
-            'materiaNombre.required' => 'El Nombre del curso es requerido',
-        ]);
-        # veo si es seminario o materia
-        $seminario = ($request['materiaSeminario'] == 'seminario') ? true : false ;
         # agrego la materia nueva.
         $materiaNueva = Materia::create([
-            'materiaNombre'       => $datosValidado['materiaNombre'],
-            'materiaSeminario'    => $seminario,
+            'materiaNombre'       => strtoupper($request->materiaNombre),
+            'materiaSeminario'    => $request->materiaSeminario,
         ]);
-        # mesaje de ok..
-        toast('Se guardó correctamente la Materia.', 'success');
-        # envio al mismo formulario de crear materia, solo actualizo el listado
-
-        return redirect()
-            // ->withToastSuccess('No tiene suficientes Privilegios para acceder a esta seccion.')
-            ->route('materia.crear')->with('materias', Materia::all());
+        return $this->showOne($materiaNueva,201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Materia  $materia
+     * @param  \App\Curso
      * @return \Illuminate\Http\Response
      */
-    public function show(Materia $materia)
+    public function show(Curso $curso)
     {
-        //
-        # toast('No puede ingresar..','warning');
-        $materias = Materia::all();
-        $seleccion_materias = array();
-        return view('curso.crear')
-        ->with('materias', $materias)
-        ->with('seleccion_materias', $seleccion_materias); ## variable de .blade ##
+        # retron a todas las materias del curso->cursoId
+        return $this->showAll($curso->materias, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Materia  $materia
+     * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Materia $materia)
+    public function update(UpdateMateriaRequest $request, Curso $curso)
     {
-        //
+        // $curso->materia()->attach($materia->materiaId);
+        // $curso->materia()->sync($materia->materiaId); 
+        # con sync nos aseguramos q el curso no tenga repetida las materias
+        return $curso->materias()->async($request->materiaId);
+
     }
 
     /**
@@ -82,18 +78,16 @@ class MateriaController extends ApiController
      * @param  \App\Materia  $materia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Materia $materia)
-    {
-        # ver si tengo que verificar si la materia no tiene relaciona con otras..
-        #######
-        #######
-        
-        # elimino la materia seleccionada..
-        $materia->delete();
-        # mesaje de ok..
-        toast('Se elimino correctamente la Materia.', 'success');
-        return redirect()
-            // ->withToastSuccess('No tiene suficientes Privilegios para acceder a esta seccion.')
-            ->route('materia.crear')->with('materias', Materia::all());
+    public function destroy( Materia $materia, $curso=null )
+    {   
+        if ($curso) {
+            # elimino materia
+            $materia->delete();
+            return $this->successResponse('Materia fue eliminada correctamente', 200);
+        }
+        # elimino la relacion curso - materia 
+        # lo hacemos con detach, con esto hace es despegar(traduccion de detach) la relacion con curso
+        $curso = Curso::findOrFail($curso);
+        $curso->materia()->detach($materia->materiaId);
     }
 }
