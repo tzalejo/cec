@@ -86,3 +86,14 @@ Route::group(['prefix' => 'curso'], function () {
         // Route::post('crear', 'Curso\CursoController@store');
     });
 });
+# Group de ruta con prefijo cursos/
+Route::group(['prefix' => 'materia'], function () {
+    # Ruta que solo acceda el usuario director..
+    Route::group(['middleware' => ['auth:api','director']], function () {
+        Route::get('mostrar/{curso?}', 'Materia\MateriaController@index');
+        Route::get('/{curso}', 'Materia\MateriaController@show');
+        Route::post('', 'Materia\MateriaController@store');
+        Route::delete('/{materia}/{curso?}', 'Materia\MateriaController@destroy');
+        Route::put('/{curso}', 'Materia\MateriaController@update');
+    });
+});
