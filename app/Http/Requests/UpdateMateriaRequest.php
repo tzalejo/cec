@@ -24,7 +24,8 @@ class UpdateMateriaRequest extends FormRequest
     public function rules()
     {
         return [
-            'materiaId' => 'required'
+            'materiaNombre' => 'required',
+            'materiaSeminario' => 'required'
         ];
     }
     /**
@@ -34,7 +35,8 @@ class UpdateMateriaRequest extends FormRequest
      */
     public function messages(){
         return [
-          'materiaId.required' => 'La materia es requerida'  
+          'materiaNombre.required' => 'El nombre de la materia es requerida',
+          'materiaSeminario.required' => 'El tipo materia es requerida',
         ];
     }
 }
