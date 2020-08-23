@@ -60,16 +60,17 @@ class MateriaController extends ApiController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Curso  $curso
+     * @param  \App\Materia  $materia
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMateriaRequest $request, Curso $curso)
+    public function update(UpdateMateriaRequest $request, Materia $materia)
     {
-        // $curso->materia()->attach($materia->materiaId);
-        // $curso->materia()->sync($materia->materiaId); 
-        # con sync nos aseguramos q el curso no tenga repetida las materias
-        return $curso->materias()->async($request->materiaId);
+        $materia->update([
+            'materiaNombre' => $request['materiaNombre'],
+            'materiaSeminario' => $request['materiaSeminario']
+        ]);
 
+        return $this->showOne($materia);
     }
 
     /**
@@ -79,15 +80,19 @@ class MateriaController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function destroy( Materia $materia, $curso=null )
-    {   
-        if ($curso) {
+    {
+        if ($curso === null) {
             # elimino materia
-            $materia->delete();
-            return $this->successResponse('Materia fue eliminada correctamente', 200);
+            # verifico que no este asignada en un curso
+            if ($materia->cursos->count() === 0){
+                $materia->delete();
+                return $this->successResponse('Materia fue eliminada correctamente', 200);
+            }
+            return $this->errorResponse('Materia fue eliminada correctamente', 404);
         }
-        # elimino la relacion curso - materia 
+        # elimino la relacion curso - materia
         # lo hacemos con detach, con esto hace es despegar(traduccion de detach) la relacion con curso
-        $curso = Curso::findOrFail($curso);
-        $curso->materia()->detach($materia->materiaId);
+        $curso = Curso::find($curso);
+        $curso->materias()->detach($materia->materiaId);
     }
 }
