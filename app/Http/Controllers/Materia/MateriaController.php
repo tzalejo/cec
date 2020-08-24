@@ -41,7 +41,7 @@ class MateriaController extends ApiController
             'materiaNombre'       => strtoupper($request->materiaNombre),
             'materiaSeminario'    => $request->materiaSeminario,
         ]);
-        return $this->showOne($materiaNueva,201);
+        return $this->successResponse('Materia fue creada correctamente', 201);
     }
 
     /**
@@ -88,7 +88,7 @@ class MateriaController extends ApiController
                 $materia->delete();
                 return $this->successResponse('Materia fue eliminada correctamente', 200);
             }
-            return $this->errorResponse('Materia fue eliminada correctamente', 404);
+            return $this->errorResponse('La Materia no puede ser eliminada', 409);
         }
         # elimino la relacion curso - materia
         # lo hacemos con detach, con esto hace es despegar(traduccion de detach) la relacion con curso
