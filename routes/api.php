@@ -84,6 +84,8 @@ Route::group(['prefix' => 'curso'], function () {
     Route::group(['middleware' => ['auth:api','director']], function () {
         Route::get('', 'Curso\CursoController@index');
         Route::put('/{curso}', 'Curso\CursoController@update');
+        Route::delete('/{curso}', 'Curso\CursoController@destroy');
+        Route::post('','Curso\CursoController@store');
     });
 });
 # Group de ruta con prefijo cursos/
