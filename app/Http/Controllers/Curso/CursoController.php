@@ -50,7 +50,7 @@ class CursoController extends ApiController
             // return redirect()
             // ->route('home')->with('comisiones', Comision::all());
         }
-        return $this->showAll(Comision::all());
+        return $this->successResponse('Curso fue creado correctamente', 201);
     }
 
     /**
@@ -75,7 +75,7 @@ class CursoController extends ApiController
     {
         # si es null materiaId es porque quiero actualizar curso
         # ahora si distinto de null es porque vamos actualizar la relacion curso materia
-        if ($request['materiaId'] !== null) {
+        if ($request['materiaId'] ) {
             # lo que hago con attach es asignarle en la tabla pivote curso y materia,
             # osea creando la relacion materia-curso
             $curso->materias()->attach($request['materiaId']);
@@ -92,13 +92,18 @@ class CursoController extends ApiController
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove un curso si no tiene materias relacionadas..
      *
      * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
     public function destroy(Curso $curso)
     {
-        //
+        # verifico q no tenga relacion con materia y comision
+        if ($curso->materias->count() === 0 && $curso->comisiones->count() === 0){
+            $curso->delete();
+            return $this->successResponse('Curso fue eliminada correctamente', 200);
+        }
+        return $this->successResponse('Curso seleccionado no puede ser eliminado.',409);
     }
 }
