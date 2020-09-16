@@ -27,7 +27,7 @@ class CursoController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Illuminate\Foundation\Http\FormRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCursoRequest $request)
@@ -56,12 +56,17 @@ class CursoController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Curso  $curso
-     * @return \Illuminate\Http\Response
+     * @param   number $curso
+     * @return  \App\Curso
      */
-    public function show(Curso $curso)
+    public function show($curso)
     {
-        //
+        return Curso::query()
+                ->where('cursoId', $curso)
+                ->with(['comisiones' => function ($query) {
+                    $query->ComisionesActivas();
+                }])
+                ->get();
     }
 
     /**
