@@ -86,7 +86,7 @@ class Comision extends Model
     public function scopeComisionesActivas($query)
     {
         $now = date('Y-m-d');
-        return $query->where('comisionFF', '>', $now);
+        return $query->where('comisionFF', '>=', $now);
     }
 
     public function scopeComisionesInactivas($query)
