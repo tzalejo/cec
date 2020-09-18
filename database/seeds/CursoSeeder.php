@@ -31,5 +31,7 @@ class CursoSeeder extends Seeder
             'cursoCostoMes'=> 1300,
             'cursoInscripcion'=> 1350,
         ]);
+
+        factory(Curso::class)->times(10)->create();
     }
 }
