@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Comision;
 
 use App\Comision;
-use App\Matricula;
-use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\DestroyComisionRequest;
 use App\Http\Requests\StoreComisionRequest;
 use App\Http\Requests\UpdateComisionRequest;
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\Log;
 # para usar validator
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -19,33 +18,27 @@ class ComisionController extends ApiController
 {
     use ApiResponser;
     /**
-     * Devuelvo todas las comisiones
-     *  - con curso especifico
+     * Devuelvo todas las comisiones     *
      *  - no activas con fecha de inicio desde hasta
      *  - sin filtro
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($fechaDesde = null, $fechaHasta = null, $curso = null )
+    public function index( $fechaDesde = null, $fechaHasta = null)
     {
         $query = Comision::query()
             ->with('curso') # para optimizar la consulta
             ->with('matriculas') # para obtener los alumnos d esta comision
             ->withCount('matriculas') # envio cantidad de matricula por comision..
             ->orderBy('cursoId', 'ASC');
-        # cuando hago un get con parametro cursoId y obtengo todo las comision de este curso..
-        if ($curso) {
-            $query->ComisionesActivas()
-                ->where('cursoId', $curso);
-        }
-        # obtengo las comisiones NO activas y con fecha (Fecha Inicio) desde hasta
+
         if ($fechaDesde && $fechaHasta) {
             $query->ComisionesInactivas()
                 ->ComisionesFechaDesde($fechaDesde)
                 ->ComisionesFechaHasta($fechaHasta);
         }
-        # obtengo las comisiones activas, pero sin filtro alguno
-        if (!$curso && !$fechaDesde && !$fechaHasta) {
+        
+        if (!$fechaDesde && !$fechaHasta) {
             $query->ComisionesActivas();
         }
 
@@ -83,6 +76,7 @@ class ComisionController extends ApiController
     public function show($comisionId)
     {
         $resultado = Comision::ComisionesActivas()
+                    ->with('curso')
                     ->with('matriculas.estudiante') # para obtener los alumnos d esta comision
                     ->where('comisionId', $comisionId)
                     ->get(); # uso un scope

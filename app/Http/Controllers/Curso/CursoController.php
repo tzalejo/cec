@@ -25,14 +25,12 @@ class CursoController extends ApiController
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
+     * Agrego el curso
      * @param  Illuminate\Foundation\Http\FormRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCursoRequest $request)
     {
-        # Agrego el curso
         $cursoNuevo = Curso::create([
             'cursoNombre'       => $request['cursoNombre'],
             'cursoNroCuota'     => $request['cursoNroCuota'],
@@ -45,10 +43,6 @@ class CursoController extends ApiController
             $seleccionMaterias = $request['sele_materia'];
             # agrego las materias..
             $cursoNuevo->materias()->attach($seleccionMaterias);
-            // Ya no lo necesito al cartel: toast('Se guardó correctamente la Curso.','success');
-
-            // return redirect()
-            // ->route('home')->with('comisiones', Comision::all());
         }
         return $this->successResponse('Curso fue creado correctamente', 201);
     }
