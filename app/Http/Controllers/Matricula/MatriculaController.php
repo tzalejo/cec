@@ -20,17 +20,7 @@ class MatriculaController extends ApiController
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $apellido = $request->get('estudianteApellido');
-        $DNI = $request->get('estudianteDNI');
-        $estudiante = Estudiante::has('matriculas')             # has: limitar sus resultados en función de la existencia de una relación
-                        ->with('matriculas.comision.curso')     
-                        ->estudianteApellido($apellido)         # utilizamos scope
-                        ->estudianteDNI($DNI)                   # utilizamos scope
-                        ->get();
-                        // ->paginate(10); 
-        return $this->successResponse($estudiante, 200);
-    }
+    {}
 
     /**
      * Store a newly created resource in storage.
@@ -84,10 +74,10 @@ class MatriculaController extends ApiController
     {
         # validar que exista la matricula..
         $this->showOne($matricula, 200);
-        
+
         // return $request->validate([
         //     'matriculaId'      => 'required|numeric']);
-            
+
         // if ($datosValidado->fails()) {
         //     $errors = $datosValidado->errors();
         //     // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
@@ -97,13 +87,13 @@ class MatriculaController extends ApiController
         // $matriculaId =$request->get('matriculaId');
         // $matricula = Matricula::where('matriculaId',$matriculaId)->get();
         // return $this->showOne($matriculaId);
-        
-        
+
+
         // $now = date('Y-m-d');
         // $estudiante = $matricula->estudiante;
         // $comisionesAbiertas = Comision::where('comisionFF', '>', $now)->get();
         // $miComision = $matricula->comision; # envio la comision de la matricula
-        
+
         // return view('alumnos.editar')
         // ->with('estudiante',$estudiante)
         // # envio la matricula para luego modificar la  comsion de esa matricula
@@ -162,7 +152,7 @@ class MatriculaController extends ApiController
         # Dejaremos los datos del estudiante..
         $matricula->matriculaSituacion = 'NR';
         $matricula->update();
-        
+
         # dd(Auth::user()->userNombre);
         return redirect()->route('home');
     }

@@ -22,9 +22,18 @@ class EstudianteController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Estudiante::query()->orderBy('estudianteApellido','ASC')->get();
+        # has: limitar sus resultados en función de la existencia de una relación
+        $apellido = $request->get('apellido');
+        $dni = $request->get('dni');
+        $estudiante = Estudiante::query()
+                        ->with('matriculas.comision.curso')
+                        ->Apellido($apellido)         # utilizamos scope
+                        ->DNI($dni)                   # utilizamos scope
+                        ->orderBy('estudianteApellido','ASC')
+                        ->get();
+        return $this->successResponse($estudiante, 200);
     }
 
     /**
@@ -35,7 +44,7 @@ class EstudianteController extends ApiController
      */
     public function store(StoreEstudianteRequest $request)
     {
-        
+
         # creo el estudiante, con su respectiva matricula
         $estudianteNuevo = Estudiante::create([
             'estudianteNombre'      => ucwords(strtolower($request->estudianteNombre)),
@@ -48,7 +57,7 @@ class EstudianteController extends ApiController
             'estudianteNacimiento'  => $request->estudianteNacimiento,
             'estudianteFoto'        => $request->estudianteFoto,
         ]);
-        
+
         // return ($request->get('pagoInscripcion') && $request->get('pagoCuota'));
         # pregunto por las casillas, pero siempre va al else por como tengo el formulario(que puede que se tenga q cambiar)
         if ($request->get('pagoInscripcion') || $request->get('pagoCuota')) {
@@ -94,23 +103,8 @@ class EstudianteController extends ApiController
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
-    {
-        # primero dejo en minuscula to el apellido y en mayusucula la primera letra
-        $apellido = ucwords(strtolower($request->get('estudianteApellido')));            # ver
-        $DNI = $request->get('estudianteDNI');
-        $estudiantes = Estudiante::query()
-        ->with('matriculas.comision.curso')  # me genera menos query..?¿?¿?¿
-        ->estudianteApellido($apellido)
-        ->estudianteDNI($DNI)
-        ->orderBy('estudianteId', 'ASC')
-        ->paginate(10);
-        
-        # return view('alumnos.mostrar')->with('estudiantes', $estudiantes);
-        # devuelve el estudiante con sus matriculas
-        // return response()->json($estudiantes, 200);
-        return $this->successResponse($estudiantes, 200);
-    }
+    public function show()
+    {}
 
     /**
      * Actualizo los datos del estudiante y tambien el comision de la matricula enviada..
@@ -127,7 +121,7 @@ class EstudianteController extends ApiController
         $matricula->comisionId = $request->get('comisionId'); # modifico con la nueva comsion
         $matricula->save();
         // return response()->json( is_null($request->get('estudianteFoto')), 200);
-        
+
         # aca especifico el mensaje d cierto error.
         if (is_null($request->get('estudianteFoto'))) {
             $estudiante->update([
