@@ -14,7 +14,7 @@ class Estudiante extends Model
     *
     */
     public $timestamps = false;
-    
+
     protected $primaryKey = 'estudianteId';
 
     protected $fillable =[
@@ -46,7 +46,7 @@ class Estudiante extends Model
     /**
      * query scope por Apellido
      */
-    public function scopeEstudianteApellido($query, $estudianteApellido)
+    public function scopeApellido($query, $estudianteApellido)
     {
         if (trim($estudianteApellido)) {
             return $query->where('estudianteApellido', 'LIKE', $estudianteApellido.'%');
@@ -56,7 +56,7 @@ class Estudiante extends Model
     /**
      * query scope por DNI
      */
-    public function scopeEstudianteDNI($query, $estudianteDNI)
+    public function scopeDNI($query, $estudianteDNI)
     {
         if (trim($estudianteDNI)) {
             return $query->where('estudianteDNI', 'LIKE', $estudianteDNI.'%');
