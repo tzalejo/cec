@@ -55,7 +55,7 @@ class CuotaController extends ApiController
         $now = date('Y-m-d');
         # id de la cuota a pagar..para luego ir recorriendo si son mas d una que se puede abonar..
         $cuotaPagada =  $cuota->cuotaId;
-        $monto =$request['cuotaMonto'];
+        $monto = $request['cuotaMonto'];
         # genero el registro de esta cuota para consultar el saldo
         $cuotaBuscada = Cuota::find($cuotaPagada);
 
@@ -64,12 +64,12 @@ class CuotaController extends ApiController
             if ($monto<$cuotaBuscada->cuotaFaltante()) {
                 # code...
                 $pago = $monto;
-                $monto = 0; 
-                
+                $monto = 0;
+
             }else {
                 # code...
-                $pago = $cuotaBuscada->cuotaFaltante(); 
-                $monto = $monto- $cuotaBuscada->cuotaFaltante();
+                $pago = $cuotaBuscada->cuotaFaltante();
+                $monto = $monto - $cuotaBuscada->cuotaFaltante();
             }
             # creo el pago, con su respectivo montos(cuotaFaltante)
             Pago::create([
@@ -82,7 +82,7 @@ class CuotaController extends ApiController
             # genero el registro de esta cuota para consultar el saldo
             $cuotaBuscada = Cuota::find($cuotaPagada);
         }
-    
+
         # resto del monto q voy abonar del saldo..
         if ($monto>$cuotaBuscada->cuotaFaltante()) {
             # 1700 - 850 = 850
