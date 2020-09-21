@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\UpdateMatriculaRequest;
+use App\Http\Requests\StoreMatriculaRequest;
+
 class MatriculaController extends ApiController
 {
     use ApiResponser;
@@ -23,45 +26,38 @@ class MatriculaController extends ApiController
     {}
 
     /**
-     * Store a newly created resource in storage.
+     * Matriculo al estudiante
+     * Tambien se dispara matriculaObserver(created)
+     * Recordar: regular(RE), no regular(NR) o egresado(EG)
      *
-     * @param  \Illuminate\Http\Request  $request
+     *
+     * @param  App\Http\Requests\StoreMatriculaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMatriculaRequest $request)
     {
-        # viene de altaReinscripcionEstudiante
-        # Recordar: regular(RE), no regular(NR) o egresado(EG)
         $matricula =  Matricula::create([
             'matriculaSituacion'=>'RE',
-            'estudianteId'      =>$request->get('estudianteId'),
-            'comisionId'        =>$request->get('comisionId') ,
+            'estudianteId'      =>$request->estudianteId,
+            'comisionId'        =>$request->comisionId,
         ]);
 
-        # generar las cuotas de la matricula..
-        $nuevafecha = $matricula->comision->comisionFI;
-        Cuota::create([
-            'cuotaConcepto'     => 'Inscripcion - '.$matricula->comision->curso->cursoNombre,
-            'cuotaMonto'        => $matricula->comision->curso->cursoInscripcion,
-            'cuotaFVencimiento' => $nuevafecha,
-            'cuotaBonificacion' => 0,
-            'matriculaId'       => $matricula->matriculaId,
-            ]);
-        for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) {
-            # code...
-            Cuota::create([
-                'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
-                'cuotaMonto'        => $matricula->comision->curso->cursoCostoMes,
-                'cuotaFVencimiento' => $nuevafecha,
-                'cuotaBonificacion' => 0,
-                'matriculaId'       => $matricula->matriculaId,
-                ]);
-            $nuevafecha = strtotime('+'.$i.' month', strtotime($matricula->comision->comisionFI)) ;
-            $nuevafecha = date('Y-m-j', $nuevafecha);
-        }
         return $this->showOne($matricula,201);
-        // return redirect()
-        // ->route('alumnos.cuotas', $matricula);/** */
+
+
+
+        // for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) {
+        //     # code...
+        //     Cuota::create([
+        //         'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
+        //         'cuotaMonto'        => $matricula->comision->curso->cursoCostoMes,
+        //         'cuotaFVencimiento' => $matricula->comision->comisionFI,
+        //         'cuotaBonificacion' => 0,
+        //         'matriculaId'       => $matricula->matriculaId,
+        //         ]);
+        //     $nuevafecha = strtotime('+'.$i.' month', strtotime($matricula->comision->comisionFI)) ;
+        //     $nuevafecha = date('Y-m-j', $nuevafecha);
+        // }
     }
 
     /**
@@ -105,30 +101,12 @@ class MatriculaController extends ApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\UpdateMatriculaRequest  $request
      * @param  \App\Matricula  $matricula
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Matricula $matricula)
+    public function update(UpdateMatriculaRequest $request, Matricula $matricula)
     {
-        // return $request;
-        $datosValidos =  Validator::make($request->all(),[
-            'matriculaSituacion'=>'required',
-            'estudianteId'      =>'required|numeric',
-            'comisionId'        =>'required|numeric' ,
-        ],[
-            'matriculaSituacion.required' => 'La Situacion es requerido',
-            'estudianteId.required' => 'El estudiante es requerido',
-            'comisionId.required' => 'La comision es requerida',
-        ]);
-
-        # verifico si hubo errores en la validaciones..
-        if ($datosValidos->fails()) {
-            $errors = $datosValidos->errors();
-            # retorno error 400..
-            return $this->errorResponse($errors, 400);
-        }
-
         # actualizo
         $matricula->update([
             'matriculaSituacion' => $request->matriculaSituacion,
