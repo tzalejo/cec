@@ -99,3 +99,10 @@ Route::group(['prefix' => 'materia'], function () {
         Route::put('/{materia}', 'Materia\MateriaController@update');
     });
 });
+
+# Grupo de ruta con prefijo pago
+Route::group(['prefix' => 'pago'], function () {
+    // Route::group(['middleware' => ['auth:api','director']], function () {
+        Route::post('','Pago\PagoController@store');
+    // });
+});
