@@ -23,7 +23,7 @@ class MatriculaObserver
         // genero lo cuota de inscripcion
         $cuota = Cuota::create([
             'cuotaConcepto'     => 'Inscripcion - '.$matricula->comision->curso->cursoNombre,
-            'cuotaMonto'        => $matricula->comision->curso->cursoCostoMes,
+            'cuotaMonto'        => $matricula->comision->curso->cursoInscripcion,
             'cuotaFVencimiento' => $matricula->comision->comisionFI,
             'cuotaBonificacion' => 0,
             'matriculaId'       => $matricula->matriculaId,
@@ -31,7 +31,7 @@ class MatriculaObserver
 
         // genero el pago de la inscripcion
         Pago::create([
-            'pagoAbono'     => $matricula->comision->curso->cursoInscripcion, //$request->montoPago,
+            'pagoAbono'     => $matricula->comision->curso->cursoInscripcion,
             'pagoFAbono'    => date('Y-m-d'),
             'cuotaId'       => $cuota->cuotaId
         ]);
