@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Matricula;
-use App\Observers\MatriculaObserver;
 use App\User;
+use App\Pago;
+use App\Observers\MatriculaObserver;
+use App\Observers\PagoObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
         // Para registrar un observador
         User::observe(UserObserver::class);
         Matricula::observe(MatriculaObserver::class);
+        Pago::observe(PagoObserver::class);
     }
 }
