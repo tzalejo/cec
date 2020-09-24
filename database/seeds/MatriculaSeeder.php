@@ -19,6 +19,6 @@ class MatriculaSeeder extends Seeder
             'comisionId'=>1 ,
         ]);
 
-        factory(Matricula::class)->times(80)->create();
+        factory(Matricula::class)->times(40)->create();
     }
 }
