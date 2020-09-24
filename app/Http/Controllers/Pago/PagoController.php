@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Pago;
 use App\Pago;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePagoRequest;
+use App\Traits\ApiResponser;
+use App\Http\Controllers\ApiController;
 
-class PagoController extends Controller
+class PagoController extends ApiController
 {
+    use ApiResponser;
     /**
      * Display a listing of the resource.
      *
@@ -19,24 +23,20 @@ class PagoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
+     * Se dispara PagoObserver cuando la cuota esta pagada
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\StorePagoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePagoRequest $request)
     {
-        //
+        Pago::create([
+            'pagoAbono'     => $request->pagoAbono,
+            'pagoFAbono'    => date('Y-m-d'),
+            'cuotaId'       => $request->cuotaId
+            ]);
+        return $this->successResponse('Cuota fue abonada correctamente', 201);
     }
 
     /**
@@ -50,16 +50,6 @@ class PagoController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Pago  $pago
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pago $pago)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
