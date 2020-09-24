@@ -32,6 +32,6 @@ class CursoSeeder extends Seeder
             'cursoInscripcion'=> 1350,
         ]);
 
-        factory(Curso::class)->times(10)->create();
+        // factory(Curso::class)->times(10)->create();
     }
 }
