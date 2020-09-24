@@ -26,7 +26,7 @@ class StoreMatriculaRequest extends FormRequest
         return [
             'estudianteId'      => 'required',
             'comisionId'        => 'required',
-            'montoPago'         => 'required',
+            // 'montoPago'         => 'required',
         ];
     }
 
@@ -34,7 +34,7 @@ class StoreMatriculaRequest extends FormRequest
         return [
             'estudianteId.required' => 'El Estudiante es requerido',
             'comisionId.required' => 'La Comision es requerido',
-            'montoPago.required' => 'El monto de la Inscripcion es requerido',
+            // 'montoPago.required' => 'El monto de la Inscripcion es requerido',
         ];
     }
 }
