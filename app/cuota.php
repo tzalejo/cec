@@ -85,9 +85,9 @@ class Cuota extends Model
     {
         /**
          *  Verifico si la cuota es un inscripcion
-         *  return @return boolean           
+         *  return @return boolean
          */
         $matricula = Matricula::find($this->matriculaId);
         return $matricula->cuotas->first()->cuotaId === $this->cuotaId;
-    } 
+    }
 }
