@@ -23,21 +23,20 @@ class UpdateEstudianteRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(Estudiante $estudiante)
+    public function rules()
     {
         return [
-            
             'estudianteNombre'      => 'required|min:3|max:50',
             'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes')->ignore($estudiante->estudianteDNI, 'estudianteDNI')],
+            'estudianteDNI'         => ['required','numeric', 'unique:estudiantes,estudianteDNI,'.$this->route('estudiante').',estudianteId'],
             'estudianteDomicilio'   => 'required|max:100',
             # estoy indicando que el valor sea unico en la tabla estudiantes del campo estudianteEmail PERO ESCLUYENDO EL estudianteId!!, el cual estoy modificando..
-            # 'estudianteEmail'       => ['email','max:100',Rule::unique('estudiantes','estudianteEmail' )->ignore($estudiante->estudianteId, 'estudianteId') ],
-            'estudianteEmail'       => '',
+            'estudianteEmail'       => ['email', 'unique:estudiantes,estudianteEmail,'.$this->route('estudiante').',estudianteId' ],
             'estudianteTelefono'    => 'max:50',
             'estudianteLocalidad'   => 'required|max:100',
             'estudianteNacimiento'  => 'required|date',
-            'estudianteFoto'        => ''
+            # sometimes: validación en un campo solo si ese campo está presente en la matriz de entrada
+            'estudianteFoto'        => 'sometimes|required'
         ];
     }
 
@@ -56,9 +55,8 @@ class UpdateEstudianteRequest extends FormRequest
             'estudianteDomicilio.required'  => 'El Domicilio del estudiante es requerido',
             'estudianteLocalidad.required'  => 'El Localidad del estudiante es requerido',
             'estudianteNacimiento.required' => 'El Nacimiento del estudiante es requerido',
-            
-            # 'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
-            # 'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, veri
+            'estudianteEmail.email'  => 'El Email es incorrecto, verifique el formato example@mail.com',
+            'estudianteEmail.unique' => 'El Email del estudiante ya esta registrado, verifique'
         ];
     }
 }
