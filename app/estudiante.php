@@ -76,20 +76,22 @@ class Estudiante extends Model
     # uso de mutadores
     public function setEstudianteNombreAttribute($valor)
     {
-        $this->attributes['estudianteNombre'] = strtolower($valor);
+        $this->attributes['estudianteNombre'] =  ucwords(strtolower($valor));
     }
     public function setEstudianteApellidoAttribute($valor)
     {
-        $this->attributes['estudianteApellido'] = strtolower($valor);
+        $this->attributes['estudianteApellido'] =  ucwords(strtolower($valor));
     }
-    # estamos devolviendo el valor con cada caracter inical con mayuscual,
-    # pero esta transformacion no se encuentra en la bd.
-    public function getEstudianteNombreAttribute($valor)
+    public function setEstudianteDomicilioAttribute($valor)
     {
-        return ucwords($valor);
+        $this->attributes['estudianteDomicilio'] =  ucwords(strtolower($valor));
     }
-    public function getEstudianteApellidoAttribute($valor)
+    public function setEstudianteEmailAttribute($valor)
     {
-        return ucwords($valor);
+        $this->attributes['estudianteEmail'] =  strtolower($valor);
+    }
+    public function setEstudianteLocalidadAttribute($valor)
+    {
+        $this->attributes['estudianteLocalidad'] =  strtolower($valor);
     }
 }
