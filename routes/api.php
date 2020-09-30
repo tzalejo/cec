@@ -68,8 +68,8 @@ Route::group(['prefix' => 'comision'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         # devuelvo todas las comisiones ACTIVAS(que no se cerraron por la FFinal) o INACTIVAS (con FI desde hasta)
-        Route::get('/{fechaDesde?}/{fechaHasta?}/', 'Comision\ComisionController@index');
         Route::get('/{comisionId}', 'Comision\ComisionController@show');
+        Route::get('/{fechaDesde?}/{fechaHasta?}/', 'Comision\ComisionController@index');
         Route::post('', 'Comision\ComisionController@store');
         Route::put('/{comision}', 'Comision\ComisionController@update');
         Route::delete('', 'Comision\ComisionController@destroy');
