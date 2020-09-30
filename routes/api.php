@@ -46,7 +46,7 @@ Route::group(['prefix' => 'matricula'], function () {
         # consulta todas las matriculas (por apellido o dni)
         # Route::get('mostrar','Matricula\MatriculaController@index');
         # modifico matricula
-        Route::put('modificar/{matricula}','Matricula\MatriculaController@update');
+        Route::put('{matricula}','Matricula\MatriculaController@update');
     });
 });
 
