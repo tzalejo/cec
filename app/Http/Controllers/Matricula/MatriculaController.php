@@ -3,20 +3,23 @@
 namespace App\Http\Controllers\Matricula;
 
 use App\Matricula;
-use App\Cuota;
-use App\Estudiante;
-use App\Comision;
-use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UpdateMatriculaRequest;
 use App\Http\Requests\StoreMatriculaRequest;
+use App\Repositories\Matricula\MatriculaRepository;
 
 class MatriculaController extends ApiController
 {
     use ApiResponser;
+
+    private $matriculaRepository;
+
+    public function __construct(MatriculaRepository $matriculaRepo){
+        $this->matriculaRepository = $matriculaRepo;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -36,28 +39,13 @@ class MatriculaController extends ApiController
      */
     public function store(StoreMatriculaRequest $request)
     {
-        $matricula =  Matricula::create([
-            'matriculaSituacion'=>'RE',
+        $matricula = $this->matriculaRepository->create([
+            'matriculaSituacion'=> Matricula::MATRICULASITUACION_RE ,
             'estudianteId'      =>$request->estudianteId,
-            'comisionId'        =>$request->comisionId,
+            'comisionId'        =>$request->comisionId
         ]);
+        return $this->showOne($matricula, 201);
 
-        return $this->showOne($matricula,201);
-
-
-
-        // for ($i=1; $i <= $matricula->comision->curso->cursoNroCuota ; $i++) {
-        //     # code...
-        //     Cuota::create([
-        //         'cuotaConcepto'     => 'Cuota '.$i.' - '.$matricula->comision->curso->cursoNombre,
-        //         'cuotaMonto'        => $matricula->comision->curso->cursoCostoMes,
-        //         'cuotaFVencimiento' => $matricula->comision->comisionFI,
-        //         'cuotaBonificacion' => 0,
-        //         'matriculaId'       => $matricula->matriculaId,
-        //         ]);
-        //     $nuevafecha = strtotime('+'.$i.' month', strtotime($matricula->comision->comisionFI)) ;
-        //     $nuevafecha = date('Y-m-j', $nuevafecha);
-        // }
     }
 
     /**
@@ -69,33 +57,7 @@ class MatriculaController extends ApiController
     public function show(Matricula $matricula)
     {
         # validar que exista la matricula..
-        $this->showOne($matricula, 200);
-
-        // return $request->validate([
-        //     'matriculaId'      => 'required|numeric']);
-
-        // if ($datosValidado->fails()) {
-        //     $errors = $datosValidado->errors();
-        //     // return $this->errorResponse('Error en la validacion del formulario, verifique',400);
-        //     # retorno error 400..
-        //     return $this->errorResponse($errors,400);
-        // }
-        // $matriculaId =$request->get('matriculaId');
-        // $matricula = Matricula::where('matriculaId',$matriculaId)->get();
-        // return $this->showOne($matriculaId);
-
-
-        // $now = date('Y-m-d');
-        // $estudiante = $matricula->estudiante;
-        // $comisionesAbiertas = Comision::where('comisionFF', '>', $now)->get();
-        // $miComision = $matricula->comision; # envio la comision de la matricula
-
-        // return view('alumnos.editar')
-        // ->with('estudiante',$estudiante)
-        // # envio la matricula para luego modificar la  comsion de esa matricula
-        // ->with('matricula',$matricula->matriculaId)
-        // ->with('comisionesAbiertas',$comisionesAbiertas)
-        // ->with('miComision',$miComision);
+        // $this->showOne($matricula, 200);
     }
 
     /**
@@ -105,15 +67,11 @@ class MatriculaController extends ApiController
      * @param  \App\Matricula  $matricula
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMatriculaRequest $request, Matricula $matricula)
+    public function update(UpdateMatriculaRequest $request, $matriculaId)
     {
+        $matricula = $this->matriculaRepository->find($matriculaId);
         # actualizo
-        $matricula->update([
-            'matriculaSituacion' => $request->matriculaSituacion,
-            'estudianteId'       => $request->estudianteId,
-            'comisionId'         => $request->comisionId ,
-        ]);
-
+        $this->matriculaRepository->update($matricula, $request->all());
         return $this->successResponse('Matricula fue modificada correctamente', 200);
     }
 
@@ -128,10 +86,7 @@ class MatriculaController extends ApiController
         # dd($matricula->estudiante);
         # Se elimina logicamente ( no regular: NR )..
         # Dejaremos los datos del estudiante..
-        $matricula->matriculaSituacion = 'NR';
-        $matricula->update();
-
-        # dd(Auth::user()->userNombre);
-        return redirect()->route('home');
+        // $matricula->matriculaSituacion = 'NR';
+        // $matricula->update();
     }
 }
