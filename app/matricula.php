@@ -16,9 +16,9 @@ class Matricula extends Model
     *
     */
     public $timestamps = false;
-    
+    const MATRICULASITUACION_RE = 'RE';
     protected $primaryKey = 'matriculaId';
-    
+
     protected $fillable=[
         'matriculaSituacion',
         'estudianteId',
@@ -63,7 +63,7 @@ class Matricula extends Model
      */
     public function esMatriculaRegular()
     {
-        return $this->matriculaSituacion == 'RE';
+        return $this->matriculaSituacion == Matricula::MATRICULASITUACION_RE;
     }
 
     /**
@@ -78,7 +78,7 @@ class Matricula extends Model
         // obtengo un arreglo de todas las cuotas con matriculaId
         // $cuotas = Cuota::whereMatriculaId($this->matriculaId)->get();
         $cuotas = Cuota::where('matriculaId', $this->matriculaId)->get();
-        
+
         // recorro las cuotas y verifico si estan pagadas o no..
         for ($i=1; $i <= $cantidadCuotas ; $i++) {
             # code...
