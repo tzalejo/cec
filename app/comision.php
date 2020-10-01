@@ -108,4 +108,11 @@ class Comision extends Model
     {
         return $query->where('comisionFI', '<=', $fechaHasta);
     }
+        /**
+     * query scope por OrderBy
+     */
+    public function scopeOrderByCampo($query, $campo)
+    {
+        return $query->orderBy($campo);
+    }
 }
