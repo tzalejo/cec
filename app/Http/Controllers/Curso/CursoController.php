@@ -101,4 +101,17 @@ class CursoController extends ApiController
         }
         return $this->successResponse('Curso seleccionado no puede ser eliminado.',409);
     }
+
+    /**
+     * Elimino la relacion curso - materia
+     * Lo hacemos con detach, con esto hace es despegar(traduccion de detach) la relacion con curso
+     *
+     * @param  Number $materia
+     * @param  Number $curso
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyCursoMateria( $curso, $materia)
+    {
+        $this->cursoRepository->find($curso)->materias()->detach($materia);
+    }
 }
