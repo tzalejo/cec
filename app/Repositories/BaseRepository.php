@@ -8,7 +8,7 @@ abstract class BaseRepository {
     abstract public function getModel();
 
     public function find($id){
-        return $this->getModel()->find($id);
+        return $this->getModel()->findOrFail($id);
     }
 
     public function getAll(){
