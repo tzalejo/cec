@@ -47,4 +47,13 @@ class Curso extends Model
          */
         return $this->belongsToMany(Materia::class, 'curso_materia', 'cursoId', 'materiaId');
     }
+
+    /**
+     * Query scope para Ordernar por Campo
+     */
+    public function scopeOrderByCampo($query, $campo)
+    {
+        return $query->orderBy($campo);
+    }
+
 }
