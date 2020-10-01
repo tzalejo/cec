@@ -86,6 +86,7 @@ Route::group(['prefix' => 'curso'], function () {
         Route::put('/{curso}', 'Curso\CursoController@update');
         Route::put('/{curso}/{materia}', 'Curso\CursoController@updateCursoMateria');
         Route::delete('/{curso}', 'Curso\CursoController@destroy');
+        Route::delete('/{curso}/{materia}', 'Curso\CursoController@destroyCursoMateria');
         Route::post('','Curso\CursoController@store');
     });
 });
@@ -93,10 +94,11 @@ Route::group(['prefix' => 'curso'], function () {
 Route::group(['prefix' => 'materia'], function () {
     # Ruta que solo acceda el usuario director..
     Route::group(['middleware' => ['auth:api','director']], function () {
-        Route::get('mostrar/{curso?}', 'Materia\MateriaController@index');
-        Route::get('/{curso}', 'Materia\MateriaController@show');
+        Route::get('', 'Materia\MateriaController@index');
+        Route::get('/{curso}', 'Materia\MateriaController@indexMateriasDiff');
+        // Route::get('/{curso}', 'Materia\MateriaController@show');
         Route::post('', 'Materia\MateriaController@store');
-        Route::delete('/{materia}/{curso?}', 'Materia\MateriaController@destroy');
+        Route::delete('/{materia}', 'Materia\MateriaController@destroy');
         Route::put('/{materia}', 'Materia\MateriaController@update');
     });
 });
