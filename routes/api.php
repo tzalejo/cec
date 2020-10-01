@@ -84,6 +84,7 @@ Route::group(['prefix' => 'curso'], function () {
         Route::get('/{curso}', 'Curso\CursoController@show');
         Route::get('', 'Curso\CursoController@index');
         Route::put('/{curso}', 'Curso\CursoController@update');
+        Route::put('/{curso}/{materia}', 'Curso\CursoController@updateCursoMateria');
         Route::delete('/{curso}', 'Curso\CursoController@destroy');
         Route::post('','Curso\CursoController@store');
     });

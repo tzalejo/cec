@@ -24,14 +24,13 @@ class StoreCursoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
             'cursoNombre'       => 'required|min:2|max:100',
             'cursoNroCuota'     => 'required|numeric|max:48',
             'cursoCostoMes'     => 'required|numeric',
             'cursoInscripcion'  => 'required|numeric',
         ];
     }
-    
+
     /**
      * Get the validation rules that apply to the request.
      *
