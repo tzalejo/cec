@@ -9,6 +9,8 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\StoreMateriaRequest;
 use App\Http\Requests\UpdateMateriaRequest;
 use App\Traits\ApiResponser;
+use App\Repositories\Materia\MateriaRepository;
+
 class MateriaController extends ApiController
 {
     use ApiResponser;
@@ -17,30 +19,39 @@ class MateriaController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($curso = null)
+
+    private $materiaRepository;
+
+    public function __construct(MateriaRepository $materiaRepository)
     {
-        $todoCursos = Materia::All();
-        # si viene curso, es porque necesito retornar los materias que no esten el curso
-        if ($curso) {
-            # diff retorna la diferencia
-            $todoCursos =  $todoCursos->diff( Curso::findOrFail($curso)->materias );
-        }
-        return $this->showAll($todoCursos, 200);
+        $this->materiaRepository = $materiaRepository;
+    }
+
+    public function index()
+    {
+        return $this->showAll($this->materiaRepository->getAll(), 200);
+    }
+
+    /**
+     * Devuelve todas las materias que no estan en un curso
+     * @param Number $curso
+     */
+    public function indexMateriasDiff($curso)
+    {
+        $materia = $this->materiaRepository->getAll()->diff(Curso::findOrFail($curso)->materias);
+        return $this->showAll($materia, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\StoreMateriaRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreMateriaRequest $request)
     {
         # agrego la materia nueva.
-        $materiaNueva = Materia::create([
-            'materiaNombre'       => strtoupper($request->materiaNombre),
-            'materiaSeminario'    => $request->materiaSeminario,
-        ]);
+        $this->materiaRepository->create($request->all());
         return $this->successResponse('Materia fue creada correctamente', 201);
     }
 
@@ -50,49 +61,38 @@ class MateriaController extends ApiController
      * @param  \App\Curso
      * @return \Illuminate\Http\Response
      */
-    public function show(Curso $curso)
+    public function show()
     {
-        # retron a todas las materias del curso->cursoId
-        return $this->showAll($curso->materias, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Materia  $materia
+     * @param  App\Http\Requests\UpdateMateriaRequest  $request
+     * @param  Number  $materia
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMateriaRequest $request, Materia $materia)
+    public function update(UpdateMateriaRequest $request, $materia)
     {
-        $materia->update([
-            'materiaNombre' => $request['materiaNombre'],
-            'materiaSeminario' => $request['materiaSeminario']
-        ]);
-
-        return $this->showOne($materia);
+        $materiaBuscado = $this->materiaRepository->find($materia);
+        $this->materiaRepository->update($materiaBuscado, $request->all());
+        return $this->successResponse('Materia fue actualizado correctamente', 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Materia  $materia
+     * @param  Number $materia
      * @return \Illuminate\Http\Response
      */
-    public function destroy( Materia $materia, $curso=null )
+    public function destroy( $materia )
     {
-        if ($curso === null) {
-            # elimino materia
-            # verifico que no este asignada en un curso
-            if ($materia->cursos->count() === 0){
-                $materia->delete();
-                return $this->successResponse('Materia fue eliminada correctamente', 200);
-            }
-            return $this->errorResponse('La Materia no puede ser eliminada', 409);
+        $materiaBuscado = $this->materiaRepository->find($materia);
+        if ($materiaBuscado->cursos->count() === 0){
+            $this->materiaRepository->delete($materiaBuscado);
+            return $this->successResponse('Materia fue eliminada correctamente', 200);
         }
-        # elimino la relacion curso - materia
-        # lo hacemos con detach, con esto hace es despegar(traduccion de detach) la relacion con curso
-        $curso = Curso::find($curso);
-        $curso->materias()->detach($materia->materiaId);
+        return $this->errorResponse('La Materia no puede ser eliminada', 409);
+
     }
 }
