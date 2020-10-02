@@ -28,11 +28,11 @@ class StoreComisionRequest extends FormRequest
             'comisionNombre'    => 'required|min:3|max:150',
             'comisionHorario'   => 'required|min:3|max:150',
             'comisionFI'        => 'required|date',
-            'comisionFF'        => '', # no la necesito validar porque se calcula
+            'comisionFF'        => 'required|date',
             'cursoId'           => 'required|numeric',
         ];
     }
-    
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -55,5 +55,5 @@ class StoreComisionRequest extends FormRequest
         ];
     }
 
-    
+
 }

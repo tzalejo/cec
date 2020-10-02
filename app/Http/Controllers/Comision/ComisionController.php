@@ -8,6 +8,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\DestroyComisionRequest;
 use App\Http\Requests\StoreComisionRequest;
 use App\Http\Requests\UpdateComisionRequest;
+use App\Repositories\Comision\ComisionRepository;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\Log;
 # para usar validator
@@ -17,54 +18,46 @@ use Illuminate\Validation\Rule;
 class ComisionController extends ApiController
 {
     use ApiResponser;
+    private $comisionRepository;
+
+    public function __construct(ComisionRepository $comisionRepository){
+        $this->comisionRepository  = $comisionRepository;
+    }
+
     /**
-     * Devuelvo todas las comisiones     *
+     * Devuelvo todas las comisiones
      *  - no activas con fecha de inicio desde hasta
      *  - sin filtro
      *
      * @return \Illuminate\Http\Response
      */
-    public function index( $fechaDesde = null, $fechaHasta = null)
+    public function index()
     {
-        $query = Comision::query()
-            ->with('curso') # para optimizar la consulta
-            ->with('matriculas') # para obtener los alumnos d esta comision
-            ->withCount('matriculas') # envio cantidad de matricula por comision..
-            ->orderBy('cursoId', 'ASC');
+        return $this->comisionRepository
+                    ->getComisionCursoMatricula()
+                    ->ComisionesActivas()
+                    ->get();;
+    }
 
-        if ($fechaDesde && $fechaHasta) {
-            $query->ComisionesInactivas()
-                ->ComisionesFechaDesde($fechaDesde)
-                ->ComisionesFechaHasta($fechaHasta);
-        }
-        
-        if (!$fechaDesde && !$fechaHasta) {
-            $query->ComisionesActivas();
-        }
-
-        # devuelvo las comisiones
-        return $this->showAll($query->get()); # usamos metodos de Traits para devolver
+    public function indexComisionesInactivas( $fechaDesde, $fechaHasta){
+        return $this->comisionRepository
+                    ->getComisionCursoMatricula()
+                    ->ComisionesInactivas()
+                    ->ComisionesFechaDesde($fechaDesde)
+                    ->ComisionesFechaHasta($fechaHasta)
+                    ->get();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\StoreComisionRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreComisionRequest $request)
     {
-        # creo la comision
-        Comision::create([
-            'comisionNombre'    => strtoupper($request->comisionNombre),
-            'comisionHorario'   => strtoupper($request->comisionHorario),
-            'comisionFI'        => $request->comisionFI,
-            'comisionFF'        => $request->comisionFF,
-            'cursoId'           => $request->cursoId,
-        ]);
-
-         # retorno ok
-         return $this->successResponse('Comision fue creada correctamente', 201);
+        $this->comisionRepository->create($request->all());
+        return $this->successResponse('Comision fue creada correctamente', 201);
     }
 
     /**
@@ -75,49 +68,38 @@ class ComisionController extends ApiController
      */
     public function show($comisionId)
     {
-        $resultado = Comision::ComisionesActivas()
-                    ->with('curso')
-                    ->with('matriculas.estudiante') # para obtener los alumnos d esta comision
-                    ->where('comisionId', $comisionId)
-                    ->get(); # uso un scope
+        $resultado = $this->comisionRepository
+                        ->getComisionCursoMatricula()
+                        ->ComisionesActivas()
+                        ->find($comisionId);
         return $this->successResponse($resultado, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comision  $comision
+     * @param  App\Http\Requests\UpdateComisionRequest  $request
+     * @param  Number  $comision
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateComisionRequest $request, Comision $comision)
+    public function update(UpdateComisionRequest $request, $comision)
     {
-        # actualizo
-        $comision->update([
-            'comisionNombre'    => strtoupper($request->comisionNombre),
-            'comisionHorario'   => strtoupper($request->comisionHorario),
-            'comisionFI'        => $request->comisionFI,
-            'comisionFF'        => $request->comisionFF,
-            'cursoId'           => $request->cursoId,
-        ]);
-
-         # retorno ok
-         return $this->successResponse('Comision fue modificada correctamente', 200);
+        $comisionBuscada = $this->comisionRepository->find($comision);
+        $this->comisionRepository->update($comisionBuscada, $request->all());
+        return $this->successResponse('Comision fue modificada correctamente', 200);
 
     }
 
     /**
-     * Remove the specified resource from storage.
+     * DestroyComisionRequest: Viene de request porque validamos si existe la comision y si tiene matriculas
      *
-     * @param  \App\Comision  $comision
+     * @param  App\Http\Requests\DestroyComisionRequest  $comision
      * @return \Illuminate\Http\Response
      */
     public function destroy(DestroyComisionRequest $comision)
     {
-        # validamos si existe la comision y
-        # si tiene matriculas
-        $comisionEliminar = Comision::find($comision->comisionId);
-        $comisionEliminar->delete();
+        $comisionEliminar = $this->comisionRepository->find($comision->comisionId);
+        $this->comisionRepository->delete($comisionEliminar);
         return $this->successResponse('Comision fue eliminada correctamente',200);
     }
 }
