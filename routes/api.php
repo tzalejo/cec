@@ -32,8 +32,10 @@ Route::group(['prefix' => 'estudiante'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
         Route::get('', 'Estudiante\EstudianteController@index');
         // Route::get('', 'Estudiante\EstudianteController@show');
-        Route::post('crear', 'Estudiante\EstudianteController@store'); # Creo un estudiante
-        Route::put('modificar/{estudiante}', 'Estudiante\EstudianteController@update'); # Modifico un estudiante
+        Route::post('', 'Estudiante\EstudianteController@store');
+        # Actualizo foto, lo dejo como post porque me genera error put
+        Route::post('/{estudiante}', 'Estudiante\EstudianteController@updateEstudianteFoto');
+        Route::put('/{estudiante}', 'Estudiante\EstudianteController@update'); # Modifico un estudiante
     });
 });
 
