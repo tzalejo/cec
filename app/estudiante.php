@@ -92,6 +92,6 @@ class Estudiante extends Model
     }
     public function setEstudianteLocalidadAttribute($valor)
     {
-        $this->attributes['estudianteLocalidad'] =  strtolower($valor);
+        $this->attributes['estudianteLocalidad'] =  ucwords(strtolower($valor));
     }
 }
