@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\StoreEstudianteRequest;
 use App\Http\Requests\UpdateEstudianteRequest;
+use App\Http\Requests\UpdateEstudianteFotoRequest;
 use App\Traits\ApiResponser;
 use App\Repositories\Estudiante\EstudianteRepository;
 
@@ -15,7 +16,11 @@ class EstudianteController extends ApiController
     use ApiResponser;
 
     private $estudianteRepo;
-
+    /**
+     *  Constructor
+     *
+     * @param  App\Repositories\Estudiante\EstudianteRepository  $estudianteRepo
+     */
     public function __construct(EstudianteRepository $estudianteRepo){
         $this->estudianteRepo = $estudianteRepo;
     }
@@ -28,14 +33,13 @@ class EstudianteController extends ApiController
     {
         $estudiante =  $this->estudianteRepo
                             ->getEstudianteDniApellido($request->get('dni'), $request->get('apellido'));
-
         return $this->successResponse($estudiante, 200);
     }
 
     /**
      *  guardo los datos del formulario de inscripcion(del estudiante)..Estudiante $estudiante,
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\StoreEstudianteRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreEstudianteRequest $request)
@@ -55,7 +59,7 @@ class EstudianteController extends ApiController
     /**
      * Actualizo los datos del estudiante y tambien el comision de la matricula enviada..
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\UpdateEstudianteRequest  $request
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
@@ -64,6 +68,20 @@ class EstudianteController extends ApiController
         $estudiante = $this->estudianteRepo->find($estudianteId);
         $estudianteNuevo = $this->estudianteRepo->update($estudiante, $request->all());
         return $this->showOne($estudianteNuevo);
+    }
+    /**
+     * Actualizo los foto del estudiante
+     *
+     * @param  App\Http\Requests\UpdateEstudianteFotoRequest  $request
+     * @param  Number $estudianteId
+     * @return \Illuminate\Http\Response
+     */
+    public function updateEstudianteFoto(UpdateEstudianteFotoRequest $request, Estudiante $estudiante)
+    {
+        $path = $request->file->store('public/imagenes');
+        $estudiante->estudianteFoto = $path;
+        $estudiante->save();
+
     }
 
     /**
