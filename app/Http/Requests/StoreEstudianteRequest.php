@@ -32,7 +32,7 @@ class StoreEstudianteRequest extends FormRequest
             'estudianteTelefono'    => 'max:50',
             'estudianteLocalidad'   => 'required|max:100',
             'estudianteNacimiento'  => 'required|date',
-            'estudianteFoto'        => 'sometimes|required'
+            'estudianteFoto'        => '',
         ];
     }
 
