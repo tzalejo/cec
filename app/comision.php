@@ -115,4 +115,18 @@ class Comision extends Model
     {
         return $query->orderBy($campo);
     }
+
+    /**
+     * Uso de Mutadores
+     *
+     */
+    public function setComisionNombreAttribute($valor)
+    {
+        $this->attributes['comisionNombre'] =  ucwords(strtolower($valor));
+    }
+
+    public function setComisionHorarioAttribute($valor)
+    {
+        $this->attributes['comisionHorario'] =  ucwords(strtolower($valor));
+    }
 }
