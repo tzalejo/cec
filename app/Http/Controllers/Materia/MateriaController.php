@@ -61,8 +61,9 @@ class MateriaController extends ApiController
      * @param  \App\Curso
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Curso $curso)
     {
+        return $this->materiaRepository->getMateriaPorCurso($curso);
     }
 
     /**
