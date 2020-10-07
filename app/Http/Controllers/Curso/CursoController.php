@@ -42,7 +42,7 @@ class CursoController extends ApiController
      * @param  App\Http\Requests\StoreCursoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCursoRequest $request)
     {
         $this->cursoRepository->create($request->all());
         return $this->successResponse('Curso fue creado correctamente', 201);
