@@ -56,4 +56,11 @@ class Curso extends Model
         return $query->orderBy($campo);
     }
 
+    /**
+     * Uso de Mutadores
+     */
+    public function setCursoNombreAttribute($valor)
+    {
+        $this->attributes['cursoNombre'] =  ucwords(strtolower($valor));
+    }
 }
