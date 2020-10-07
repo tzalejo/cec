@@ -99,8 +99,8 @@ Route::group(['prefix' => 'materia'], function () {
     # Ruta que solo acceda el usuario director..
     Route::group(['middleware' => ['auth:api','director']], function () {
         Route::get('', 'Materia\MateriaController@index');
-        Route::get('/{curso}', 'Materia\MateriaController@indexMateriasDiff');
-        // Route::get('/{curso}', 'Materia\MateriaController@show');
+        Route::get('diff/{curso}', 'Materia\MateriaController@indexMateriasDiff');
+        Route::get('curso/{curso}', 'Materia\MateriaController@show'); // todas las materias del curso
         Route::post('', 'Materia\MateriaController@store');
         Route::delete('/{materia}', 'Materia\MateriaController@destroy');
         Route::put('/{materia}', 'Materia\MateriaController@update');
