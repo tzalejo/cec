@@ -14,4 +14,7 @@ class MateriaRepository extends BaseRepository {
         return new Materia();
     }
 
+    public function getMateriaPorCurso(Curso $curso){
+        return $curso->materias;
+    }
 }
