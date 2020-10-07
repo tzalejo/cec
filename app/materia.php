@@ -35,4 +35,13 @@ class Materia extends Model
          */
         return $this->belongsToMany(Curso::class, 'curso_materia', 'materiaId', 'cursoId');
     }
+
+    /**
+     * Uso de Mutadores
+     *
+     */
+    public function setMateriaNombreAttribute($valor)
+    {
+        $this->attributes['materiaNombre'] =  ucwords(strtolower($valor));
+    }
 }
