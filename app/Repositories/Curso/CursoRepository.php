@@ -26,8 +26,8 @@ class CursoRepository extends BaseRepository {
     public function cursoTieneMateriaComision($curso)
     {
         return (
-            $this->getModel()->find($curso)->materias->count() === 0 &&
-            $this->getModel()->find($curso)->comisiones->count() === 0
+            $curso->materias->count() === 0 &&
+            $curso->comisiones->count() === 0
         );
     }
 }

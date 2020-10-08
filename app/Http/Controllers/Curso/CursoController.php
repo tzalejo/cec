@@ -92,8 +92,9 @@ class CursoController extends ApiController
      * @param  Number $curso
      * @return \Illuminate\Http\Response
      */
-    public function destroy($curso)
+    public function destroy($cursoId)
     {
+        $curso = $this->cursoRepository->find($cursoId);
         # verifico q no tenga relacion con materia y comision
         if ($this->cursoRepository->cursoTieneMateriaComision($curso)){
             $this->cursoRepository->delete($curso);
