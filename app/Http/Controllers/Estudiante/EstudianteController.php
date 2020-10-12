@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Estudiante;
 use App\Estudiante;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\IndexEstudianteFilterRequest;
 use App\Http\Requests\StoreEstudianteRequest;
 use App\Http\Requests\UpdateEstudianteRequest;
 use App\Http\Requests\UpdateEstudianteFotoRequest;
 use App\Traits\ApiResponser;
 use App\Repositories\Estudiante\EstudianteRepository;
-
+use Symfony\Component\HttpFoundation\Response;
 class EstudianteController extends ApiController
 {
     use ApiResponser;
@@ -26,14 +27,14 @@ class EstudianteController extends ApiController
     }
     /**
      * Display a listing of the resource.
-     *
+     * @param App\Http\Requests\IndexEstudianteFilterRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(IndexEstudianteFilterRequest $request)
     {
         $estudiante =  $this->estudianteRepo
-                            ->getEstudianteDniApellido($request->get('dni'), $request->get('apellido'));
-        return $this->successResponse($estudiante, 200);
+                            ->getEstudianteDniApellido($request->getDni(), $request->getApellido());
+        return $this->successResponse($estudiante, Response::HTTP_OK);
     }
 
     /**
@@ -73,7 +74,7 @@ class EstudianteController extends ApiController
      * Actualizo los foto del estudiante
      *
      * @param  App\Http\Requests\UpdateEstudianteFotoRequest  $request
-     * @param  Number $estudianteId
+     * @param  Estudiante $estudiante
      * @return \Illuminate\Http\Response
      */
     public function updateEstudianteFoto(UpdateEstudianteFotoRequest $request, Estudiante $estudiante)
@@ -81,7 +82,7 @@ class EstudianteController extends ApiController
         $path = $request->file->store('public/imagenes');
         $estudiante->estudianteFoto = $path;
         $estudiante->save();
-
+        return $this->successResponse($estudiante, Response::HTTP_OK);
     }
 
     /**
