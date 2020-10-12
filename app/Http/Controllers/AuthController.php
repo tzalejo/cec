@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
@@ -25,10 +26,7 @@ class AuthController extends Controller
             'roleId'        => 2,
         ]);
 
-        return $this->successResponse(['message' => 'Usuario '.$user->userNombre.' creado satisfactoriamente'], 201);
-        // return response()->json([
-        //     'message' => 'Usuario '.$user->userNombre.' creado satisfactoriamente'
-        // ],201);
+        return $this->successResponse(['message' => 'Usuario '.$user->userNombre.' creado satisfactoriamente'], Response::HTTP_CREATED);
     }
     public function login(LoginUserRequest $request)
     {
@@ -47,11 +45,11 @@ class AuthController extends Controller
         # El metrod Auth devuelve true si la autenticacion fue exitosa
         if (!Auth::attempt($credenciales)) {
             # code...
-            return $this->errorResponse('No autorizado, verifique sus datos por favor.', 401);
+            return $this->errorResponse('No autorizado, verifique sus datos por favor.', Response::HTTP_UNAUTHORIZED);
             # return response()->json(['message' => 'No autorizado'],401);
         }
         # return response()->json($credenciales);
-        
+
         # $user = User::find(1);
         # return response()->json($user->createToken('Personal Access Token'));
         $user = $request->user();
@@ -71,17 +69,17 @@ class AuthController extends Controller
             'token'         => $tokenResult->accessToken,
             'token_type'    => 'Bearer',
             'expires_at'    => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
-        ], 200);
+        ], Response::HTTP_OK);
     }
 
 
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
-        return $this->successResponse(['message'=>'Salió exitosamente'], 200);
+        return $this->successResponse(['message'=>'Salió exitosamente'], Response::HTTP_OK);
     }
 
-      
+
     public function delete(Request $request)
     {
         return 'bien';
