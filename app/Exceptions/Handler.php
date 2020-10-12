@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Throwable;
 use App\Traits\ApiResponser;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -19,6 +19,7 @@ use RuntimeException;
 class Handler extends ExceptionHandler
 {
     use ApiResponser;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -44,7 +45,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
@@ -56,7 +57,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         # cuando genera algun otro error llamo al metodo ApiException
         if ($request->expectsJson()) {
@@ -65,7 +66,7 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
     }
 
-    protected function ApiException($request, Exception $exception)
+    protected function ApiException($request, Throwable $exception)
     {
 
         // if ($exception instanceof CustomException) {
