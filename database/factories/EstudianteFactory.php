@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Estudiante::class, function (Faker $faker) {
     return [
-        'estudianteDNI'         => $faker->randomNumber(8, false),
+        'estudianteDNI'         => strval($faker->randomNumber(8, false)),
         'estudianteApellido'    => $faker->lastName,
         'estudianteNombre'      => $faker->firstNameMale,
         'estudianteDomicilio'   => $faker->secondaryAddress,

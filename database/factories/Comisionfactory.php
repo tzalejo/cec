@@ -12,7 +12,7 @@ $factory->define(Comision::class, function (Faker $faker) {
     $date = Carbon::now();
     $fechaInicio = $date->format('Y-m-d');
     $fechafin = $date->addMonth($curso->cursoNroCuota);
-    $digito = $faker->randomDigitNot(40);
+
     return [
         'comisionNombre' => $faker->numerify('Comision ##'),
         'comisionHorario' => "$faker->dayOfWeek" ." $faker->time",
