@@ -26,7 +26,7 @@ class StoreEstudianteRequest extends FormRequest
         return [
             'estudianteNombre'      => 'required|min:3|max:50',
             'estudianteApellido'    => 'required|min:3|max:50',
-            'estudianteDNI'         => ['required','numeric',Rule::unique('estudiantes', 'estudianteDNI')], // 'required|numeric', //required|unique:estudiantes,estudianteDNI //
+            'estudianteDNI'         => ['required',Rule::unique('estudiantes', 'estudianteDNI')], // 'required|numeric', //required|unique:estudiantes,estudianteDNI //
             'estudianteDomicilio'   => 'required|max:100',
             'estudianteEmail'       => ['required','email','max:100',Rule::unique('estudiantes', 'estudianteEmail')],    // 'estudianteEmail'       => 'required|email',
             'estudianteTelefono'    => 'max:50',
