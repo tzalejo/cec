@@ -25,7 +25,7 @@ class UserObserver
     public function created(User $user)
     {
         // disparo un Job de mail de bienvenida
-        dispatch(new enviarMailBienvenidaJob($user, $this->admin));
+        // dispatch(new enviarMailBienvenidaJob($user, $this->admin));
     }
 
     /**
