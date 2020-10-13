@@ -36,7 +36,7 @@ class UpdateEstudianteRequest extends FormRequest
             'estudianteLocalidad'   => 'required|max:100',
             'estudianteNacimiento'  => 'required|date',
             # sometimes: validación en un campo solo si ese campo está presente en la matriz de entrada
-            'estudianteFoto'        => 'sometimes|required'
+            'estudianteFoto'        => ''
         ];
     }
 
