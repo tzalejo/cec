@@ -1,12 +1,16 @@
 <?php
 namespace Tests\Feature;
 
+use App\Role;
 use App\User;
 use App\Estudiante;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 class EstudianteModulTest extends TestCase
 {
@@ -14,6 +18,7 @@ class EstudianteModulTest extends TestCase
 
     public function testLogin()
     {
+        factory(Role::class)->create();
         Passport::actingAs(
             factory(User::class)->create(),
             ['estudiante']
@@ -63,18 +68,18 @@ class EstudianteModulTest extends TestCase
 
     }
 
-    public function test_Error_Al_filtar_por_dni_enviando_un_string()
-    {
-        // $this->withoutExceptionHandling();
-        $this->withoutMiddleware();
-        factory(Estudiante::class, 3)->create();
-        $this->json('GET', '/api/estudiante',[
-            'dni' => '1dds',
-            'apellido' => 'Valenzuela'
-        ])
-        ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    // public function test_Error_Al_filtar_por_dni_enviando_un_string()
+    // {
+    //     // $this->withoutExceptionHandling();
+    //     $this->withoutMiddleware();
+    //     factory(Estudiante::class, 3)->create();
+    //     $this->json('GET', '/api/estudiante',[
+    //         'dni' => '1dds',
+    //         'apellido' => 'Valenzuela'
+    //     ])
+    //     ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-    }
+    // }
 
     public function test_Obtner_Estudiante_filtrando_Por_Dni_Y_Apellido_Igual_A_Null()
     {
@@ -144,7 +149,7 @@ class EstudianteModulTest extends TestCase
      * @test que valida todo los valores de store Estudiantes
      */
 
-    public function test_validacion_de_los_request_para_crear_un_estudiante()
+    public function test_validacion_de_los_request_para_crear_o_modificar_un_estudiante()
     {
         $this->assertTrue(true);
         return [
@@ -164,9 +169,9 @@ class EstudianteModulTest extends TestCase
     }
 
     /**
-     * @dataProvider test_validacion_de_los_request_para_crear_un_estudiante
+     * @dataProvider test_validacion_de_los_request_para_crear_o_modificar_un_estudiante
      */
-    public function test_validacion_request(
+    public function test_validacion_request_store(
         string $campo,
         $valor
     ){
@@ -176,4 +181,82 @@ class EstudianteModulTest extends TestCase
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors($campo);
     }
+
+    /**
+     * @dataProvider test_validacion_de_los_request_para_crear_o_modificar_un_estudiante
+     */
+    public function test_validacion_request_update(
+        string $campo,
+        $valor
+    ){
+        $this->withoutMiddleware();
+        $estudiante = factory(Estudiante::class)->create()->toArray();
+        $estudiante[$campo] = $valor;
+        $this->put(sprintf('api/estudiante/%s',$estudiante['estudianteId']),$estudiante)
+            ->assertStatus(Response::HTTP_FOUND)
+            ->assertSessionHasErrors($campo);
+    }
+
+    public function test_modificar_la_foto_del_estudiante()
+    {
+        $this->withoutMiddleware();
+        // $this->withoutExceptionHandling();
+
+        Storage::fake('public/imagenes');
+        $file = UploadedFile::fake()->image('avatar.png');
+        $estudiante = factory(Estudiante::class)->create()->toArray();
+
+        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> $file])
+            ->assertStatus(Response::HTTP_OK);
+        // Afirmar que el archivo se almacenó...
+        Storage::disk()->assertExists(sprintf('public/imagenes/%s', $file->hashName()));
+
+        // // Assert a file does not exist...
+        Storage::disk()->assertMissing('avatar_no_esta.png');
+    }
+
+    public function test_verifica_el_tipo_de_archivo_en_la_foto()
+    {
+        $this->withoutMiddleware();
+        // $this->withoutExceptionHandling();
+
+        Storage::fake('public/imagenes');
+        $file = UploadedFile::fake()->image('avatar.pdf');
+        $estudiante = factory(Estudiante::class)->create()->toArray();
+
+        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> $file])
+            ->assertStatus(Response::HTTP_FOUND);
+        // Assert a file no exista...
+        Storage::disk()->assertMissing(sprintf('public/imagenes/%s', $file->hashName()));
+    }
+
+    public function test_verifica_que_size_en_la_foto()
+    {
+        $this->withoutMiddleware();
+        // $this->withoutExceptionHandling();
+
+        Storage::fake('public/imagenes');
+        $file = UploadedFile::fake()->image('avatar.png')->size(1025); // 1025 kilobytes..
+        $estudiante = factory(Estudiante::class)->create()->toArray();
+
+        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> $file])
+            ->assertStatus(Response::HTTP_FOUND);
+        // Assert a file no exista...
+        Storage::disk()->assertMissing(sprintf('public/imagenes/%s', $file->hashName()));
+    }
+
+    public function test_verifica_que_la_foto_se_requerida()
+    {
+        $this->withoutMiddleware();
+        // $this->withoutExceptionHandling();
+
+        Storage::fake('public/imagenes');
+        $estudiante = factory(Estudiante::class)->create()->toArray();
+
+        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> null])
+            ->assertStatus(Response::HTTP_FOUND);
+        // Assert a file no exista...
+        Storage::disk()->assertMissing('no_imagen');
+    }
+    
 }
