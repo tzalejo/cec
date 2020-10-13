@@ -24,14 +24,14 @@ class IndexEstudianteFilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'dni' => 'integer'
+            // 'dni' => 'integer'
         ];
     }
 
     public function messages()
     {
         return[
-            'dni.integer'       => 'El DNI es numerico'
+            // 'dni.integer'       => 'El DNI es numerico'
         ];
     }
 
