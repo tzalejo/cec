@@ -61,7 +61,7 @@ class EstudianteController extends ApiController
      * Actualizo los datos del estudiante y tambien el comision de la matricula enviada..
      *
      * @param  App\Http\Requests\UpdateEstudianteRequest  $request
-     * @param  \App\Estudiante  $estudiante
+     * @param  Number  $estudianteId
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateEstudianteRequest $request, $estudianteId)
@@ -74,11 +74,12 @@ class EstudianteController extends ApiController
      * Actualizo los foto del estudiante
      *
      * @param  App\Http\Requests\UpdateEstudianteFotoRequest  $request
-     * @param  Estudiante $estudiante
+     * @param  Number $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function updateEstudianteFoto(UpdateEstudianteFotoRequest $request, Estudiante $estudiante)
+    public function updateEstudianteFoto(UpdateEstudianteFotoRequest $request, $estudianteId)
     {
+        $estudiante = $this->estudianteRepo->find($estudianteId);
         $path = $request->file->store('public/imagenes');
         $estudiante->estudianteFoto = $path;
         $estudiante->save();
