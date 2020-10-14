@@ -26,7 +26,7 @@ class StoreMatriculaRequest extends FormRequest
         return [
             'estudianteId'      => 'required|numeric',
             'comisionId'        => 'required|numeric',
-            'matriculaSituacion'=> '',
+            'matriculaSituacion'=> 'required',
         ];
     }
 
