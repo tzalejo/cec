@@ -111,7 +111,7 @@ class EstudianteModulTest extends TestCase
         $this->withoutMiddleware();
         $response = factory(Estudiante::class)->create()->toArray();
         $estudiante = [
-            'estudianteDNI' => "46484889498",
+            'estudianteDNI' => '46484889498',
             'estudianteApellido' => 'Goyette',
             'estudianteNombre' => 'Lloyd',
             'estudianteDomicilio' => 'Apt. 189',
@@ -132,7 +132,7 @@ class EstudianteModulTest extends TestCase
         $this->withoutMiddleware();
         $response = factory(Estudiante::class)->create()->toArray();
         $this->post('api/estudiante/',[
-            'estudianteDNI' => 123456789,
+            'estudianteDNI' => '123456789',
             'estudianteApellido' => 'Goyette',
             'estudianteNombre' => 'Lloyd',
             'estudianteDomicilio' => 'Apt. 189',
@@ -140,8 +140,7 @@ class EstudianteModulTest extends TestCase
             'estudianteLocalidad' => 'Cote Divoire',
             'estudianteEmail' => intval($response['estudianteEmail']),
             'estudianteNacimiento' => '2005-06-22',
-            'estudianteFoto' => 'application/vnd.wap.wbxml',
-            'estudianteId' => 1]
+            'estudianteFoto' => 'application/vnd.wap.wbxml']
         )->assertStatus(Response::HTTP_FOUND);
 
     }
@@ -258,5 +257,5 @@ class EstudianteModulTest extends TestCase
         // Assert a file no exista...
         Storage::disk()->assertMissing('no_imagen');
     }
-    
+
 }
