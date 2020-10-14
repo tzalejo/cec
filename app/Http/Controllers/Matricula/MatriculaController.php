@@ -6,7 +6,6 @@ use App\Matricula;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Traits\ApiResponser;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UpdateMatriculaRequest;
 use App\Http\Requests\StoreMatriculaRequest;
 use App\Repositories\Matricula\MatriculaRepository;
