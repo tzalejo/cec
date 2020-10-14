@@ -11,7 +11,7 @@ $factory->define(Comision::class, function (Faker $faker) {
     $curso = Curso::query()->inRandomOrder()->first();
     $date = Carbon::now();
     $fechaInicio = $date->format('Y-m-d');
-    $fechafin = $date->addMonth($curso->cursoNroCuota);
+    $fechafin = $date->addMonths($curso->cursoNroCuota);
 
     return [
         'comisionNombre' => $faker->numerify('Comision ##'),
