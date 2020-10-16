@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Comision;
 
-use App\Comision;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\DestroyComisionRequest;
@@ -10,10 +9,7 @@ use App\Http\Requests\StoreComisionRequest;
 use App\Http\Requests\UpdateComisionRequest;
 use App\Repositories\Comision\ComisionRepository;
 use App\Traits\ApiResponser;
-use Illuminate\Support\Facades\Log;
-# para usar validator
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class ComisionController extends ApiController
 {
@@ -38,8 +34,16 @@ class ComisionController extends ApiController
                     ->ComisionesActivas()
                     ->get();;
     }
-
-    public function indexComisionesInactivas( $fechaDesde, $fechaHasta){
+    /**
+     * Retorna todas las comisiones inactivas con fecha de inicio desde hasta
+     *
+     * @param  Date $fechaDesde
+     * @param  Date $fechaHasta
+     * @return \Illuminate\Http\Response
+     */
+    public function indexComisionesInactivas(
+        $fechaDesde,
+        $fechaHasta){
         return $this->comisionRepository
                     ->getComisionCursoMatricula()
                     ->ComisionesInactivas()
@@ -57,7 +61,7 @@ class ComisionController extends ApiController
     public function store(StoreComisionRequest $request)
     {
         $this->comisionRepository->create($request->all());
-        return $this->successResponse('Comision fue creada correctamente', 201);
+        return $this->successResponse('Comision fue creada correctamente', Response::HTTP_CREATED);
     }
 
     /**
@@ -72,7 +76,7 @@ class ComisionController extends ApiController
                         ->getComisionCursoMatricula()
                         ->ComisionesActivas()
                         ->find($comisionId);
-        return $this->successResponse($resultado, 200);
+        return $this->successResponse($resultado, Response::HTTP_OK);
     }
 
     /**
@@ -85,8 +89,8 @@ class ComisionController extends ApiController
     public function update(UpdateComisionRequest $request, $comision)
     {
         $comisionBuscada = $this->comisionRepository->find($comision);
-        $this->comisionRepository->update($comisionBuscada, $request->all());
-        return $this->successResponse('Comision fue modificada correctamente', 200);
+        $comisionUpdate = $this->comisionRepository->update($comisionBuscada, $request->all());
+        return $this->successResponse($comisionUpdate , Response::HTTP_OK);
 
     }
 
@@ -100,6 +104,6 @@ class ComisionController extends ApiController
     {
         $comisionEliminar = $this->comisionRepository->find($comision->comisionId);
         $this->comisionRepository->delete($comisionEliminar);
-        return $this->successResponse('Comision fue eliminada correctamente',200);
+        return $this->successResponse('Comision fue eliminada correctamente',Response::HTTP_NO_CONTENT);
     }
 }
