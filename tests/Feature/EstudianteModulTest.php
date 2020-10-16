@@ -33,7 +33,6 @@ class EstudianteModulTest extends TestCase
         $estudianteDatos = factory(Estudiante::class)->make()->toArray();
 
         $this->post('api/estudiante/', $estudianteDatos )
-            ->assertOk()
             ->assertStatus(Response::HTTP_OK);
             // $estudiante = Estudiante::first();
         $this->assertCount(1, Estudiante::all());
@@ -50,7 +49,6 @@ class EstudianteModulTest extends TestCase
             'apellido' => $estudiante[0]['estudianteApellido']
         ])
             ->assertExactJson([$estudiante[0]->toArray()])
-            ->assertOk()
             ->assertStatus(Response::HTTP_OK);
 
     }
@@ -75,7 +73,6 @@ class EstudianteModulTest extends TestCase
         factory(Estudiante::class, 3)->create();
         $this->call('GET', '/api/estudiante')
             ->assertJsonCount(3)
-            ->assertOk()
             ->assertStatus(Response::HTTP_OK);
     }
 
