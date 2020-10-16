@@ -70,7 +70,7 @@ Route::group(['prefix' => 'comision'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         # devuelvo todas las comisiones INACTIVAS fdesde fhasta
-        Route::get('/{fechaDesde}/{fechaHasta}/', 'Comision\ComisionController@indexComisionesInactivas');
+        Route::get('/{fechaDesde}/{fechaHasta}/inactivas', 'Comision\ComisionController@indexComisionesInactivas');
         Route::get('/{comisionId}', 'Comision\ComisionController@show');
         # devuelvo todas las comisiones ACTIVAS
         Route::get('/', 'Comision\ComisionController@index');
