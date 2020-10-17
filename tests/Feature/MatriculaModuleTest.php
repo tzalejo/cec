@@ -23,7 +23,7 @@ class MatriculaModuleTest extends TestCase
         factory(Estudiante::class)->create();
         factory(Comision::class)->create();
         $matricula = factory(Matricula::class)->make()->toArray();
-        $this->post('api/matricula',$matricula)
+        $this->post('api/matriculas',$matricula)
             ->assertStatus(Response::HTTP_CREATED);
     }
 
@@ -52,7 +52,7 @@ class MatriculaModuleTest extends TestCase
         factory(Estudiante::class)->create();
 
         $matricula = factory(Matricula::class)->make([$campo => $valor]);
-        $this->post('api/matricula/',$matricula->toArray())
+        $this->post('api/matriculas/',$matricula->toArray())
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors($campo);
     }
@@ -68,7 +68,7 @@ class MatriculaModuleTest extends TestCase
         $matricula = factory(Matricula::class)->create(
             ['comisionId' => $comision[0]['comisionId'] ]
         )->toArray();
-        $this->put(sprintf('api/matricula/%s', $matricula['matriculaId']), [
+        $this->put(sprintf('api/matriculas/%s', $matricula['matriculaId']), [
             'comisionId' => $comision[1]['comisionId'],
             'estudianteId' =>  $matricula['estudianteId'],
             'matriculaSituacion' =>  $matricula['matriculaSituacion']])
@@ -90,7 +90,7 @@ class MatriculaModuleTest extends TestCase
 
         $matricula = factory(Matricula::class)->create()->toArray();
         $matricula[$campo] = $valor;
-        $this->put(sprintf('api/matricula/%s', $matricula['matriculaId']), $matricula)
+        $this->put(sprintf('api/matriculas/%s', $matricula['matriculaId']), $matricula)
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors($campo);
     }

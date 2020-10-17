@@ -21,7 +21,7 @@ class ComisionModuleTest extends TestCase
         $this->withoutMiddleware();
         factory(Curso::class)->create();
         factory(Comision::class, 4)->create();
-        $this->get('api/comision')
+        $this->get('api/comisiones')
             ->assertJsonCount(4)
             ->assertOk()
             ->assertStatus(Response::HTTP_OK);
@@ -33,7 +33,7 @@ class ComisionModuleTest extends TestCase
         factory(Curso::class)->create();
         $comision = factory(Comision::class)->create()->toArray();
 
-        $this->get(sprintf('api/comision/%s',$comision['comisionId']))
+        $this->get(sprintf('api/comisiones/%s',$comision['comisionId']))
             ->assertOk()
             ->assertStatus(Response::HTTP_OK)
             ->assertJson(
@@ -77,7 +77,7 @@ class ComisionModuleTest extends TestCase
                 'comisionId' => 3,
         ]);
 
-        $this->get(sprintf('api/comision/%s/%s/inactivas',
+        $this->get(sprintf('api/comisiones/%s/%s/inactivas',
             Carbon::parse('2016-01-15')->format('Y-m-d'),
             Carbon::parse( '2018-07-15')->format('Y-m-d')))
             ->assertOk()
@@ -90,7 +90,7 @@ class ComisionModuleTest extends TestCase
         $this->withoutMiddleware();
         factory(Curso::class)->create();
         factory(Comision::class)->create();
-        $this->get('api/comision/fecha_invalida/fecha_invalida')
+        $this->get('api/comisiones/fecha_invalida/fecha_invalida')
             ->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
@@ -107,7 +107,7 @@ class ComisionModuleTest extends TestCase
             'cursoId' => 1
             ])->toArray();
 
-        $this->post('api/comision', $comision)
+        $this->post('api/comisiones', $comision)
             ->assertStatus(Response::HTTP_CREATED);
         $this->assertCount(1, Comision::all());
     }
@@ -145,7 +145,7 @@ class ComisionModuleTest extends TestCase
         $this->withoutMiddleware();
         factory(Curso::class)->create();
         $comision = factory(Comision::class)->make([$campo => $valor]);
-        $this->post('api/comision/',$comision->toArray())
+        $this->post('api/comisiones/',$comision->toArray())
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors($campo);
     }
@@ -157,7 +157,7 @@ class ComisionModuleTest extends TestCase
         factory(Curso::class)->create();
         $comision = factory(Comision::class)->create()->toArray();
         $comision['comisionNombre'] = 'Nombre Modificado';
-        $this->put(sprintf('api/comision/%s', $comision['comisionId']), $comision)
+        $this->put(sprintf('api/comisiones/%s', $comision['comisionId']), $comision)
             ->assertExactJson($comision)
             ->assertStatus(Response::HTTP_OK);
     }
@@ -173,7 +173,7 @@ class ComisionModuleTest extends TestCase
         factory(Curso::class)->create();
         $comision = factory(Comision::class)->create()->toArray();
         $comision[$campo] = $valor;
-        $this->put(sprintf('api/comision/%s', $comision['comisionId']), $comision)
+        $this->put(sprintf('api/comisiones/%s', $comision['comisionId']), $comision)
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors($campo);
     }
@@ -183,7 +183,7 @@ class ComisionModuleTest extends TestCase
         $this->withoutMiddleware();
         factory(Curso::class)->create();
         $comision = factory(Comision::class)->create()->toArray();
-        $this->delete('api/comision', $comision)
+        $this->delete('api/comisiones', $comision)
             ->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertCount(0, Comision::all());
     }
@@ -199,7 +199,7 @@ class ComisionModuleTest extends TestCase
             'comisionId' => $comision['comisionId'],
             'matriculaSituacion' =>  'RE'
             ])->toArray();
-        $this->delete('api/comision', $comision)
+        $this->delete('api/comisiones', $comision)
             ->assertStatus(Response::HTTP_FOUND);
         $this->assertCount(1, Comision::all());
     }
@@ -209,7 +209,7 @@ class ComisionModuleTest extends TestCase
         $this->withoutMiddleware();
         factory(Curso::class)->create();
         $comisionNoExiste = factory(Comision::class)->make()->toArray();
-        $this->delete('api/comision', $comisionNoExiste)
+        $this->delete('api/comisiones', $comisionNoExiste)
             ->assertStatus(Response::HTTP_FOUND);
     }
 

@@ -10,7 +10,6 @@ use Laravel\Passport\Passport;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Contracts\Filesystem\Filesystem;
 
 class EstudianteModulTest extends TestCase
 {
@@ -23,7 +22,7 @@ class EstudianteModulTest extends TestCase
             factory(User::class)->create(),
             ['estudiante']
         );
-        $this->get('/api/estudiante')
+        $this->get('/api/estudiantes')
             ->assertStatus(Response::HTTP_OK);
     }
 
@@ -32,7 +31,7 @@ class EstudianteModulTest extends TestCase
         $this->withoutMiddleware();
         $estudianteDatos = factory(Estudiante::class)->make()->toArray();
 
-        $this->post('api/estudiante/', $estudianteDatos )
+        $this->post('api/estudiantes/', $estudianteDatos )
             ->assertStatus(Response::HTTP_OK);
             // $estudiante = Estudiante::first();
         $this->assertCount(1, Estudiante::all());
@@ -44,7 +43,7 @@ class EstudianteModulTest extends TestCase
         $this->withoutExceptionHandling();
         $estudiante = factory(Estudiante::class, 3)->create();
         $estudiante[0]['matriculas'] = [];
-        $this->call('GET', '/api/estudiante',[
+        $this->call('GET', '/api/estudiantes',[
             'dni' =>$estudiante[0]['estudianteDNI'],
             'apellido' => $estudiante[0]['estudianteApellido']
         ])
@@ -71,7 +70,7 @@ class EstudianteModulTest extends TestCase
         $this->withoutMiddleware();
 
         factory(Estudiante::class, 3)->create();
-        $this->call('GET', '/api/estudiante')
+        $this->call('GET', '/api/estudiantes')
             ->assertJsonCount(3)
             ->assertStatus(Response::HTTP_OK);
     }
@@ -83,7 +82,7 @@ class EstudianteModulTest extends TestCase
         $estudianteModificado = Estudiante::findOrFail($estudiante['estudianteId'])->toArray();
         $estudianteModificado['estudianteNombre'] = 'Modificado';
         // dd($estudianteModificado);
-        $response = $this->put(sprintf('api/estudiante/%s', $estudiante['estudianteId']),$estudianteModificado);
+        $response = $this->put(sprintf('api/estudiantes/%s', $estudiante['estudianteId']),$estudianteModificado);
         $response
             ->assertExactJson($estudianteModificado)
             ->assertStatus(Response::HTTP_OK);
@@ -107,7 +106,7 @@ class EstudianteModulTest extends TestCase
 
         $estudiante['estudianteDNI'] = $response['estudianteDNI'];
 
-        $this->post('api/estudiante/', $estudiante)
+        $this->post('api/estudiantes/', $estudiante)
             ->assertStatus(Response::HTTP_FOUND);
     }
 
@@ -115,7 +114,7 @@ class EstudianteModulTest extends TestCase
     {
         $this->withoutMiddleware();
         $response = factory(Estudiante::class)->create()->toArray();
-        $this->post('api/estudiante/',[
+        $this->post('api/estudiantes/',[
             'estudianteDNI' => '123456789',
             'estudianteApellido' => 'Goyette',
             'estudianteNombre' => 'Lloyd',
@@ -160,7 +159,7 @@ class EstudianteModulTest extends TestCase
     ){
         $this->withoutMiddleware();
         $estudiante = factory(Estudiante::class)->make([$campo => $valor]);
-        $this->post('api/estudiante/',$estudiante->toArray())
+        $this->post('api/estudiantes/',$estudiante->toArray())
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors($campo);
     }
@@ -175,7 +174,7 @@ class EstudianteModulTest extends TestCase
         $this->withoutMiddleware();
         $estudiante = factory(Estudiante::class)->create()->toArray();
         $estudiante[$campo] = $valor;
-        $this->put(sprintf('api/estudiante/%s',$estudiante['estudianteId']),$estudiante)
+        $this->put(sprintf('api/estudiantes/%s',$estudiante['estudianteId']),$estudiante)
             ->assertStatus(Response::HTTP_FOUND)
             ->assertSessionHasErrors($campo);
     }
@@ -189,7 +188,7 @@ class EstudianteModulTest extends TestCase
         $file = UploadedFile::fake()->image('avatar.png');
         $estudiante = factory(Estudiante::class)->create()->toArray();
 
-        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> $file])
+        $this->post(sprintf('api/estudiantes/%s', $estudiante['estudianteId']),['file'=> $file])
             ->assertStatus(Response::HTTP_OK);
         // Afirmar que el archivo se almacenó...
         Storage::disk()->assertExists(sprintf('public/imagenes/%s', $file->hashName()));
@@ -207,7 +206,7 @@ class EstudianteModulTest extends TestCase
         $file = UploadedFile::fake()->image('avatar.pdf');
         $estudiante = factory(Estudiante::class)->create()->toArray();
 
-        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> $file])
+        $this->post(sprintf('api/estudiantes/%s', $estudiante['estudianteId']),['file'=> $file])
             ->assertStatus(Response::HTTP_FOUND);
         // Assert a file no exista...
         Storage::disk()->assertMissing(sprintf('public/imagenes/%s', $file->hashName()));
@@ -222,7 +221,7 @@ class EstudianteModulTest extends TestCase
         $file = UploadedFile::fake()->image('avatar.png')->size(1025); // 1025 kilobytes..
         $estudiante = factory(Estudiante::class)->create()->toArray();
 
-        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> $file])
+        $this->post(sprintf('api/estudiantes/%s', $estudiante['estudianteId']),['file'=> $file])
             ->assertStatus(Response::HTTP_FOUND);
         // Assert a file no exista...
         Storage::disk()->assertMissing(sprintf('public/imagenes/%s', $file->hashName()));
@@ -236,7 +235,7 @@ class EstudianteModulTest extends TestCase
         Storage::fake('public/imagenes');
         $estudiante = factory(Estudiante::class)->create()->toArray();
 
-        $this->post(sprintf('api/estudiante/%s', $estudiante['estudianteId']),['file'=> null])
+        $this->post(sprintf('api/estudiantes/%s', $estudiante['estudianteId']),['file'=> null])
             ->assertStatus(Response::HTTP_FOUND);
         // Assert a file no exista...
         Storage::disk()->assertMissing('no_imagen');
