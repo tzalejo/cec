@@ -1,20 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-# envio a la home del sistema
-// Route::middleware('auth:api')->get('home','HomeController@index');
 
 # Para manejo de credenciales de los usuarios, agrego cors a las rutas
 Route::group(['prefix' => 'auth'], function () {
@@ -22,12 +8,12 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('signup', 'AuthController@signup'); # Creo un usuario(Users)
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('logout', '    AuthController@logout'); # Salgo
-        Route::get('delete/user', 'AuthController@delete'); # elimino pero solo admin  VER LOS PERMISOS!!
+        Route::get('deletes/users', 'AuthController@delete'); # elimino pero solo admin  VER LOS PERMISOS!!
     });
 });
 
 # Group de ruta con prefijo alumnos, agrego cors a las rutas
-Route::group(['prefix' => 'estudiante'], function () {
+Route::group(['prefix' => 'estudiantes'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         Route::get('', 'Estudiante\EstudianteController@index');
@@ -40,7 +26,7 @@ Route::group(['prefix' => 'estudiante'], function () {
 });
 
 # Group de ruta con prefijo matricula, agrego cors a las rutas
-Route::group(['prefix' => 'matricula'], function () {
+Route::group(['prefix' => 'matriculas'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         # lo consumo desde reinscripcion de alumno..
@@ -53,7 +39,7 @@ Route::group(['prefix' => 'matricula'], function () {
 });
 
 # Group de ruta con prefijo cuota, agrego cors a las rutas
-Route::group(['prefix' => 'cuota'], function () {
+Route::group(['prefix' => 'cuotas'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
 
@@ -66,12 +52,12 @@ Route::group(['prefix' => 'cuota'], function () {
 
 
 #Para manejo de comsiones
-Route::group(['prefix' => 'comision'], function () {
+Route::group(['prefix' => 'comisiones'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         # devuelvo todas las comisiones INACTIVAS fdesde fhasta
         Route::get('/{fechaDesde}/{fechaHasta}/inactivas', 'Comision\ComisionController@indexComisionesInactivas');
-        Route::get('/{comisionId}', 'Comision\ComisionController@show');
+        Route::get('/{comision}', 'Comision\ComisionController@show');
         # devuelvo todas las comisiones ACTIVAS
         Route::get('/', 'Comision\ComisionController@index');
         Route::post('', 'Comision\ComisionController@store');
@@ -82,7 +68,7 @@ Route::group(['prefix' => 'comision'], function () {
 
 
 # Group de ruta con prefijo cursos/
-Route::group(['prefix' => 'curso'], function () {
+Route::group(['prefix' => 'cursos'], function () {
     # Ruta que solo acceda el usuario director..
     Route::group(['middleware' => ['auth:api','director']], function () {
         Route::get('/{curso}', 'Curso\CursoController@show');
@@ -95,12 +81,12 @@ Route::group(['prefix' => 'curso'], function () {
     });
 });
 # Group de ruta con prefijo cursos/
-Route::group(['prefix' => 'materia'], function () {
+Route::group(['prefix' => 'materias'], function () {
     # Ruta que solo acceda el usuario director..
     Route::group(['middleware' => ['auth:api','director']], function () {
         Route::get('', 'Materia\MateriaController@index');
         Route::get('diff/{curso}', 'Materia\MateriaController@indexMateriasDiff');
-        Route::get('curso/{curso}', 'Materia\MateriaController@show'); // todas las materias del curso
+        Route::get('cursos/{curso}', 'Materia\MateriaController@show'); // todas las materias del curso
         Route::post('', 'Materia\MateriaController@store');
         Route::delete('/{materia}', 'Materia\MateriaController@destroy');
         Route::put('/{materia}', 'Materia\MateriaController@update');
@@ -108,7 +94,7 @@ Route::group(['prefix' => 'materia'], function () {
 });
 
 # Grupo de ruta con prefijo pago
-Route::group(['prefix' => 'pago'], function () {
+Route::group(['prefix' => 'pagos'], function () {
     // Route::group(['middleware' => ['auth:api','director']], function () {
         Route::post('','Pago\PagoController@store');
     // });

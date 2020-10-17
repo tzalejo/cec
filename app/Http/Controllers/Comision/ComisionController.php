@@ -70,12 +70,12 @@ class ComisionController extends ApiController
      * @param  \App\Comision  $comision
      * @return \Illuminate\Http\Response
      */
-    public function show($comisionId)
+    public function show($comision)
     {
         $resultado = $this->comisionRepository
                         ->getComisionCursoMatricula()
                         ->ComisionesActivas()
-                        ->find($comisionId);
+                        ->find($comision);
         return $this->successResponse($resultado, Response::HTTP_OK);
     }
 
