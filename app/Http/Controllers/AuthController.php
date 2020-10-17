@@ -30,26 +30,13 @@ class AuthController extends Controller
     }
     public function login(LoginUserRequest $request)
     {
-        /*$request->validate([
-            'email'         => 'required|string|email',
-            'userNombre'    => 'required_without:email|string',
-            'password'      => 'required|string',
-            'remember_me'   => 'boolean',
-            ]);
-        */
-        //if ($request->has('email')) {
-            $credenciales = request(['email', 'password']);
-        //} else {
-        //    $credenciales = request(['userNombre', 'password']);
-        //}
+        $credenciales = request(['email', 'password']);
+
         # El metrod Auth devuelve true si la autenticacion fue exitosa
         if (!Auth::attempt($credenciales)) {
-            # code...
             return $this->errorResponse('No autorizado, verifique sus datos por favor.', Response::HTTP_UNAUTHORIZED);
-            # return response()->json(['message' => 'No autorizado'],401);
         }
         # return response()->json($credenciales);
-
         # $user = User::find(1);
         # return response()->json($user->createToken('Personal Access Token'));
         $user = $request->user();

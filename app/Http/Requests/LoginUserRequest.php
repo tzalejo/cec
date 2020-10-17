@@ -25,17 +25,13 @@ class LoginUserRequest extends FormRequest
     {
         return [
             'email'         => 'required|email',
-            //'userNombre'    => 'required|string',
-            //'userNombre'    => 'required_without:email|string',
             'password'      => 'required|string',
-            //'remember_me'   => 'boolean',
         ];
     }
 
     public function messages()
     {
         return [
-            //'userNombre.requered'   => 'El Usuario es requerido',
             'email.requered'        => 'El Email es requerido',
             'email.email'           => 'El Email es incorrecto, verifique el formato example@mail.com',
             'password.requered'     => 'El Password es requerido',
