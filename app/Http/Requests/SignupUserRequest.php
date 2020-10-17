@@ -37,10 +37,10 @@ class SignupUserRequest extends FormRequest
      */
     public function messages(){
         return [
-            'userNombre.requered'   => 'El Usuario es requerido',
-            'email.requered'        => 'El Email es requerido',
+            'userNombre.required'   => 'El Usuario es requerido',
+            'email.required'        => 'El Email es requerido',
             'email.email'           => 'El Email es incorrecto, verifique el formato example@mail.com',
             'email.unique'          => 'El Email ya esta registrado, verifique',
-        ];   
+        ];
     }
 }
