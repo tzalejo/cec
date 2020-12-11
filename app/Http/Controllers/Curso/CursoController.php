@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Curso;
 use App\Curso;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\StoreCursoMateriaRequest;
 use App\Http\Requests\StoreCursoRequest;
 use App\Http\Requests\UpdateCursoRequest;
 use App\Repositories\Curso\CursoRepository;
@@ -20,7 +21,8 @@ class CursoController extends ApiController
      */
     private $cursoRepository;
 
-    public function __construct(CursoRepository $cursoRepo){
+    public function __construct(CursoRepository $cursoRepo)
+    {
         $this->cursoRepository = $cursoRepo;
     }
 
@@ -49,6 +51,25 @@ class CursoController extends ApiController
     }
 
     /**
+     * Agrego Curso Materia a la tabla pivote(curso_materia).
+     *
+     * @param  App\Http\Requests\StoreCursoMateriaRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCursoMateria(StoreCursoMateriaRequest $request)
+    {
+        # creo en la tabla pivote curso y materia,
+        $this->cursoRepository
+            ->find($request->cursoId)
+            ->materias()
+            ->attach($request->materiaId);
+        return $this->successResponse(
+            'Materia fue asiganada al curso correctamente',
+            200
+        );
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param   Number $curso
@@ -69,21 +90,10 @@ class CursoController extends ApiController
     public function update(UpdateCursoRequest $request, Curso $curso)
     {
         $this->cursoRepository->update($curso, $request->all());
-        return $this->successResponse('Curso fue actualizado correctamente', 200);
-    }
-
-    /**
-     * Update Curso Materia.
-     *
-     * @param  Number $materia
-     * @param  Number $curso
-     * @return \Illuminate\Http\Response
-     */
-    public function updateCursoMateria($curso, $materia)
-    {
-        # asigno en la tabla pivote curso y materia,
-        $this->cursoRepository->find($curso)->materias()->attach($materia);
-        return $this->successResponse('Materia fue asiganada al curso correctamente', 200);
+        return $this->successResponse(
+            'Curso fue actualizado correctamente',
+            200
+        );
     }
 
     /**
@@ -96,11 +106,17 @@ class CursoController extends ApiController
     {
         $curso = $this->cursoRepository->find($cursoId);
         # verifico q no tenga relacion con materia y comision
-        if ($this->cursoRepository->cursoTieneMateriaComision($curso)){
+        if ($this->cursoRepository->cursoTieneMateriaComision($curso)) {
             $this->cursoRepository->delete($curso);
-            return $this->successResponse('Curso fue eliminada correctamente', 200);
+            return $this->successResponse(
+                'Curso fue eliminada correctamente',
+                200
+            );
         }
-        return $this->successResponse('Curso seleccionado no puede ser eliminado.',409);
+        return $this->successResponse(
+            'Curso seleccionado no puede ser eliminado.',
+            409
+        );
     }
 
     /**
@@ -111,8 +127,11 @@ class CursoController extends ApiController
      * @param  Number $curso
      * @return \Illuminate\Http\Response
      */
-    public function destroyCursoMateria( $curso, $materia)
+    public function destroyCursoMateria($curso, $materia)
     {
-        $this->cursoRepository->find($curso)->materias()->detach($materia);
+        $this->cursoRepository
+            ->find($curso)
+            ->materias()
+            ->detach($materia);
     }
 }

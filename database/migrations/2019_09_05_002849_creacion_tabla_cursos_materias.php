@@ -18,6 +18,7 @@ class CreacionTablaCursosMaterias extends Migration
             $table->integer('cursoId')->unsigned();
             $table->integer('materiaId')->unsigned();
             // $table->timestamps();
+            $table->unique(['cursoId', 'materiaId']);
         });
     }
 

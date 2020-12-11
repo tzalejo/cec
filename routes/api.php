@@ -20,7 +20,10 @@ Route::group(['prefix' => 'estudiantes'], function () {
         // Route::get('', 'Estudiante\EstudianteController@show');
         Route::post('', 'Estudiante\EstudianteController@store');
         # Actualizo foto, lo dejo como post porque me genera error put
-        Route::post('/{estudiante}', 'Estudiante\EstudianteController@updateEstudianteFoto');
+        Route::post(
+            '/{estudiante}',
+            'Estudiante\EstudianteController@updateEstudianteFoto'
+        );
         Route::put('/{estudiante}', 'Estudiante\EstudianteController@update'); # Modifico un estudiante
     });
 });
@@ -30,11 +33,11 @@ Route::group(['prefix' => 'matriculas'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         # lo consumo desde reinscripcion de alumno..
-        Route::post('','Matricula\MatriculaController@store');
+        Route::post('', 'Matricula\MatriculaController@store');
         # consulta todas las matriculas (por apellido o dni)
         # Route::get('mostrar','Matricula\MatriculaController@index');
         # modifico matricula
-        Route::put('{matricula}','Matricula\MatriculaController@update');
+        Route::put('{matricula}', 'Matricula\MatriculaController@update');
     });
 });
 
@@ -42,7 +45,6 @@ Route::group(['prefix' => 'matriculas'], function () {
 Route::group(['prefix' => 'cuotas'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
-
         # devolvemos matricua->cuotas->pagos
         Route::get('{matricula}', 'Cuota\CuotaController@index');
         # para realizar un pago de un cuota..
@@ -50,13 +52,15 @@ Route::group(['prefix' => 'cuotas'], function () {
     });
 });
 
-
 #Para manejo de comsiones
 Route::group(['prefix' => 'comisiones'], function () {
     # Rutas con middleware auth
     Route::group(['middleware' => ['auth:api']], function () {
         # devuelvo todas las comisiones INACTIVAS fdesde fhasta
-        Route::get('/{fechaDesde}/{fechaHasta}/inactivas', 'Comision\ComisionController@indexComisionesInactivas');
+        Route::get(
+            '/{fechaDesde}/{fechaHasta}/inactivas',
+            'Comision\ComisionController@indexComisionesInactivas'
+        );
         Route::get('/{comision}', 'Comision\ComisionController@show');
         # devuelvo todas las comisiones ACTIVAS
         Route::get('/', 'Comision\ComisionController@index');
@@ -66,26 +70,31 @@ Route::group(['prefix' => 'comisiones'], function () {
     });
 });
 
-
 # Group de ruta con prefijo cursos/
 Route::group(['prefix' => 'cursos'], function () {
     # Ruta que solo acceda el usuario director..
-    Route::group(['middleware' => ['auth:api','director']], function () {
+    Route::group(['middleware' => ['auth:api', 'director']], function () {
         Route::get('/{curso}', 'Curso\CursoController@show');
         Route::get('', 'Curso\CursoController@index');
         Route::put('/{curso}', 'Curso\CursoController@update');
-        Route::put('/{curso}/{materia}', 'Curso\CursoController@updateCursoMateria');
         Route::delete('/{curso}', 'Curso\CursoController@destroy');
-        Route::delete('/{curso}/{materia}', 'Curso\CursoController@destroyCursoMateria');
-        Route::post('','Curso\CursoController@store');
+        Route::delete(
+            '/{curso}/{materia}',
+            'Curso\CursoController@destroyCursoMateria'
+        );
+        Route::post('', 'Curso\CursoController@store');
+        Route::post('/materias', 'Curso\CursoController@storeCursoMateria');
     });
 });
 # Group de ruta con prefijo cursos/
 Route::group(['prefix' => 'materias'], function () {
     # Ruta que solo acceda el usuario director..
-    Route::group(['middleware' => ['auth:api','director']], function () {
+    Route::group(['middleware' => ['auth:api', 'director']], function () {
         Route::get('', 'Materia\MateriaController@index');
-        Route::get('diff/{curso}', 'Materia\MateriaController@indexMateriasDiff');
+        Route::get(
+            'diff/{curso}',
+            'Materia\MateriaController@indexMateriasDiff'
+        );
         Route::get('cursos/{curso}', 'Materia\MateriaController@show'); // todas las materias del curso
         Route::post('', 'Materia\MateriaController@store');
         Route::delete('/{materia}', 'Materia\MateriaController@destroy');
@@ -96,6 +105,6 @@ Route::group(['prefix' => 'materias'], function () {
 # Grupo de ruta con prefijo pago
 Route::group(['prefix' => 'pagos'], function () {
     // Route::group(['middleware' => ['auth:api','director']], function () {
-        Route::post('','Pago\PagoController@store');
+    Route::post('', 'Pago\PagoController@store');
     // });
 });
