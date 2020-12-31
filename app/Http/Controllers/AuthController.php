@@ -20,10 +20,10 @@ class AuthController extends Controller
     use ApiResponser;
     public function signup(SignupUserRequest $request)
     {
-        $role = Role::where(
+        $role = Role::firstWhere(
             'roleDescripcion',
             Config::get('constants.USER')
-        )->first();
+        );
 
         $user = User::create([
             'userNombre' => $request->userNombre,
