@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Config; // Agrego constantes
 use App\User;
 use App\Role;
 
@@ -18,27 +19,33 @@ class UserTablaSeeder extends Seeder
         // DB::table('users')->truncate();
 
         // traigo el rol de admin(director)
-        $role_dire=Role::where('roleDescripcion', 'Director')->first();
-        
+        $role_dire = Role::where(
+            'roleDescripcion',
+            Config::get('constants.ADMIN')
+        )->first();
+
         // creo el usuario director.
-        $user= new User();
+        $user = new User();
         $user->userNombre = 'Alejandro';
         $user->email = 'tzalejo@gmail.com';
         $user->password = bcrypt('secret');
-        $user->userImagen ='director.png';
+        $user->userImagen = 'director.png';
         $user->roleId = $role_dire->roleId;
         $user->save();
-        
+
         // creo un usuario secretaria
-        $role_secre=Role::where('roleDescripcion', 'Secretaria')->first();
-        $user= new User();
+        $role_secre = Role::where(
+            'roleDescripcion',
+            Config::get('constants.USER')
+        )->first();
+        $user = new User();
         $user->userNombre = 'Amelie';
         $user->email = 'secre@email.com';
         $user->password = bcrypt('secret1');
         $user->userImagen = 'secretaria.png';
         $user->roleId = $role_secre->roleId;
         $user->save();
-        
+
         //creo usuario usando factory..
         // factory(User::class)->times(20)->create();
     }

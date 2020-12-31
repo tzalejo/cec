@@ -7,23 +7,30 @@ use App\Notifications\SignupActivate;
 use App\Traits\ApiResponser;
 use App\Http\Requests\SignupUserRequest;
 use App\Http\Requests\LoginUserRequest;
+use App\Role;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Config; // Agrego constantes
 
 class AuthController extends Controller
 {
     use ApiResponser;
     public function signup(SignupUserRequest $request)
     {
+        $role = Role::where(
+            'roleDescripcion',
+            Config::get('constants.USER')
+        )->first();
+
         $user = User::create([
             'userNombre' => $request->userNombre,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'userImagen' => 'secretaria.png',
-            'roleId' => 2,
+            'roleId' => $role->roleId,
         ]);
 
         return $this->successResponse(

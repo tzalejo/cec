@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Role;
+use Illuminate\Support\Facades\Config; // Agrego constantes
 
 class RoleTablaSeeder extends Seeder
 {
@@ -16,25 +17,13 @@ class RoleTablaSeeder extends Seeder
         // DB::table('roles')->truncate();
 
         // creamos el rol de director(admin)
-        $role = new Role(
-            // [
-            // 'roleId'=>1,
-            // 'roleDescripcion' => 'director'
-            // ]
-        );
-        // $role->roleId = 1;
-        $role->roleDescripcion = 'Director';
+        $role = new Role();
+        $role->roleDescripcion = Config::get('constants.ADMIN');
         $role->save();
 
         // creamos el rol de secretaria
-        $role = new Role(
-            // [
-            // 'roleId'=>2,
-            // 'roleDescripcion' => 'secretaria'
-            // ]
-        );
-        // $role->roleId = 2;
-        $role->roleDescripcion = 'Secretaria';
+        $role = new Role();
+        $role->roleDescripcion = Config::get('constants.USER');
         $role->save();
     }
 }
